@@ -1,0 +1,26 @@
+:root {
+  /* Color de marca. Naranja nunca como texto sobre crema (2,65:1). */
+  --oliva: #303717;
+  --oliva-suave: #4a5228;
+  --naranja: #E8652B;
+  --crema: #F4EEE3;
+  --crema-oscura: #EAE1D0;
+  --blanco: #FFFFFF;
+
+  --font-display: 'Gloock', 'Georgia', serif;
+  --font-texto: 'Instrument Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --texto-base: 1.0625rem; /* 17 px */
+  --texto-chico: 0.9375rem; /* 15 px, solo etiquetas */
+
+  --espacio-1: 0.5rem;
+  --espacio-2: 1rem;
+  --espacio-3: 1.5rem;
+  --espacio-4: 2.5rem;
+  --espacio-5: 4rem;
+  --espacio-6: 6.5rem;
+
+  --ancho-max: 76rem;
+  --radio: 1.25rem;
+  --alto-menu: 4.5rem;
+  --alto-barra-movil: 4.25rem;
+}

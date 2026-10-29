@@ -1,0 +1,10 @@
+{
+  "name": "coraggio-web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "carta": "node tools/build-carta.mjs",
+    "imagenes": "sh tools/optimizar-imagenes.sh"
+  }
+}
