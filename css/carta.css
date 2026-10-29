@@ -55,3 +55,6 @@
   background: var(--crema-oscura); margin-bottom: var(--espacio-4);
 }
 .carta__notas { font-size: var(--texto-chico); }
+
+/* Al saltar desde el índice, el título queda debajo del menú y del índice pegajoso. */
+html { scroll-padding-top: calc(var(--alto-menu) + 5rem); }

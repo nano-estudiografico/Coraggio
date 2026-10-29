@@ -4,14 +4,12 @@
     {
       "name": "coraggio",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8080"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8080"
+      ],
       "port": 8080
-    },
-    {
-      "name": "logo-scratch",
-      "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8091", "--directory", "/private/tmp/claude-501/-Users-nanogon-Library-CloudStorage-GoogleDrive-sanmarianito-gmail-com-Mi-unidad-Proyectos-Recientes-Coraggio/27abf08f-d927-4693-97cd-7cd38952a7d6/scratchpad/logo"],
-      "port": 8091
     }
   ]
 }
