@@ -61,3 +61,87 @@ section { padding-block: var(--espacio-6); }
 .firma__remate { font: 400 clamp(1.75rem, 3.4vw, 2.75rem)/1.2 var(--font-display); margin-top: var(--espacio-3); }
 .firma__remate strong { color: var(--naranja); font-weight: 400; }
 @media (min-width: 1000px) { .firma__grilla { grid-template-columns: 1fr 1fr; align-items: start; } }
+
+/* Reseñas */
+.resenas__cabecera { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: var(--espacio-2); margin-bottom: var(--espacio-4); }
+.resenas__cabecera h2 { margin: 0; }
+.resenas__nota { margin: 0; font-size: 1.125rem; }
+.estrellas { color: var(--naranja); letter-spacing: 0.1em; margin: 0 0 var(--espacio-1); }
+.resenas__lista {
+  list-style: none; margin: 0; padding: 0 0 var(--espacio-2);
+  display: grid; grid-auto-flow: column; grid-auto-columns: min(85%, 26rem); gap: var(--espacio-3);
+  overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin;
+}
+.resena { scroll-snap-align: start; background: var(--blanco); border-radius: var(--radio); padding: var(--espacio-3); display: flex; flex-direction: column; }
+.resena blockquote { margin: 0 0 var(--espacio-2); flex: 1; font-size: 1.125rem; }
+.resena__autor { margin: 0; font-weight: 600; }
+.resenas__pie { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--espacio-2); margin-top: var(--espacio-3); }
+.resenas__flechas { display: flex; gap: var(--espacio-1); }
+.resenas__flechas[hidden] { display: none; }
+.resenas__flechas .icono { background: transparent; font-size: 1.25rem; cursor: pointer; }
+
+/* Marca gigante con la copa */
+.marca { padding-block: var(--espacio-5); overflow: hidden; }
+.marca__escena { position: relative; display: grid; place-items: center; }
+.marca__palabra { font: 400 clamp(4rem, 19vw, 18rem)/0.9 var(--font-display); color: var(--oliva); letter-spacing: -0.02em; white-space: nowrap; }
+.marca__copa {
+  position: absolute; height: 125%; width: auto; aspect-ratio: 3 / 4;
+  object-fit: cover; object-position: 70% 50%;
+  border-radius: 999px; border: 6px solid var(--crema);
+  background: var(--oliva);
+}
+
+/* Momentos */
+.momentos { background: var(--crema-oscura); }
+.momentos__grilla { display: grid; gap: var(--espacio-4); align-items: center; }
+@media (min-width: 900px) { .momentos__grilla { grid-template-columns: 1fr 1.1fr; } }
+.momentos__grilla picture, .historia__grilla picture { border-radius: var(--radio); overflow: hidden; }
+.momentos__lista { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--espacio-1); }
+.momentos__lista li { padding: 0.5rem 1.1rem; border-radius: 999px; border: 1.5px solid var(--oliva); font-weight: 600; }
+.momentos__lista li:nth-child(3n + 1) { background: var(--oliva); color: var(--crema); }
+
+/* Historia */
+.historia__grilla { display: grid; gap: var(--espacio-4); align-items: center; }
+@media (min-width: 900px) { .historia__grilla { grid-template-columns: 1.3fr 1fr; } }
+.historia p { font-size: 1.125rem; max-width: 40ch; }
+
+/* Recetas */
+.recetas { background: var(--oliva); color: var(--crema); }
+.recetas h2 { color: var(--crema); }
+.recetas__grilla { list-style: none; margin: var(--espacio-4) 0 0; padding: 0; display: grid; gap: var(--espacio-3); }
+@media (min-width: 900px) { .recetas__grilla { grid-template-columns: repeat(3, 1fr); } }
+.receta { border: 1.5px solid rgb(244 238 227 / 0.35); border-radius: var(--radio); padding: var(--espacio-3); }
+.receta h3 { color: var(--naranja); font-size: 2rem; }
+.receta__tag { font-weight: 600; }
+.receta__medidas { list-style: none; margin: var(--espacio-2) 0 0; padding: var(--espacio-2) 0 0; border-top: 1px solid rgb(244 238 227 / 0.35); }
+.receta__medidas li { padding: 0.2rem 0; }
+
+/* Instagram */
+.instagram__cabecera { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: var(--espacio-2); margin-bottom: var(--espacio-4); }
+.instagram__cabecera h2 { margin: 0; max-width: 18ch; }
+.instagram__grilla { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--espacio-2); grid-template-columns: repeat(2, 1fr); }
+@media (min-width: 900px) { .instagram__grilla { grid-template-columns: repeat(3, 1fr); } }
+.instagram__grilla a { display: block; border-radius: var(--radio); overflow: hidden; background: var(--oliva); }
+.instagram__grilla img { aspect-ratio: 1; object-fit: cover; width: 100%; transition: transform 0.3s ease; }
+.instagram__grilla a:hover img { transform: scale(1.04); }
+
+/* Visítanos */
+.visitanos { background: var(--crema-oscura); }
+.visitanos__grilla { display: grid; gap: var(--espacio-4); }
+@media (min-width: 900px) { .visitanos__grilla { grid-template-columns: 1fr 1.2fr; align-items: stretch; } }
+.visitanos__dato { font-size: 1.25rem; }
+.visitanos .botones { margin-block: var(--espacio-3); }
+.visitanos__contacto a { font-weight: 600; }
+.visitanos__encargos { margin-top: var(--espacio-3); padding: var(--espacio-3); border-radius: var(--radio); background: var(--crema); }
+.visitanos__mapa { width: 100%; min-height: 22rem; border: 0; border-radius: var(--radio); background: var(--oliva); }
+.estado { display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600; margin: 0; }
+.estado::before { content: ''; width: 0.7rem; height: 0.7rem; border-radius: 50%; background: currentColor; }
+.estado--abierto::before { background: #2f7d32; }
+.estado--cerrado::before { background: #9a3412; }
+
+.pie__logo { width: 72px; height: 72px; margin-bottom: var(--espacio-2); }
+
+@media (prefers-reduced-motion: reduce) {
+  .instagram__grilla img { transition: none; }
+  .instagram__grilla a:hover img { transform: none; }
+}
