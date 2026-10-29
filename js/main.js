@@ -45,3 +45,11 @@ if (menu) {
   addEventListener('scroll', alternar, { passive: true });
   alternar();
 }
+
+// El hero termina en el borde inferior de la ventana: descuenta la cinta superior.
+const cintaSuperior = document.getElementById('cinta-superior');
+if (cintaSuperior) {
+  const medir = () => document.documentElement.style.setProperty('--alto-cinta', `${cintaSuperior.offsetHeight}px`);
+  new ResizeObserver(medir).observe(cintaSuperior);
+  medir();
+}
