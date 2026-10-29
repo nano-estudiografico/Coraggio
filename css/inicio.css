@@ -1,13 +1,32 @@
 section { padding-block: var(--espacio-6); }
 
 /* Hero */
+.menu {
+  position: sticky; margin-bottom: calc(-1 * var(--alto-menu)); overflow: hidden;
+  color: var(--crema); text-shadow: 0 1px 2px rgb(0 0 0 / 52%);
+  transition: color 0.35s ease;
+}
+.menu a { color: inherit; }
+.menu .icono { background: var(--crema); color: var(--oliva); border-color: transparent; transition: border-color 0.35s ease, background-color 0.2s, color 0.2s; }
+/* Bloque crema que baja desde arriba y cubre todo el alto del menú */
+.menu::before {
+  content: ''; position: absolute; inset: 0; z-index: -1;
+  background: rgb(244 238 227 / 0.72); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  transform: translateY(-100%);
+  transition: transform 0.35s ease;
+}
+.menu:hover, .menu:focus-within, .menu--solido { color: var(--oliva); text-shadow: none; }
+.menu:hover .icono, .menu:focus-within .icono, .menu--solido .icono { border-color: var(--oliva); background: transparent; }
+.menu .icono:hover { background: var(--oliva); color: var(--crema); }
+.menu:hover::before, .menu:focus-within::before, .menu--solido::before { transform: none; }
+@media (prefers-reduced-motion: reduce) { .menu, .menu::before, .menu .icono { transition: none; } }
 .hero { position: relative; min-height: min(92vh, 56rem); padding: 0; display: grid; align-items: end; color: var(--crema); overflow: hidden; }
 .hero__foto, .hero__foto img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .hero__foto::after {
   content: ''; position: absolute; inset: 0;
   background: linear-gradient(to top, rgb(30 34 14 / 0.9) 0%, rgb(30 34 14 / 0.72) 40%, rgb(30 34 14 / 0) 78%);
 }
-.hero__texto { position: relative; padding-block: var(--espacio-5); }
+.hero__texto { position: relative; padding-block: calc(var(--alto-menu) + var(--espacio-5)) var(--espacio-6); }
 .hero h1 { color: var(--crema); margin-bottom: var(--espacio-1); }
 .hero__sub { font-size: clamp(1.125rem, 2vw, 1.375rem); max-width: 34ch; margin-bottom: var(--espacio-3); }
 .btn--claro { border-color: var(--crema); color: var(--crema); }

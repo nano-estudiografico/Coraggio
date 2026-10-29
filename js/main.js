@@ -24,3 +24,24 @@ if (lista && flechas) {
 
 const anio = document.getElementById('anio');
 if (anio) anio.textContent = new Date().getFullYear();
+
+// Cintas sin corte: la pista se repite hasta que la mitad (lo que recorre la animación) cubra la pantalla.
+// La duración crece con las copias para que la velocidad no cambie.
+document.fonts.ready.then(() => {
+  for (const pista of document.querySelectorAll('.cinta__pista')) {
+    const texto = pista.firstElementChild;
+    const copias = 2 * Math.ceil(innerWidth / texto.offsetWidth);
+    if (copias <= 2) continue;
+    const base = parseFloat(getComputedStyle(pista).animationDuration);
+    while (pista.children.length < copias) pista.append(pista.lastElementChild.cloneNode(true));
+    pista.style.animationDuration = `${base * copias / 2}s`;
+  }
+});
+
+// Al empezar el scroll el menú toma su bloque crema (igual que en hover), sin sombras.
+const menu = document.querySelector('.menu');
+if (menu) {
+  const alternar = () => menu.classList.toggle('menu--solido', scrollY > 8);
+  addEventListener('scroll', alternar, { passive: true });
+  alternar();
+}
