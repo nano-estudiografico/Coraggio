@@ -72,3 +72,66 @@ test('los tres logos existen, son SVG con viewBox y título', () => {
     assert.doesNotMatch(svg, /<image/); // vector puro, sin bitmap incrustado
   }
 });
+
+const paginas = ['index.html', 'carta.html'];
+
+test('toda imagen tiene alt y no vacío salvo decorativas', () => {
+  for (const p of paginas) for (const img of leer(p).match(/<img[^>]*>/g)) {
+    assert.match(img, /alt="/, `${p}: ${img}`);
+    if (!/alt=""/.test(img)) continue;
+    assert.ok(leer(p).includes('aria-hidden="true"'), `${p}: imagen sin alt fuera de un bloque decorativo`);
+  }
+});
+
+test('enlaces de solo ícono tienen aria-label', () => {
+  for (const p of paginas) for (const a of leer(p).match(/<a [^>]*class="[^"]*icono[^"]*"[^>]*>/g) || []) assert.match(a, /aria-label="/, a);
+});
+
+test('externos con target _blank y rel noopener', () => {
+  for (const p of paginas) for (const a of leer(p).match(/<a [^>]*href="https?:[^>]*>/g)) {
+    assert.match(a, /target="_blank"/, a);
+    assert.match(a, /rel="noopener"/, a);
+  }
+});
+
+test('avisos legales literales en ambas páginas', () => {
+  for (const p of paginas) {
+    assert.ok(leer(p).includes('El exceso de alcohol es perjudicial para la salud. Prohíbase el expendio de bebidas embriagantes a menores de edad.'), p);
+    assert.ok(leer(p).includes('Precios en miles de pesos. Incluyen impuesto al consumo.'), p);
+  }
+});
+
+test('metadatos y datos estructurados', () => {
+  for (const p of paginas) {
+    const h = leer(p);
+    assert.match(h, /<html lang="es-CO">/);
+    assert.match(h, /<meta name="description"/);
+    assert.match(h, /<meta property="og:image" content="img\/tres-spritz-1920\.jpg"/);
+    assert.match(h, /<link rel="icon" href="favicon\.svg"/);
+  }
+  const ld = JSON.parse(inicio().match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
+  assert.equal(ld['@type'], 'BarOrPub');
+  assert.equal(ld.address.addressLocality, 'Medellín');
+  assert.equal(ld.telephone, '+57 300 700 2822');
+  assert.equal(ld.openingHoursSpecification.opens, '09:00');
+  assert.equal(ld.openingHoursSpecification.closes, '21:00');
+});
+
+test('sin localStorage, animaciones con reduced-motion y nada arranca invisible', () => {
+  assert.doesNotMatch(inicio(), /localStorage/);
+  assert.doesNotMatch(leer('js/main.js'), /localStorage/);
+  for (const f of ['css/base.css', 'css/inicio.css', 'css/carta.css']) {
+    const css = leer(f);
+    if (/@keyframes|animation:|transition:/.test(css)) assert.match(css, /prefers-reduced-motion/, f);
+    assert.doesNotMatch(css, /opacity:\s*0\s*[;}]/, `${f}: nada debe arrancar invisible`);
+  }
+});
+
+test('contenedores de imagen con color de fondo', () => {
+  assert.match(leer('css/base.css'), /picture[^{]*\{[^}]*background(-color)?:/);
+});
+
+test('sin JS: el estado de horario arranca oculto y el horario está escrito', () => {
+  assert.match(inicio(), /<p class="estado" id="estado-horario" hidden><\/p>/);
+  assert.match(leer('css/base.css'), /\[hidden\]\s*\{\s*display:\s*none/);
+});
