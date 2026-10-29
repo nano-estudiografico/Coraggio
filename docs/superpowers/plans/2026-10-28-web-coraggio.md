@@ -15,7 +15,7 @@
 - Idioma de la web: español (Colombia), `<html lang="es-CO">`. Trato de "tú" como en la marca ("Ponle corazón que tú puedes").
 - Sin tienda, carrito, cuentas, reservas, newsletter ni base de datos.
 - Sin dependencias npm; Node solo para tests y para `tools/`.
-- Colores (tokens en `css/tokens.css`): `--oliva: #303717`, `--naranja: #E8652B`, `--crema: #F4EEE3`, `--blanco: #FFFFFF`. Texto general en oliva sobre crema (10,8:1). Naranja nunca como color de texto sobre crema; sobre oliva solo en títulos ≥ 24 px o negrita. Botones naranjas con texto oliva en negrita.
+- Colores (tokens en `css/tokens.css`): `--oliva: #303717`, `--naranja: #FF5E00`, `--crema: #F4EEE3`, `--blanco: #FFFFFF`. Texto general en oliva sobre crema (10,8:1). Naranja nunca como color de texto sobre crema; sobre oliva solo en títulos ≥ 24 px o negrita. Botones naranjas con texto oliva en negrita.
 - Tipografía: display **Gloock** solo en títulos, frases y momentos grandes; texto **Instrument Sans**, tamaño base 17 px (`1.0625rem`), escalas en `rem` para que el zoom de texto funcione.
 - Objetivos táctiles ≥ 44 × 44 px; foco visible en todo lo interactivo.
 - Todo movimiento (cintas, entradas) se apaga con `prefers-reduced-motion: reduce`.

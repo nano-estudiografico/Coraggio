@@ -111,7 +111,7 @@ Los datos de la carta viven en un archivo aparte (JSON o similar) para cambiar p
 | Rol | Valor aproximado | Uso |
 |---|---|---|
 | Verde oliva | #303717 | Texto principal sobre fondos claros, fondo del momento firma y del pie |
-| Naranja Coraggio | #FF5E00 (la marca impresa se ve más cercana a #E8652B) | Botones de acción principal y detalles; nunca texto chico |
+| Naranja Coraggio | #FF5E00 (oficial, confirmado por el usuario el 28 oct 2026) | Botones de acción principal, títulos grandes sobre oliva y logo; nunca texto chico ni contorno de foco sobre crema |
 | Crema | ~#F4EEE3 | Fondo general |
 | Blanco / mármol | — | Tarjetas, carta |
 

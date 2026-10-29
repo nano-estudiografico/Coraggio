@@ -36,7 +36,9 @@ h3 { font-size: clamp(1.5rem, 2.6vw, 2rem); }
 p { margin: 0 0 var(--espacio-2); }
 
 a { color: inherit; text-underline-offset: 0.2em; }
-:focus-visible { outline: 3px solid var(--naranja); outline-offset: 3px; border-radius: 4px; }
+:focus-visible { outline: 3px solid var(--oliva); outline-offset: 3px; border-radius: 4px; }
+/* En secciones oscuras el contorno de foco va en crema (10,8:1); el naranja sobre crema no llega a 3:1. */
+:is(.hero, .firma, .recetas, .pie, .barra-movil, .cinta, #combos) :focus-visible { outline-color: var(--crema); }
 
 .contenedor { width: min(100% - 2rem, var(--ancho-max)); margin-inline: auto; }
 /* Las columnas de grilla pueden achicarse por debajo de su contenido (zoom de texto en celulares chicos). */
@@ -68,7 +70,7 @@ a.visualmente-oculto:focus {
 }
 .btn:hover { transform: translateY(-1px); }
 .btn--primario { background: var(--naranja); color: var(--oliva); }
-.btn--primario:hover { background: #f07a45; }
+.btn--primario:hover { background: #ff7a2e; }
 .btn--secundario { border-color: currentColor; color: inherit; background: transparent; }
 .btn--secundario:hover { background: rgb(48 55 23 / 0.08); }
 .botones { display: flex; flex-wrap: wrap; gap: var(--espacio-2); }
@@ -87,7 +89,7 @@ a.visualmente-oculto:focus {
 .menu__enlaces { display: flex; gap: var(--espacio-3); list-style: none; margin: 0; padding: 0; }
 .menu__enlaces a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; text-decoration: none; }
 .menu__enlaces a:hover, .menu__enlaces a[aria-current="page"] { text-decoration: underline; }
-.menu__logo img { height: 2.25rem; width: auto; }
+.menu__logo img { height: 3rem; width: auto; }
 .menu__iconos { display: flex; justify-content: flex-end; gap: var(--espacio-1); }
 .icono {
   display: inline-grid; place-items: center;
@@ -101,7 +103,7 @@ a.visualmente-oculto:focus {
   .menu__barra { grid-template-columns: 1fr auto; }
   .menu__barra > nav { display: none; }
   .menu__logo { justify-self: start; }
-  .menu__logo img { height: 1.9rem; }
+  .menu__logo img { height: 2.4rem; }
 }
 
 /* Cinta en movimiento */

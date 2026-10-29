@@ -70,6 +70,7 @@ section { padding-block: var(--espacio-6); }
 .resenas__cabecera { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: var(--espacio-2); margin-bottom: var(--espacio-4); }
 .resenas__cabecera h2 { margin: 0; }
 .resenas__nota { margin: 0; font-size: 1.125rem; }
+.resenas__nota .estrellas { color: var(--oliva); } /* sobre crema el naranja da 2,65:1 */
 .estrellas { color: var(--naranja); letter-spacing: 0.1em; margin: 0 0 var(--espacio-1); }
 .resenas__lista {
   list-style: none; margin: 0; padding: 0 0 var(--espacio-2);
