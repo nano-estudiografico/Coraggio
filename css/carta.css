@@ -1,0 +1,57 @@
+.carta { padding-block: var(--espacio-4) var(--espacio-5); }
+
+.carta__cabecera h1 { font-size: clamp(3rem, 10vw, 6.5rem); margin-bottom: var(--espacio-1); }
+.carta__intro { font-size: 1.125rem; }
+
+.carta__indice {
+  position: sticky; top: var(--alto-menu); z-index: 10;
+  display: flex; gap: var(--espacio-1); overflow-x: auto;
+  margin: var(--espacio-3) -1rem var(--espacio-4); padding: var(--espacio-1) 1rem;
+  background: var(--crema);
+  scrollbar-width: none;
+}
+.carta__indice a {
+  flex: none; display: inline-flex; align-items: center; min-height: 44px;
+  padding: 0 1rem; border-radius: 999px; border: 1.5px solid rgb(48 55 23 / 0.35);
+  font-weight: 600; text-decoration: none; white-space: nowrap;
+}
+.carta__indice a:hover { background: var(--oliva); color: var(--crema); }
+
+.carta__seccion { margin-bottom: var(--espacio-5); }
+.carta__seccion > h2 {
+  display: flex; align-items: center; gap: var(--espacio-2);
+  border-bottom: 2px solid var(--oliva); padding-bottom: var(--espacio-1);
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+.carta__grupos { display: grid; gap: var(--espacio-4) var(--espacio-5); }
+@media (min-width: 768px) { .carta__grupos { grid-template-columns: 1fr 1fr; } }
+
+.carta__grupo h3 { font-size: 1.5rem; margin-bottom: var(--espacio-2); }
+.carta__lista { list-style: none; margin: 0; padding: 0; }
+.carta__item {
+  display: flex; flex-wrap: wrap; gap: 0 1rem;
+  justify-content: space-between; align-items: baseline;
+  padding: 0.6rem 0; border-bottom: 1px dashed rgb(48 55 23 / 0.25);
+}
+.carta__nombre { flex: 1; min-width: 0; overflow-wrap: anywhere; font-weight: 600; }
+.carta__precio { flex: none; font-variant-numeric: tabular-nums; font-weight: 600; }
+.carta__detalle { flex-basis: 100%; font-size: var(--texto-chico); color: var(--oliva-suave); }
+
+#combos .carta__item { padding: 0.9rem 1rem; margin-bottom: 0.5rem; border: 0; border-radius: var(--radio); background: var(--oliva); color: var(--crema); }
+#combos .carta__detalle { color: rgb(244 238 227 / 0.85); }
+
+.carta__promos {
+  display: flex; flex-wrap: wrap; gap: var(--espacio-2);
+  list-style: none; margin: 0 0 var(--espacio-5); padding: 0;
+}
+.carta__promos li {
+  padding: 0.75rem 1.5rem; border-radius: 999px;
+  background: var(--naranja); color: var(--oliva);
+  font: 400 1.5rem/1.2 var(--font-display);
+}
+
+.carta__encargos {
+  padding: var(--espacio-4); border-radius: var(--radio);
+  background: var(--crema-oscura); margin-bottom: var(--espacio-4);
+}
+.carta__notas { font-size: var(--texto-chico); }

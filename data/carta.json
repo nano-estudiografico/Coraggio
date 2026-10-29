@@ -1,0 +1,126 @@
+{
+  "secciones": [
+    {
+      "id": "cafe",
+      "titulo": "Café",
+      "grupos": [
+        {
+          "id": "calientes",
+          "titulo": "Bebidas calientes",
+          "items": [
+            { "nombre": "Tinto", "precio": 2 },
+            { "nombre": "Espresso", "precio": 4.9 },
+            { "nombre": "Café con leche", "precio": 5.9 },
+            { "nombre": "Americano", "precio": 5.9 },
+            { "nombre": "Capuccino", "precio": 6.9 },
+            { "nombre": "Latte", "precio": 6.9 },
+            { "nombre": "Prensa francesa", "precio": 8.9 },
+            { "nombre": "Aromática", "precio": 2.9 }
+          ]
+        },
+        {
+          "id": "frias",
+          "titulo": "Bebidas frías",
+          "items": [
+            { "nombre": "Cold brew", "precio": 11.9 },
+            { "nombre": "Cold brew naranja", "precio": 11.9 },
+            { "nombre": "Limonada de café", "precio": 11.9 },
+            { "nombre": "Iced latte", "precio": 12.9 },
+            { "nombre": "Granizado de café", "precio": 12.9 },
+            { "nombre": "Chai latte", "precio": 9.9, "detalle": "Caliente o frío" }
+          ]
+        },
+        {
+          "id": "combos",
+          "titulo": "Combos",
+          "items": [
+            { "nombre": "Combo Classico", "precio": 7.9, "detalle": "Tinto + palito de queso" },
+            { "nombre": "Combo Due", "precio": 12.9, "detalle": "Latte o café con leche + pastel salado" },
+            { "nombre": "Combo Freddo", "precio": 16.9, "detalle": "Granizado de café o cold brew + pastel salado" },
+            { "nombre": "Combo Dolce", "precio": 18.9, "detalle": "Capuccino o americano + torta de zanahoria" }
+          ]
+        },
+        {
+          "id": "dulce",
+          "titulo": "Para acompañar: dulce",
+          "items": [
+            { "nombre": "Torta de zanahoria", "precio": 14.9 },
+            { "nombre": "Tarta vasca", "precio": 18.9 },
+            { "nombre": "Pastel de arequipe", "precio": 6.9 },
+            { "nombre": "Pastel de guayaba", "precio": 6.9 }
+          ]
+        },
+        {
+          "id": "salado",
+          "titulo": "Para acompañar: salado",
+          "items": [
+            { "nombre": "Palito de queso", "precio": 6.9 },
+            { "nombre": "Pastel de jamón y queso", "precio": 8.9 },
+            { "nombre": "Pastel de tocineta", "precio": 8.9 },
+            { "nombre": "Pastel de pollo", "precio": 8.9 },
+            { "nombre": "Pastel de carne", "precio": 8.9 },
+            { "nombre": "Pastel Il Rustico", "precio": 10.9, "detalle": "Salami, pepperoni y queso crema" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aperitivos",
+      "titulo": "Aperitivos",
+      "grupos": [
+        {
+          "id": "spritz",
+          "titulo": "Spritz y copas",
+          "items": [
+            { "nombre": "Aperol Spritz", "precio": 28 },
+            { "nombre": "Campari Spritz", "precio": 28 },
+            { "nombre": "Limoncello Spritz", "precio": 28 },
+            { "nombre": "Mimosa", "precio": 15 },
+            { "nombre": "Lambrusco", "precio": 16, "detalle": "Copa" },
+            { "nombre": "Prosecco", "precio": 16, "detalle": "Copa" },
+            { "nombre": "Vino tinto", "precio": 18, "detalle": "Copa" },
+            { "nombre": "Vino blanco", "precio": 18, "detalle": "Copa" }
+          ]
+        },
+        {
+          "id": "birras",
+          "titulo": "Birras",
+          "items": [
+            { "nombre": "Peroni Nastro Azzurro", "precio": 15 },
+            { "nombre": "Stella Artois", "precio": 12 },
+            { "nombre": "Club Colombia", "precio": 9 },
+            { "nombre": "Coronita", "precio": 9 },
+            { "nombre": "Águila", "precio": 7 },
+            { "nombre": "Pilsen", "precio": 7 },
+            { "nombre": "Vaso michelado", "precio": 2 }
+          ]
+        },
+        {
+          "id": "sin-alcohol",
+          "titulo": "Sin alcohol",
+          "items": [
+            { "nombre": "Coca-Cola", "precio": 5.9, "detalle": "Con o sin azúcar" },
+            { "nombre": "Agua", "precio": 6.9, "detalle": "Con o sin gas" },
+            { "nombre": "Té Hatsu", "precio": 8.9 },
+            { "nombre": "Soda Hatsu", "precio": 9.9 },
+            { "nombre": "Red Bull", "precio": 10.9 },
+            { "nombre": "Sanpellegrino Zero", "precio": 13.9 }
+          ]
+        },
+        {
+          "id": "picar",
+          "titulo": "Para picar",
+          "items": [
+            { "nombre": "Panini pulled pork", "precio": 28 },
+            { "nombre": "Crostinis pulled pork", "precio": 50, "detalle": "x12" },
+            { "nombre": "Tabla madurados-queso", "precio": 65 }
+          ]
+        }
+      ]
+    }
+  ],
+  "promos": [
+    { "texto": "2 spritz × 50" },
+    { "texto": "2 copas × 30" }
+  ]
+}
