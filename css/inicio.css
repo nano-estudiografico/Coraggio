@@ -2,6 +2,7 @@ section { padding-block: var(--espacio-6); }
 
 /* Hero */
 .menu {
+  background: none; backdrop-filter: none; border-bottom: 0;
   position: sticky; margin-bottom: calc(-1 * var(--alto-menu));
   color: var(--crema); text-shadow: 0 1px 2px rgb(0 0 0 / 52%);
   transition: color 0.35s ease;
