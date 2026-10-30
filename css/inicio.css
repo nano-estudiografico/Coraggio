@@ -167,7 +167,15 @@ section { padding-block: var(--espacio-6); }
 .copa__medidas li[style]::before { content: ""; flex: none; width: 1.6rem; height: 0.7rem; border-radius: 2px; background: var(--c); }
 @media (prefers-reduced-motion: reduce) { .copa__giro, .copa__giro > .copa__flota, .copa__liquido, .copa__liquido img { transition: none; animation: none; } }
 .copas__pie { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--espacio-2); margin-top: var(--espacio-4); }
-.copas__promo { margin: 0; font-size: 1.125rem; }
+.copas__promo {
+  display: inline-flex; align-items: center; gap: 0.6rem; margin: 0;
+  padding: 0.5rem 1.25rem 0.5rem 0.5rem; border-radius: 2rem;
+  background: var(--oliva); color: var(--crema); font-size: 1.125rem;
+}
+.copas__promo > img { width: 2.25rem; height: 2.25rem; flex: none; }
+.copas__promo strong { white-space: nowrap; }
+.copas__sep { display: inline-block; width: 0.35em; height: 0.35em; margin-inline: 0.4em; border-radius: 50%; background: var(--naranja); vertical-align: 0.15em; }
+.copas__ico { display: inline-block; width: auto; height: 1.15em; margin-right: 0.3em; vertical-align: -0.2em; }
 
 /* Día y tarde */
 .dia { background: var(--crema-oscura); }

@@ -30,6 +30,88 @@ if (matchMedia('(hover: none)').matches) {
   });
 }
 
+// Entrada de las copas: al acercarse a la pantalla las tarjetas esperan fuera, por el borde izquierdo;
+// al verse entran juntas como un mazo hasta el lugar de la primera (Aperol). Por inercia, mientras viajan
+// se inclinan hacia atrás (izquierda) y al frenar se balancean hacia adelante (derecha); ese impulso lanza
+// a las demás hasta su sitio, donde se enderezan. La primera se asienta en el suyo. Solo con varias
+// columnas y sin "reducir movimiento".
+const grillaCopas = document.querySelector('.copas__grilla');
+if (grillaCopas && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const copas = [...grillaCopas.children];
+  const columnas = () => getComputedStyle(grillaCopas).gridTemplateColumns.split(' ').length;
+  const llegada = 550; // ms del viaje del mazo hasta el lugar de la primera
+  const frenado = 0.7; // fracción del viaje en que empieza a frenar: hasta ahí van inclinadas hacia atrás
+  const viaje = 'cubic-bezier(0.45, 0, 0.55, 0.85)'; // acelera y frena sin detenerse (pendiente final 1/3)
+  const lanzada = 'cubic-bezier(0.2, 0.24, 0.35, 1)'; // sale con impulso (pendiente 1,2) y frena en su sitio
+  const asienta = 180; // ms que la primera se pasa de su lugar antes de volver
+  // Inclinación desde la base: las de atrás, más (atrás = hacia la izquierda, adelante = hacia la derecha).
+  const atras = (i) => `${-4 - i * 3}deg`;
+  const adelante = (i) => `${3 + i * 3}deg`;
+  let recorridos = null; // por tarjeta, relativo a su lugar: desde dónde entra y dónde queda la primera
+  const sacar = () => {
+    const primera = copas[0].getBoundingClientRect();
+    recorridos = copas.map((copa, i) => {
+      const r = copa.getBoundingClientRect();
+      const inicio = [-r.right - 40, primera.top - r.top];
+      const enPrimera = [primera.left - r.left, primera.top - r.top];
+      copa.style.translate = `${inicio[0]}px ${inicio[1]}px`;
+      copa.style.rotate = atras(i);
+      copa.style.transformOrigin = '50% 100%';
+      copa.style.zIndex = copas.length - i; // la primera encima de todas; la última (Mimosa) debajo
+      return { inicio, enPrimera };
+    });
+  };
+  const px = ([x, y]) => `${x}px ${y}px`;
+  const repartir = () => {
+    const animaciones = copas.map((copa, i) => {
+      const { inicio, enPrimera } = recorridos[i];
+      const tramo1 = Math.hypot(enPrimera[0] - inicio[0], enPrimera[1] - inicio[1]);
+      const tramo2 = Math.hypot(...enPrimera);
+      copa.style.translate = copa.style.rotate = '';
+      const primera = tramo2 < 1;
+      const duracion = primera ? llegada + asienta * 2 : llegada * (1 + tramo2 / tramo1);
+      const en = (ms) => ms / duracion;
+      // Desplazamiento.
+      const mover = primera
+        ? [ // la primera frena, se pasa un poco por la inercia y vuelve
+          { translate: px(inicio), easing: viaje },
+          { translate: '0px 0px', offset: en(llegada), easing: 'cubic-bezier(0.1, 0.3, 0.3, 1)' },
+          { translate: `${(tramo1 / llegada / 3) * asienta / 3}px 0px`, offset: en(llegada + asienta), easing: 'ease-in-out' },
+          { translate: '0px 0px' },
+        ]
+        : [
+          { translate: px(inicio), easing: viaje },
+          { translate: px(enPrimera), offset: en(llegada), easing: lanzada },
+          { translate: '0px 0px' },
+        ];
+      // Inclinación: hacia atrás mientras viajan, hacia adelante al frenar, derechas al llegar a su sitio.
+      const inclinar = [
+        { rotate: atras(i) },
+        { rotate: atras(i), offset: en(llegada * frenado), easing: 'ease-in-out' },
+        { rotate: adelante(i), offset: en(llegada), easing: primera ? 'ease-in-out' : lanzada },
+        ...(primera ? [{ rotate: '0deg', offset: en(llegada + asienta) }] : []),
+        { rotate: '0deg' },
+      ];
+      return [copa.animate(mover, { duration: duracion }), copa.animate(inclinar, { duration: duracion })];
+    }).flat();
+    Promise.all(animaciones.map((a) => a.finished)).then(() => copas.forEach((copa) => {
+      copa.style.zIndex = copa.style.transformOrigin = '';
+    }));
+  };
+  const cerca = new IntersectionObserver(([e]) => {
+    if (!e.isIntersecting) return;
+    cerca.disconnect();
+    if (columnas() > 1) sacar();
+  }, { rootMargin: '0px 0px 300px 0px' });
+  const visible = new IntersectionObserver(([e]) => {
+    if (!e.isIntersecting || !recorridos) return;
+    visible.disconnect();
+    requestAnimationFrame(repartir);
+  }, { threshold: 0.35 });
+  cerca.observe(grillaCopas);
+  visible.observe(grillaCopas);
+}
+
 const anio = document.getElementById('anio');
 if (anio) anio.textContent = new Date().getFullYear();
 
