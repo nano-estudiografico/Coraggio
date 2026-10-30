@@ -1,0 +1,8 @@
+{
+  "github.copilot.chat.commitMessageGeneration.instructions": [
+    {
+      "text": "Escribe siempre los mensajes de commit en español, siguiendo el estándar de Conventional Commits (por ejemplo: feat: ..., fix: ..., chore: ...)."
+    }
+  ]
+}
+

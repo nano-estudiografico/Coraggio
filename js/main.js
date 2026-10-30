@@ -30,6 +30,18 @@ if (matchMedia('(hover: none)').matches) {
   });
 }
 
+// Frase de marca: la barra con oleaje sube desde abajo cuando la frase se ve.
+const titular = document.querySelector('.frase__titular');
+if (titular && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  titular.classList.add('frase__titular--vacia');
+  const verTitular = new IntersectionObserver(([e]) => {
+    if (!e.isIntersecting) return;
+    verTitular.disconnect();
+    requestAnimationFrame(() => titular.classList.remove('frase__titular--vacia'));
+  }, { threshold: 0.6 });
+  verTitular.observe(titular);
+}
+
 // Entrada de las copas: al acercarse a la pantalla las tarjetas esperan fuera, por el borde izquierdo;
 // al verse entran juntas como un mazo hasta el lugar de la primera (Aperol). Por inercia, mientras viajan
 // se inclinan hacia atrás (izquierda) y al frenar se balancean hacia adelante (derecha); ese impulso lanza
