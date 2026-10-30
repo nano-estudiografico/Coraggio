@@ -80,14 +80,13 @@
 
   <main id="contenido">
     <section class="hero" id="inicio" aria-labelledby="hero-titulo">
-      <picture class="hero__foto">
-        <source media="(min-width: 960px)" srcset="img/tres-spritz-1920.jpg">
-        <img src="img/tres-spritz-960.jpg" alt="Tres copas de spritz —Campari, Limoncello y Aperol— sobre una mesa de mármol en Coraggio" width="1920" height="1072" fetchpriority="high">
-      </picture>
-      <div class="contenedor hero__texto">
-        <h1 id="hero-titulo">Ponle corazón.</h1>
-        <p class="hero__sub">Café de día, aperitivo italiano de tarde. <br> <span class="hero__lugar">En San Diego, Medellín.</span></p>
-        <div class="botones">
+      <div class="hero__escena">
+        <video class="hero__video" src="video/hero-loop.mp4" poster="img/hero-loop-poster.jpg" autoplay muted loop playsinline aria-hidden="true"></video>
+        <div class="hero__texto">
+          <h1 id="hero-titulo"><span class="hero__ponle">Ponle</span> <span class="hero__corazon">corazón.</span></h1>
+          <p class="hero__sub">Café de día, aperitivo italiano de tarde. <br> <span class="hero__lugar">En San Diego, Medellín.</span></p>
+        </div>
+        <div class="botones hero__botones">
           <a class="btn btn--primario" href="carta.html">Ver la carta</a>
           <a class="btn btn--claro" href="https://www.rappi.com.co/restaurantes/delivery/373002-coraggio-aperitivos" target="_blank" rel="noopener">Pedir a domicilio</a>
         </div>
