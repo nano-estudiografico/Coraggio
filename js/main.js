@@ -123,3 +123,18 @@ if (cintaSuperior) {
   new ResizeObserver(medir).observe(cintaSuperior);
   medir();
 }
+
+// Móvil: el botón de hamburguesa abre y cierra el panel con enlaces e iconos.
+const burger = menu?.querySelector('.menu__burger');
+if (burger) {
+  const abrir = (si) => {
+    menu.classList.toggle('menu--abierto', si);
+    burger.setAttribute('aria-expanded', String(si));
+    burger.setAttribute('aria-label', si ? 'Cerrar el menú' : 'Abrir el menú');
+  };
+  burger.addEventListener('click', () => abrir(!menu.classList.contains('menu--abierto')));
+  menu.addEventListener('click', (e) => { if (e.target.closest('.menu__barra > nav a')) abrir(false); });
+  addEventListener('keydown', (e) => { if (e.key === 'Escape' && menu.classList.contains('menu--abierto')) { abrir(false); burger.focus(); } });
+  addEventListener('click', (e) => { if (!menu.contains(e.target)) abrir(false); });
+  addEventListener('resize', () => { if (innerWidth >= 768) abrir(false); });
+}

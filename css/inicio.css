@@ -12,15 +12,18 @@ section { padding-block: var(--espacio-6); }
 /* Bloque crema que baja desde arriba y cubre todo el alto del menú */
 .menu::before {
   content: ''; position: absolute; inset: 0; z-index: -1;
-  background: rgb(244 238 227 / 0.72); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  background: rgb(244 238 227 / 0.72); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
   clip-path: inset(0 0 100% 0); /* recorte en vez de overflow: el logo del hero sale del menú */
   transition: clip-path 0.35s ease;
 }
-.menu:hover, .menu:focus-within, .menu--solido { color: var(--oliva); text-shadow: none; }
-.menu:hover .icono, .menu:focus-within .icono, .menu--solido .icono { border-color: var(--oliva); background: transparent; }
+.menu:hover, .menu:focus-within, .menu--solido, .menu--abierto { color: var(--oliva); text-shadow: none; }
+.menu:hover .icono, .menu:focus-within .icono, .menu--solido .icono, .menu--abierto .icono { border-color: var(--oliva); background: transparent; }
 .menu .icono:hover { background: var(--oliva); color: var(--crema); }
-.menu:hover::before, .menu:focus-within::before, .menu--solido::before { clip-path: inset(0); }
+.menu:hover::before, .menu:focus-within::before, .menu--solido::before, .menu--abierto::before { clip-path: inset(0); }
+.menu--abierto::before { background: rgb(244 238 227 / 0.8); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
 .menu__logo img { display: block; transform-origin: center; }
+.menu--abierto .menu__logo img { transform: none !important; }
+@media (max-width: 767px) { .menu--abierto { position: fixed; inset: 0 0 auto 0; } } /* con la cinta arriba, el panel debe cubrir la pantalla entera */ /* con el panel abierto el logo no viaja por el hero */
 @media (prefers-reduced-motion: reduce) { .menu, .menu::before, .menu .icono { transition: none; } }
 .hero { position: relative; padding: 0; color: var(--crema); background: #1e220e; }
 .hero__escena { position: relative; height: calc(100vh - var(--alto-cinta, 0px)); height: calc(100svh - var(--alto-cinta, 0px)); min-height: 30rem; overflow: hidden; }
@@ -34,7 +37,6 @@ section { padding-block: var(--espacio-6); }
 .hero__sub { font-family: var(--font-display); font-size: clamp(1.125rem, 2vw, 1.5rem); max-width: 34ch; margin: 0; }
 .hero__lugar { font-family: var(--font-texto); }
 .hero__botones { position: absolute; left: 0; right: 0; bottom: calc(var(--espacio-4) + var(--cinta-visible, 0px)); justify-content: center; padding-inline: var(--espacio-2); }
-@media (max-width: 767px) { .hero__botones { bottom: calc(var(--alto-barra-movil) + var(--espacio-3) + var(--cinta-visible, 0px)); } }
 /* Con JS y movimiento permitido: escena fija mientras el scroll recorre la animación */
 .hero--animado { height: 220vh; }
 .hero--animado .hero__escena { position: sticky; top: 0; height: 100vh; height: 100svh; }
