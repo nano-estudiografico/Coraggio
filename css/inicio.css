@@ -48,7 +48,7 @@ section { padding-block: var(--espacio-6); }
 .frase__texto span { display: block; margin-top: var(--espacio-2); font: 400 clamp(1.125rem, 2vw, 1.5rem)/1.4 var(--font-texto); }
 
 /* Copas */
-.copas { padding-top: var(--espacio-3); }
+.copas { padding-top: var(--espacio-3); overflow-x: clip; } /* las copas (160 % de ancho) no deben dar scroll lateral en celular */
 .copas__grilla { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--espacio-3); grid-template-columns: 1fr; }
 @media (min-width: 640px) { .copas__grilla { grid-template-columns: 1fr 1fr; } }
 @media (min-width: 1100px) { .copas__grilla { grid-template-columns: repeat(4, 1fr); } }
