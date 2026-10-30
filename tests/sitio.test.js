@@ -5,6 +5,7 @@ import fs from 'node:fs';
 const leer = (ruta) => fs.readFileSync(new URL(`../${ruta}`, import.meta.url), 'utf8');
 
 const inicio = () => leer('index.html');
+const paginasYEstilos = () => ['index.html', 'carta.html', ...fs.readdirSync(new URL('../css', import.meta.url)).map(f => `css/${f}`)].map(leer);
 
 test('secciones 1-7 presentes en orden', () => {
   const ids = ['cinta-superior', 'inicio', 'frase', 'copas', 'dia-y-tarde', 'firma'];
@@ -38,9 +39,12 @@ test('las cuatro reseñas reales, con 4,9 y 31 reseñas', () => {
   assert.match(inicio(), /31 reseñas/);
 });
 
-test('recetas con medidas exactas', () => {
-  assert.equal((inicio().match(/90 ml de prosecco/g) || []).length, 3);
-  for (const l of ['Aperol', 'Campari', 'limoncello']) assert.match(inicio(), new RegExp(`60 ml de ${l}`));
+test('recetas con medidas exactas, en la sección y en el reverso de las copas', () => {
+  for (const id of ['recetas', 'copas']) {
+    const seccion = inicio().match(new RegExp(`<section class="${id}"[\\s\\S]*?</section>`))[0];
+    assert.equal((seccion.match(/90 ml de prosecco/g) || []).length, 3, id);
+    for (const l of ['Aperol', 'Campari', 'limoncello']) assert.match(seccion, new RegExp(`60 ml de ${l}`), id);
+  }
 });
 
 test('visítanos: dirección, horario escrito, contacto', () => {
@@ -64,11 +68,12 @@ test('barra móvil con tres acciones', () => {
   for (const t of ['Carta', 'Cómo llegar', 'Pedir']) assert.match(barra, new RegExp(`>\\s*${t}\\s*<`));
 });
 
-const IMAGENES = ['aperol-spritz', 'campari-spritz', 'limoncello-spritz', 'tres-spritz', 'mimosas', 'cafe-frio', 'capuchino', 'pasteleria', 'tabla-picar', 'salon', 'tazas-momentos'];
-test('cada imagen tiene versión 1920 y 960 de menos de 600 KB', () => {
-  for (const n of IMAGENES) for (const t of [1920, 960]) {
-    const { size } = fs.statSync(new URL(`../img/${n}-${t}.jpg`, import.meta.url));
-    assert.ok(size < 600_000, `${n}-${t} pesa ${size}`);
+test('toda imagen que usan las páginas existe y las fotos pesan menos de 600 KB', () => {
+  const rutas = new Set(paginasYEstilos().flatMap(t => t.match(/img\/[\w/.-]+\.(?:jpg|png|svg|webp)/g) || []));
+  assert.ok(rutas.size > 0);
+  for (const r of rutas) {
+    const { size } = fs.statSync(new URL(`../${r}`, import.meta.url));
+    if (/\.(jpg|webp)$/.test(r)) assert.ok(size < 600_000, `${r} pesa ${size}`);
   }
 });
 

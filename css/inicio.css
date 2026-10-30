@@ -52,16 +52,49 @@ section { padding-block: var(--espacio-6); }
 .copas__grilla { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--espacio-3); grid-template-columns: 1fr; }
 @media (min-width: 640px) { .copas__grilla { grid-template-columns: 1fr 1fr; } }
 @media (min-width: 1100px) { .copas__grilla { grid-template-columns: repeat(4, 1fr); } }
-/* La foto se corta en el borde superior de la tarjeta; encima va la misma copa sin fondo,
+/* Tarjeta de dos caras: al pasar el cursor (o enfocarla / tocarla) gira 180° y muestra el reverso. */
+.copa { --perspectiva: 1400; margin-top: 47%; perspective: calc(var(--perspectiva) * 1px); perspective-origin: 50% 0; border-radius: var(--radio); }
+.copa__giro { position: relative; height: 100%; transform-style: preserve-3d; transition: transform 1.4s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.copa:hover .copa__giro, .copa:focus-within .copa__giro { transform: rotateY(180deg); }
+.copa__cara { border-radius: var(--radio); }
+.copa__cara, .copa__media { transform-style: preserve-3d; }
+.copa__giro * { -webkit-backface-visibility: hidden; backface-visibility: hidden; }
+/* Las copas (recorte y dibujo) flotan --z px delante de su cara y se separan al girar. La escala
+   compensa el agrandado de la perspectiva desde su punto de fuga (arriba al centro de la tarjeta,
+   que en el lienzo de cada imagen cae al 42 %), así en reposo siguen calzando con la foto. */
+.copa__recorte, .copa__media--dorso img {
+  --z: 80;
+  transform: translateZ(calc(var(--z) * 1px)) scale(calc(1 - var(--z) / var(--perspectiva)));
+  transform-origin: 50% 42%;
+}
+
+/* Frente: la foto se corta en el borde superior; encima va la misma copa sin fondo,
    alineada píxel a píxel, que sí sobresale. El margen superior deja lugar a lo que sobresale. */
-.copa { background: var(--blanco); border-radius: var(--radio); display: flex; flex-direction: column; margin-top: 47%; }
+.copa__frente { height: 100%; background: var(--blanco); display: flex; flex-direction: column; }
 .copa__media { position: relative; aspect-ratio: 5 / 6; }
 .copa__fondo { position: absolute; inset: 0; overflow: hidden; border-radius: var(--radio) var(--radio) 0 0; }
-.copa__media img { position: absolute; top: -75%; left: 50%; width: 160%; max-width: none; translate: -50% 0; }
-.copa__texto { padding: var(--espacio-2) var(--espacio-3) var(--espacio-3); }
+/* Las imágenes son más grandes que la tarjeta y casi todo es transparente: no deben activar el giro. */
+.copa__media img { position: absolute; top: -75%; left: 50%; width: 160%; max-width: none; translate: -50% 0; pointer-events: none; }
+.copa__texto { flex: 1; padding: var(--espacio-2) var(--espacio-3) var(--espacio-3); }
 .copa h3 { margin-bottom: 0.25rem; }
 .copa p { margin-bottom: 0.25rem; }
-.copa__precio { font-weight: 600; font-size: 1.125rem; }
+.copa .copa__precio { margin: 0; padding: var(--espacio-2) var(--espacio-3); background: var(--oliva); color: var(--crema); border-radius: 0 0 var(--radio) var(--radio); font-weight: 600; font-size: 1.125rem; }
+
+/* Reverso: la copa dibujada (una franja por ingrediente) va en el mismo lienzo que la foto y también sobresale. */
+.copa__dorso {
+  position: absolute; inset: 0; transform: rotateY(180deg);
+  display: flex; flex-direction: column;
+  background: var(--oliva); color: var(--crema); font-size: 0.9375rem; line-height: 1.4;
+}
+@media (max-width: 359px) { .copa__dorso { font-size: 0.875rem; } }
+.copa__media--dorso { aspect-ratio: 5 / 4; flex: none; }
+.copa__media--dorso img { top: -86%; width: 120%; transform-origin: 50% 42.8%; }
+.copa__info { flex: 1; display: flex; flex-direction: column; gap: var(--espacio-2); padding: var(--espacio-2) var(--espacio-3) var(--espacio-3); }
+.copa .copa__nombre { margin: 0; font: 400 1.5rem/1.1 var(--font-display); color: var(--naranja); }
+.copa__medidas { list-style: none; margin: 0; padding: 0 0 var(--espacio-2); border-bottom: 1px solid rgb(244 238 227 / 0.35); }
+.copa__medidas li { display: flex; align-items: center; gap: 0.6rem; padding: 0.15rem 0; }
+.copa__medidas li[style]::before { content: ""; flex: none; width: 1.6rem; height: 0.7rem; border-radius: 2px; background: var(--c); }
+@media (prefers-reduced-motion: reduce) { .copa__giro { transition: none; } }
 .copas__pie { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--espacio-2); margin-top: var(--espacio-4); }
 .copas__promo { margin: 0; font-size: 1.125rem; }
 

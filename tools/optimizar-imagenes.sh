@@ -1,20 +1,24 @@
 #!/bin/sh
-# Genera img/<nombre>-1920.jpg y img/<nombre>-960.jpg desde imagenes/<nombre>.jpg (macOS: usa sips).
+# Genera las imágenes web (WebP) en img/ desde los originales de imagenes/ (macOS: usa sips y cwebp).
 set -e
 cd "$(dirname "$0")/.."
 mkdir -p img
-for n in aperol-spritz campari-spritz limoncello-spritz tres-spritz mimosas cafe-frio capuchino pasteleria tabla-picar salon tazas-momentos; do
-  for t in 1920 960; do
-    out="img/$n-$t.jpg"
-    sips -Z "$t" -s format jpeg -s formatOptions 78 "imagenes/$n.jpg" --out "$out" >/dev/null
-    if [ "$(stat -f %z "$out")" -ge 600000 ]; then
-      sips -Z "$t" -s format jpeg -s formatOptions 70 "imagenes/$n.jpg" --out "$out" >/dev/null
-    fi
-  done
+tmp=$(mktemp -d)
+# Fotos: solo los tamaños que usan las páginas (nombre-lado mayor).
+for nt in aperol-spritz-960 campari-spritz-960 limoncello-spritz-960 mimosas-960 cafe-frio-960 capuchino-960 \
+          pasteleria-960 tabla-picar-960 tazas-momentos-960 salon-960 salon-1920 tres-spritz-1920 hero-loop-poster-1280; do
+  n=${nt%-*}; t=${nt##*-}
+  sips -Z "$t" -s format png "imagenes/$n.jpg" --out "$tmp/$n.png" >/dev/null
+  out="img/$n-$t.webp"; [ "$n" = hero-loop-poster ] && out="img/$n.webp"
+  cwebp -quiet -q 80 "$tmp/$n.png" -o "$out"
 done
-# Copas: foto con fondo (se corta en la tarjeta). Encima va img/copa-<n>-recorte.png, la misma copa
-# sin fondo en un lienzo de 1200x1607 (recorte hecho a mano; tools/recortar-copa.swift --marco da uno automático).
+# Copas: fondo común y recortes con transparencia, hechos a mano en un lienzo de 1200x1607
+# (tools/recortar-copa.swift --marco da un recorte automático).
+cwebp -quiet -q 80 imagenes/tarjetas-fondo.jpg -o img/tarjetas-fondo.webp
 for n in aperol-spritz campari-spritz limoncello-spritz mimosa; do
-  sips -Z 1607 -s format jpeg -s formatOptions 70 "imagenes/copa-$n.jpg" --out "img/copa-$n-fondo.jpg" >/dev/null
+  cwebp -quiet -q 85 -alpha_q 90 "imagenes/copa-$n-recorte.png" -o "img/copa-$n-recorte.webp"
 done
-ls -l img/*.jpg | awk '{print $5, $9}'
+# Vista previa para redes (og:image): JPG, que todas las redes muestran.
+sips -Z 1920 -s format jpeg -s formatOptions 78 imagenes/tres-spritz.jpg --out img/tres-spritz-1920.jpg >/dev/null
+rm -r "$tmp"
+ls -l img/*.webp | awk '{print $5, $9}'
