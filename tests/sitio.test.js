@@ -63,9 +63,10 @@ test('precios del inicio con signo pesos y k', () => {
   assert.doesNotMatch(inicio(), /\d mil\b/);
 });
 
-test('barra móvil con tres acciones', () => {
-  const barra = inicio().match(/<nav class="barra-movil"[\s\S]*?<\/nav>/)[0];
-  for (const t of ['Carta', 'Cómo llegar', 'Pedir']) assert.match(barra, new RegExp(`>\\s*${t}\\s*<`));
+test('menú con Carta, Visítanos y Pedir en Rappi', () => {
+  const menu = inicio().match(/<ul class="menu__enlaces">[\s\S]*?<\/ul>/)[0];
+  for (const t of ['Carta', 'Visítanos', 'Pedir']) assert.match(menu, new RegExp(`>\\s*${t}\\s*<`));
+  assert.match(menu, /href="https:\/\/www\.rappi\.com\.co\/[^"]*"[^>]*>\s*Pedir\s*</);
 });
 
 test('toda imagen que usan las páginas existe y las fotos pesan menos de 600 KB', () => {
@@ -136,7 +137,12 @@ test('sin localStorage, animaciones con reduced-motion y nada arranca invisible'
   for (const f of ['css/base.css', 'css/inicio.css', 'css/carta.css']) {
     const css = leer(f);
     if (/@keyframes|animation:|transition:/.test(css)) assert.match(css, /prefers-reduced-motion/, f);
-    assert.doesNotMatch(css, /opacity:\s*0\s*[;}]/, `${f}: nada debe arrancar invisible`);
+    // Excepciones: @keyframes (terminan visibles y reduced-motion los apaga) y reglas de
+    // .menu--abierto, estados que solo existen después de un clic.
+    const enReposo = css
+      .replace(/@keyframes[^{]*\{(?:[^{}]*\{[^}]*\})*[^}]*\}/g, '')
+      .replace(/\.menu--abierto[^{]*\{[^}]*\}/g, '');
+    assert.doesNotMatch(enReposo, /opacity:\s*0\s*[;}]/, `${f}: nada debe arrancar invisible`);
   }
 });
 
