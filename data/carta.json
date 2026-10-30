@@ -120,7 +120,7 @@
     }
   ],
   "promos": [
-    { "texto": "2 spritz × 50" },
-    { "texto": "2 copas × 30" }
+    { "texto": "2 spritz × $50k" },
+    { "texto": "2 copas × $30k" }
   ]
 }

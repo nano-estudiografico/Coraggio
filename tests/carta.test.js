@@ -25,16 +25,16 @@ test('precios de control', () => {
 });
 
 test('formatoPrecio', () => {
-  assert.equal(formatoPrecio(2), '2');
-  assert.equal(formatoPrecio(4.9), '4.9');
-  assert.equal(formatoPrecio(28), '28');
+  assert.equal(formatoPrecio(2), '$2k');
+  assert.equal(formatoPrecio(4.9), '$4.9k');
+  assert.equal(formatoPrecio(28), '$28k');
 });
 
 test('cartaAHtml escapa y estructura', () => {
   const html = cartaAHtml({ secciones: [{ id: 'x', titulo: 'X', grupos: [{ id: 'g', titulo: 'G', items: [{ nombre: 'A & B', precio: 4.9 }] }] }], promos: [] });
   assert.match(html, /<section id="x"/);
   assert.match(html, /A &amp; B/);
-  assert.match(html, /<span class="carta__precio">4.9<\/span>/);
+  assert.match(html, /<span class="carta__precio">\$4\.9k<\/span>/);
 });
 
 test('carta.html está generada con los datos actuales', () => {

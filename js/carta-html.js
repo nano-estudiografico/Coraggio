@@ -2,8 +2,8 @@
 
 const escapar = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-// Igual que el PDF: precios en miles, sin ceros de más (2, 4.9, 28).
-export const formatoPrecio = (n) => String(n);
+// Precios en miles con signo pesos y k: 2 → $2k, 4.9 → $4.9k, 28 → $28k.
+export const formatoPrecio = (n) => `$${n}k`;
 
 const item = ({ nombre, precio, detalle }) =>
   `<li class="carta__item"><span class="carta__nombre">${escapar(nombre)}</span>` +

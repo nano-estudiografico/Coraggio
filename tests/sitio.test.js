@@ -51,6 +51,14 @@ test('visítanos: dirección, horario escrito, contacto', () => {
   assert.match(inicio(), /pan de masa madre, tortas y desayunos empresariales/i);
 });
 
+test('precios del inicio con signo pesos y k', () => {
+  assert.equal((inicio().match(/<p class="copa__precio">\$28k<\/p>/g) || []).length, 3);
+  assert.match(inicio(), /<p class="copa__precio">\$15k<\/p>/);
+  assert.match(inicio(), /2 spritz × \$50k/);
+  assert.match(inicio(), /2 copas × \$30k/);
+  assert.doesNotMatch(inicio(), /\d mil\b/);
+});
+
 test('barra móvil con tres acciones', () => {
   const barra = inicio().match(/<nav class="barra-movil"[\s\S]*?<\/nav>/)[0];
   for (const t of ['Carta', 'Cómo llegar', 'Pedir']) assert.match(barra, new RegExp(`>\\s*${t}\\s*<`));
