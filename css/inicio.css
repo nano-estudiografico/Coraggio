@@ -56,48 +56,98 @@ section { padding-block: var(--espacio-6); }
 @media (min-width: 640px) { .copas__grilla { grid-template-columns: 1fr 1fr; } }
 @media (min-width: 1100px) { .copas__grilla { grid-template-columns: repeat(4, 1fr); } }
 /* Tarjeta de dos caras: al pasar el cursor (o enfocarla / tocarla) gira 180° y muestra el reverso. */
-.copa { --perspectiva: 1400; margin-top: 47%; perspective: calc(var(--perspectiva) * 1px); perspective-origin: 50% 0; border-radius: var(--radio); }
-.copa__giro { position: relative; height: 100%; transform-style: preserve-3d; transition: transform 1.4s cubic-bezier(0.2, 0.7, 0.2, 1); }
-.copa:hover .copa__giro, .copa:focus-within .copa__giro { transform: rotateY(180deg); }
-.copa__cara { border-radius: var(--radio); }
-.copa__cara, .copa__media { transform-style: preserve-3d; }
-.copa__giro * { -webkit-backface-visibility: hidden; backface-visibility: hidden; }
-/* Las copas (recorte y dibujo) flotan --z px delante de su cara y se separan al girar. La escala
-   compensa el agrandado de la perspectiva desde su punto de fuga (arriba al centro de la tarjeta,
-   que en el lienzo de cada imagen cae al 42 %), así en reposo siguen calzando con la foto. */
-.copa__recorte, .copa__media--dorso img {
-  --z: 80;
-  transform: translateZ(calc(var(--z) * 1px)) scale(calc(1 - var(--z) / var(--perspectiva)));
-  transform-origin: 50% 42%;
+.copa { --perspectiva: 1400; --giro: 1.4s; --ancho: 100%; width: var(--ancho); margin-top: calc(var(--ancho) * 0.47); perspective: calc(var(--perspectiva) * 1px); perspective-origin: 50% 0; border-radius: var(--radio); }
+/* Celular en vertical: todo se dimensiona con el ancho de la tarjeta y la composición (copa que
+   sobresale + tarjeta) mide 1,67 × ancho + ~10rem de textos; el ancho se limita para que quepa
+   entera bajo el menú. Se usa lvh (barras recogidas, como se ve casi siempre en iOS 26): svh
+   subestima el alto visible y dvh cambiaría el tamaño de las tarjetas al hacer scroll. */
+@media (max-width: 639px) and (orientation: portrait) {
+  .copa { --ancho: min(100%, max(15rem, (100lvh - var(--alto-menu) - 11rem) / 1.67)); justify-self: center; }
 }
+.copa__giro { position: relative; height: 100%; transform-style: preserve-3d; transition: transform var(--giro) cubic-bezier(0.2, 0.7, 0.2, 1); }
+/* --g: 0 muestra el frente y 1 el reverso. Con cursor gira al pasar por encima; en pantallas táctiles
+   cada toque alterna .copa--girada (js/main.js); con teclado, al enfocarla. */
+.copa { --g: 0; }
+@media (hover: hover) { .copa:hover { --g: 1; } }
+.copa:focus-visible, .copa--girada { --g: 1; }
+.copa__giro { transform: rotateY(calc(var(--g) * 180deg)); }
+.copa__cara { border-radius: var(--radio); }
+/* Cada capa es hija directa del giro y tiene su propia transformación 3D: así Safari (iPhone)
+   respeta backface-visibility. El orden del HTML (placa, frente, copa, reverso, copa) es además
+   el orden de pintado correcto si Safari no ordena las capas por profundidad durante el giro. */
+.copa__giro > * { -webkit-backface-visibility: hidden; backface-visibility: hidden; }
+/* Placa opaca entre las dos caras (cada cara se separa 1px de ella). */
+.copa__giro::before { content: ""; position: absolute; inset: 0; border-radius: var(--radio); background: var(--oliva); transform: translateZ(0); }
+/* Las copas (recorte y dibujo) flotan --z px delante de su cara y se separan al girar. La escala
+   compensa el agrandado de la perspectiva desde su punto de fuga (arriba al centro de la tarjeta),
+   así en reposo siguen calzando con la foto. Son más grandes que la tarjeta y casi todo es
+   transparente: no deben activar el giro. */
+.copa__flota {
+  --z: 81;
+  position: absolute; top: 0; left: 0; width: 100%; aspect-ratio: 5 / 6; pointer-events: none;
+  transform-origin: 50% 0;
+  transform: translateZ(calc(var(--z) * 1px)) scale(calc(1 - var(--z) / var(--perspectiva)));
+}
+/* Ninguna copa desaparece al girar: la de la cara que queda atrás sigue visible detrás de la tarjeta,
+   más tenue, desenfocada y más chica. El z-index replica el orden por profundidad (cara activa y su
+   copa adelante) para Safari, y cambia cuando la tarjeta queda de perfil: al 14,4 % del giro con esta curva.
+   El desenfoque termina a los 100° de giro, que con esta curva es el 16,5 % del tiempo. */
+.copa__frente, .copa__dorso { z-index: 1; }
+.copa__giro > .copa__flota {
+  -webkit-backface-visibility: visible; backface-visibility: visible;
+  transition: opacity var(--giro) ease, filter calc(var(--giro) * 0.165) ease, scale var(--giro) cubic-bezier(0.2, 0.7, 0.2, 1),
+              z-index 0s linear calc(var(--giro) * 0.144);
+}
+.copa__flota--frente { z-index: calc(2 - 2 * var(--g)); opacity: calc(1 - 0.65 * var(--g)); filter: blur(calc(4px * var(--g))); scale: calc(1 - 0.18 * var(--g)); }
+/* el dibujo no se atenúa, solo se desenfoca y achica */
+.copa__flota--dorso { z-index: calc(2 * var(--g)); filter: blur(calc(4px - 4px * var(--g))); scale: calc(0.82 + 0.18 * var(--g)); }
+.copa__flota--dorso { aspect-ratio: 5 / 4; transform: rotateY(180deg) translateZ(calc(var(--z) * 1px)) scale(calc(1 - var(--z) / var(--perspectiva))); }
+.copa__flota img, .copa__media img { position: absolute; top: -75%; left: 50%; width: 160%; max-width: none; translate: -50% 0; }
+.copa__flota--dorso img { top: -86%; width: 120%; }
+/* El líquido sube desde la base del cuerpo: encima de la copa vacía va la llena, dentro de una capa
+   cuyo borde superior es una ola (máscara que se desplaza sin fin). La capa baja hasta el nivel del
+   líquido y la copa de adentro sube lo mismo, así solo se mueve la superficie. --vacio y --lleno son
+   el nivel en % del lienzo (--vacio un poco bajo la base para que las crestas no asomen). Llena al
+   girar y termina 1 s después del giro; al volver se vacía durante el giro. */
+.copa__liquido {
+  --vacio: 60.9%; --lleno: 28%;
+  --nivel: calc(var(--vacio) - (var(--vacio) - var(--lleno)) * var(--g));
+  --llenado: translate calc(var(--giro) + 1s * var(--g)) cubic-bezier(0.4, 0, 0.3, 1);
+  position: absolute; top: -86%; left: 50%; width: 120%; aspect-ratio: 1200 / 1607;
+  translate: -50% var(--nivel);
+  transition: var(--llenado);
+  --ola: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M0 0.9Q12.5 0 25 0.9T50 0.9T75 0.9T100 0.9V100H0Z'/%3E%3C/svg%3E");
+  -webkit-mask: var(--ola) 0 0 / 30% 100% repeat-x; mask: var(--ola) 0 0 / 30% 100% repeat-x;
+  animation: oleaje 1.44s linear infinite;
+}
+.copa__flota--dorso .copa__liquido img { top: 0; left: 0; width: 100%; translate: 0 calc(-1 * var(--nivel)); transition: var(--llenado); }
+/* Avanza exactamente una baldosa (30 % de ancho = 3/7 del recorrido posible) para que el ciclo empalme. */
+@keyframes oleaje { to { -webkit-mask-position: 42.857% 0; mask-position: 42.857% 0; } }
 
-/* Frente: la foto se corta en el borde superior; encima va la misma copa sin fondo,
+/* Frente: la foto se corta en el borde superior; encima (en .copa__flota) va la misma copa sin fondo,
    alineada píxel a píxel, que sí sobresale. El margen superior deja lugar a lo que sobresale. */
-.copa__frente { height: 100%; background: var(--blanco); display: flex; flex-direction: column; }
+.copa__frente { position: relative; transform: translateZ(1px); height: 100%; background: var(--blanco); display: flex; flex-direction: column; }
 .copa__media { position: relative; aspect-ratio: 5 / 6; }
 .copa__fondo { position: absolute; inset: 0; overflow: hidden; border-radius: var(--radio) var(--radio) 0 0; }
-/* Las imágenes son más grandes que la tarjeta y casi todo es transparente: no deben activar el giro. */
-.copa__media img { position: absolute; top: -75%; left: 50%; width: 160%; max-width: none; translate: -50% 0; pointer-events: none; }
 .copa__texto { flex: 1; padding: var(--espacio-2) var(--espacio-3) var(--espacio-3); }
 .copa h3 { margin-bottom: 0.25rem; }
 .copa p { margin-bottom: 0.25rem; }
 .copa .copa__precio { margin: 0; padding: var(--espacio-2) var(--espacio-3); background: var(--oliva); color: var(--crema); border-radius: 0 0 var(--radio) var(--radio); font-weight: 600; font-size: 1.125rem; }
 
-/* Reverso: la copa dibujada (una franja por ingrediente) va en el mismo lienzo que la foto y también sobresale. */
+/* Reverso: la copa dibujada (una franja por ingrediente) va en .copa__flota--dorso; aquí deja su lugar. */
 .copa__dorso {
-  position: absolute; inset: 0; transform: rotateY(180deg);
+  position: absolute; inset: 0; transform: rotateY(180deg) translateZ(1px);
   display: flex; flex-direction: column;
-  background: var(--oliva); color: var(--crema); font-size: 0.9375rem; line-height: 1.4;
+  background: var(--oliva); color: var(--crema); line-height: 1.4; container-type: inline-size;
 }
-@media (max-width: 359px) { .copa__dorso { font-size: 0.875rem; } }
 .copa__media--dorso { aspect-ratio: 5 / 4; flex: none; }
-.copa__media--dorso img { top: -86%; width: 120%; transform-origin: 50% 42.8%; }
-.copa__info { flex: 1; display: flex; flex-direction: column; gap: var(--espacio-2); padding: var(--espacio-2) var(--espacio-3) var(--espacio-3); }
-.copa .copa__nombre { margin: 0; font: 400 1.5rem/1.1 var(--font-display); color: var(--naranja); }
+/* El texto del reverso escala con el ancho de la tarjeta (cqw) para caber también en tarjetas angostas. */
+.copa__info { flex: 1; display: flex; flex-direction: column; gap: clamp(0.5rem, 4cqw, var(--espacio-2)); padding: var(--espacio-2) clamp(1rem, 7cqw, var(--espacio-3)) 2rem; font-size: clamp(0.75rem, 5.2cqw, 0.9375rem); }
+.copa .copa__nombre { margin: 0; font: 400 clamp(1.125rem, 8.5cqw, 1.5rem)/1.1 var(--font-display); color: var(--naranja); }
 .copa__medidas { list-style: none; margin: 0; padding: 0 0 var(--espacio-2); border-bottom: 1px solid rgb(244 238 227 / 0.35); }
 .copa__medidas li { display: flex; align-items: center; gap: 0.6rem; padding: 0.15rem 0; }
 .copa__medidas li[style]::before { content: ""; flex: none; width: 1.6rem; height: 0.7rem; border-radius: 2px; background: var(--c); }
-@media (prefers-reduced-motion: reduce) { .copa__giro { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .copa__giro, .copa__giro > .copa__flota, .copa__liquido, .copa__liquido img { transition: none; animation: none; } }
 .copas__pie { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--espacio-2); margin-top: var(--espacio-4); }
 .copas__promo { margin: 0; font-size: 1.125rem; }
 

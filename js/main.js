@@ -22,6 +22,14 @@ if (lista && flechas) {
   });
 }
 
+// Tarjetas de copas: en pantallas táctiles cada toque gira la tarjeta y el siguiente la devuelve
+// (con cursor giran al pasar por encima, sin JS).
+if (matchMedia('(hover: none)').matches) {
+  document.querySelector('.copas__grilla')?.addEventListener('click', (e) => {
+    e.target.closest('.copa')?.classList.toggle('copa--girada');
+  });
+}
+
 const anio = document.getElementById('anio');
 if (anio) anio.textContent = new Date().getFullYear();
 
