@@ -132,7 +132,25 @@ section { padding-block: var(--espacio-6); }
 .copa__texto { flex: 1; padding: var(--espacio-2) var(--espacio-3) var(--espacio-3); }
 .copa h3 { margin-bottom: 0.25rem; }
 .copa p { margin-bottom: 0.25rem; }
-.copa .copa__precio { margin: 0; padding: var(--espacio-2) var(--espacio-3); background: var(--oliva); color: var(--crema); border-radius: 0 0 var(--radio) var(--radio); font-weight: 600; font-size: 1.125rem; }
+/* Precio grande en Gloock que sobresale de la franja verde (la franja es ::before, detrás del texto).
+   Contorno verde detrás del relleno: 4px de trazo dejan 2px visibles por fuera. El rótulo "Precio"
+   comparte la línea base con el número; el margen inferior lo deja centrado en la franja. */
+.copa .copa__precio {
+  position: relative; isolation: isolate; margin: 0; padding: 0 var(--espacio-3) 0.7rem;
+  display: flex; align-items: baseline; justify-content: space-between;
+  font: 400 2.5rem/1 var(--font-display); color: var(--crema);
+  -webkit-text-stroke: 4px var(--oliva); paint-order: stroke fill;
+}
+.copa .copa__precio::before {
+  content: ""; position: absolute; z-index: -1; left: 0; right: 0; bottom: 0; height: calc(0.55em + var(--espacio-2));
+  background: var(--oliva); border-radius: 0 0 var(--radio) var(--radio);
+}
+/* Rótulo "Precio" a la derecha (sin lectura en voz alta: es decorativo, el número ya lo dice). */
+.copa .copa__precio::after {
+  content: "Precio"; content: "Precio" / "";
+  font: 600 0.5rem/1 var(--font-texto); letter-spacing: 0.08em; text-transform: uppercase;
+  -webkit-text-stroke: 0; color: #fff;
+}
 
 /* Reverso: la copa dibujada (una franja por ingrediente) va en .copa__flota--dorso; aquí deja su lugar. */
 .copa__dorso {
