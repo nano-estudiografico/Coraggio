@@ -1,8 +1,10 @@
+/* Página */
 .carta { padding-block: var(--espacio-4) var(--espacio-5); }
 
 .carta__cabecera h1 { font-size: clamp(3rem, 10vw, 6.5rem); margin-bottom: var(--espacio-1); }
 .carta__intro { font-size: 1.125rem; }
 
+/* Índice de secciones */
 .carta__indice {
   position: sticky; top: var(--alto-menu); z-index: 10;
   display: flex; gap: var(--espacio-1); overflow-x: auto;
@@ -17,6 +19,7 @@
 }
 .carta__indice a:hover { background: var(--oliva); color: var(--crema); }
 
+/* Secciones y grupos */
 .carta__seccion { margin-bottom: var(--espacio-5); }
 .carta__seccion > h2 {
   display: flex; align-items: center; gap: var(--espacio-2);
@@ -27,6 +30,7 @@
 @media (min-width: 768px) { .carta__grupos { grid-template-columns: 1fr 1fr; } }
 
 .carta__grupo h3 { font-size: 1.5rem; margin-bottom: var(--espacio-2); }
+/* Productos y precios */
 .carta__lista { list-style: none; margin: 0; padding: 0; }
 .carta__item {
   display: flex; flex-wrap: wrap; gap: 0 1rem;
@@ -37,9 +41,11 @@
 .carta__precio { flex: none; font-variant-numeric: tabular-nums; font-weight: 600; }
 .carta__detalle { flex-basis: 100%; font-size: var(--texto-chico); color: var(--oliva-suave); }
 
+/* Combos */
 #combos .carta__item { padding: 0.9rem 1rem; margin-bottom: 0.5rem; border: 0; border-radius: var(--radio); background: var(--oliva); color: var(--crema); }
 #combos .carta__detalle { color: rgb(244 238 227 / 0.85); }
 
+/* Promos */
 .carta__promos {
   display: flex; flex-wrap: wrap; gap: var(--espacio-2);
   list-style: none; margin: 0 0 var(--espacio-5); padding: 0;
@@ -50,6 +56,7 @@
   font: 400 1.5rem/1.2 var(--font-display);
 }
 
+/* Por encargo y notas */
 .carta__encargos {
   padding: var(--espacio-4); border-radius: var(--radio);
   background: var(--crema-oscura); margin-bottom: var(--espacio-4);

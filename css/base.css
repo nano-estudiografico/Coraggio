@@ -1,3 +1,4 @@
+/* Reset y base */
 *, *::before, *::after { box-sizing: border-box; }
 
 html {
@@ -22,6 +23,7 @@ body {
 img, svg { display: block; max-width: 100%; height: auto; }
 picture { display: block; background-color: var(--oliva); }
 
+/* Tipografía */
 h1, h2, h3 {
   font-family: var(--font-display);
   font-weight: 400;
@@ -40,6 +42,7 @@ a { color: inherit; text-underline-offset: 0.2em; }
 /* En secciones oscuras el contorno de foco va en crema (10,8:1); el naranja sobre crema no llega a 3:1. */
 :is(.hero, .firma, .recetas, .pie, .barra-movil, .cinta, #combos) :focus-visible { outline-color: var(--crema); }
 
+/* Utilidades */
 .contenedor { width: min(100% - 2rem, var(--ancho-max)); margin-inline: auto; }
 /* Las columnas de grilla pueden achicarse por debajo de su contenido (zoom de texto en celulares chicos). */
 [class*="__grilla"] > * { min-width: 0; }
