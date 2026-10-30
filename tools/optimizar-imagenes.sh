@@ -12,4 +12,9 @@ for n in aperol-spritz campari-spritz limoncello-spritz tres-spritz mimosas cafe
     fi
   done
 done
+# Copas: foto con fondo (se corta en la tarjeta). Encima va img/copa-<n>-recorte.png, la misma copa
+# sin fondo en un lienzo de 1200x1607 (recorte hecho a mano; tools/recortar-copa.swift --marco da uno automático).
+for n in aperol-spritz campari-spritz limoncello-spritz mimosa; do
+  sips -Z 1607 -s format jpeg -s formatOptions 70 "imagenes/copa-$n.jpg" --out "img/copa-$n-fondo.jpg" >/dev/null
+done
 ls -l img/*.jpg | awk '{print $5, $9}'
