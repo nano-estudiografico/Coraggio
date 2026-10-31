@@ -376,10 +376,10 @@ section { padding-block: var(--espacio-6); }
 }
 
 /* Momentos */
-.momentos { background: var(--crema-oscura); }
-.momentos__grilla { display: grid; gap: var(--espacio-4); align-items: center; }
-@media (min-width: 900px) { .momentos__grilla { grid-template-columns: 1fr 1.1fr; } }
-.momentos__grilla picture, .historia__grilla picture { border-radius: var(--radio); overflow: hidden; }
+.momentos { background: var(--crema-oscura); padding-top: 0; }
+.momentos__foto { display: block; margin-bottom: var(--espacio-5); } /* foto a sangre: todo el ancho de la sección */
+.momentos__foto img { display: block; width: 100%; height: auto; }
+.historia__grilla picture { border-radius: var(--radio); overflow: hidden; }
 .momentos__lista { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--espacio-1); }
 .momentos__lista li { padding: 0.5rem 1.1rem; border-radius: 999px; border: 1.5px solid var(--oliva); font-weight: 600; }
 .momentos__lista li:nth-child(3n + 1) { background: var(--oliva); color: var(--crema); }

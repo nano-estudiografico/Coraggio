@@ -357,10 +357,11 @@
 
     <!-- ===== 11. Momentos ===== -->
     <section class="momentos" id="momentos" aria-labelledby="momentos-titulo">
-      <div class="contenedor momentos__grilla">
-        <picture>
-          <img src="img/tazas-momentos-960.webp" alt="Vista desde arriba de tazas de café y copas ya vacías sobre una mesa de mármol, después de una tarde de charla" width="768" height="960" loading="lazy">
-        </picture>
+      <picture class="momentos__foto">
+        <source media="(min-width: 960px)" srcset="img/tazas-momentos-1920.webp">
+        <img src="img/tazas-momentos-960.webp" alt="Vista desde arriba de tazas de café, copas y platos con restos de torta sobre una mesa de mármol, después de una tarde de charla" width="1920" height="1080" loading="lazy">
+      </picture>
+      <div class="contenedor">
         <div>
           <h2 id="momentos-titulo">Cada taza tiene una historia.</h2>
           <ul class="momentos__lista">
