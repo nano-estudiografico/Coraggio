@@ -331,19 +331,49 @@ if (burger) {
   addEventListener('resize', () => { if (innerWidth >= 768) abrir(false); });
 }
 
-// Marca gigante: la copa da una vuelta completa sobre su eje Y mientras la sección cruza la pantalla.
+// Marca gigante: como si una cámara orbitara la copa. El scroll elige cuál de los 95 fotogramas
+// (sacados de imagenes/Aperol_Spritz_camera_orbit.mp4) se dibuja en un canvas.
 const copaMarca = document.querySelector('.marca__copa');
-if (copaMarca && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+if (copaMarca && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const TOTAL = 95;
   const seccion = copaMarca.closest('.marca');
-  let pendiente = false;
-  const girar = () => {
+  const lienzo = document.createElement('canvas');
+  lienzo.className = copaMarca.className;
+  lienzo.width = 504; lienzo.height = 700;
+  lienzo.setAttribute('aria-hidden', 'true');
+  const ctx = lienzo.getContext('2d');
+  const fotos = [];
+  let actual = -1, pendiente = false;
+
+  const dibujar = () => {
     pendiente = false;
     const r = seccion.getBoundingClientRect();
     const avance = (innerHeight - r.top) / (innerHeight + r.height); // 0 al asomar, 1 al salir
-    const giro = Math.min(1, Math.max(0, (avance - 0.2) / 0.6));      // vuelta completa entre el 20 % y el 80 %
-    copaMarca.style.setProperty('--giro', giro.toFixed(4));
+    const i = Math.round(Math.min(1, Math.max(0, avance)) * (TOTAL - 1));
+    // Si el fotograma aún no llegó, se usa el cargado más cercano hacia atrás.
+    for (let j = i; j >= 0; j--) {
+      if (fotos[j]?.complete && fotos[j].naturalWidth) {
+        if (j !== actual) { ctx.clearRect(0, 0, lienzo.width, lienzo.height); ctx.drawImage(fotos[j], 0, 0, lienzo.width, lienzo.height); actual = j; }
+        return;
+      }
+    }
   };
-  addEventListener('scroll', () => { if (!pendiente) { pendiente = true; requestAnimationFrame(girar); } }, { passive: true });
-  addEventListener('resize', girar);
-  girar();
+  const pedir = () => { if (!pendiente) { pendiente = true; requestAnimationFrame(dibujar); } };
+
+  // Los fotogramas se piden recién cuando la sección está por aparecer.
+  const cerca = new IntersectionObserver(([e]) => {
+    if (!e.isIntersecting) return;
+    cerca.disconnect();
+    for (let n = 0; n < TOTAL; n++) {
+      const f = new Image();
+      f.decoding = 'async';
+      f.onload = pedir;
+      f.src = `img/orbita/${String(n + 1).padStart(3, '0')}.webp`;
+      fotos[n] = f;
+    }
+    fotos[0].addEventListener('load', () => copaMarca.replaceWith(lienzo), { once: true });
+    addEventListener('scroll', pedir, { passive: true });
+    addEventListener('resize', pedir);
+  }, { rootMargin: '600px 0px' });
+  cerca.observe(seccion);
 }
