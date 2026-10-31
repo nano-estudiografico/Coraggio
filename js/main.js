@@ -339,7 +339,7 @@ if (copaMarca && 'IntersectionObserver' in window && !matchMedia('(prefers-reduc
   const seccion = copaMarca.closest('.marca');
   const lienzo = document.createElement('canvas');
   lienzo.className = copaMarca.className;
-  lienzo.width = 504; lienzo.height = 700;
+  lienzo.width = 504; lienzo.height = 636;
   lienzo.setAttribute('aria-hidden', 'true');
   const ctx = lienzo.getContext('2d');
   const fotos = [];
