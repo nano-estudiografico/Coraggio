@@ -137,11 +137,13 @@ test('sin localStorage, animaciones con reduced-motion y nada arranca invisible'
   for (const f of ['css/base.css', 'css/inicio.css', 'css/carta.css']) {
     const css = leer(f);
     if (/@keyframes|animation:|transition:/.test(css)) assert.match(css, /prefers-reduced-motion/, f);
-    // Excepciones: @keyframes (terminan visibles y reduced-motion los apaga) y reglas de
-    // .menu--abierto, estados que solo existen después de un clic.
+    // Excepciones: @keyframes (terminan visibles y reduced-motion los apaga), reglas de
+    // .menu--abierto, estados que solo existen después de un clic, y contenido de un details
+    // cerrado (el navegador ya lo oculta; la opacidad solo sirve para el fundido al cerrar).
     const enReposo = css
       .replace(/@keyframes[^{]*\{(?:[^{}]*\{[^}]*\})*[^}]*\}/g, '')
-      .replace(/\.menu--abierto[^{]*\{[^}]*\}/g, '');
+      .replace(/\.menu--abierto[^{]*\{[^}]*\}/g, '')
+      .replace(/details:not\(\[open\]\)[^{]*\{[^}]*\}/g, '');
     assert.doesNotMatch(enReposo, /opacity:\s*0\s*[;}]/, `${f}: nada debe arrancar invisible`);
   }
 });

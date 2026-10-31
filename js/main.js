@@ -77,6 +77,11 @@ if (tituloDia && 'IntersectionObserver' in window && !matchMedia('(prefers-reduc
   });
 }
 
+// Oferta: siempre queda una abierta; tocar la que ya está abierta no la cierra.
+document.querySelectorAll('.dia__oferta summary').forEach((s) => {
+  s.addEventListener('click', (e) => { if (s.parentElement.open) e.preventDefault(); });
+});
+
 // Entrada de las copas: al acercarse a la pantalla las tarjetas esperan fuera, por el borde izquierdo;
 // al verse entran juntas como un mazo hasta el lugar de la primera (Aperol). Por inercia, mientras viajan
 // se inclinan hacia atrás (izquierda) y al frenar se balancean hacia adelante (derecha); ese impulso lanza

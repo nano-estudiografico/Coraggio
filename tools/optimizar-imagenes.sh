@@ -5,8 +5,10 @@ cd "$(dirname "$0")/.."
 mkdir -p img
 tmp=$(mktemp -d)
 # Fotos: solo los tamaños que usan las páginas (nombre-lado mayor).
-for nt in aperol-spritz-960 campari-spritz-960 limoncello-spritz-960 mimosas-960 cafe-frio-960 capuchino-960 \
-          pasteleria-960 tabla-picar-960 tazas-momentos-960 salon-960 salon-1920 tres-spritz-1920 hero-loop-poster-1280; do
+for nt in aperol-spritz-960 campari-spritz-960 limoncello-spritz-960 mimosas-960 capuchino-960 pasteleria-960 \
+          dia-capuchino-960 dia-capuchino-1920 dia-cafe-frio-960 dia-cafe-frio-1920 \
+          dia-pasteleria-960 dia-pasteleria-1920 dia-tabla-picar-960 dia-tabla-picar-1920 \
+          dia-capuchino-v-1280 dia-capuchino-v-1920 dia-cafe-frio-v-1280 dia-cafe-frio-v-1920 dia-tabla-picar-v-1280 dia-tabla-picar-v-1920 dia-pasteleria-v-1280 dia-pasteleria-v-1920 tazas-momentos-960 salon-960 salon-1920 tres-spritz-1920 hero-loop-poster-1280; do
   n=${nt%-*}; t=${nt##*-}
   sips -Z "$t" -s format png "imagenes/$n.jpg" --out "$tmp/$n.png" >/dev/null
   out="img/$n-$t.webp"; [ "$n" = hero-loop-poster ] && out="img/$n.webp"

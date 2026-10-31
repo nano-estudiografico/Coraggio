@@ -206,25 +206,94 @@ section { padding-block: var(--espacio-6); }
 /* Titular: cada letra nace pegada a las vecinas (cada una con su propio apriete al azar) y se separa
    despacio hasta su lugar (js/main.js). Solo se mueven con transform: las líneas no se reacomodan. */
 .dia__palabra { display: inline-block; white-space: nowrap; }
-.dia__letra { display: inline-block; transition: translate 2.2s var(--dur, 0s) cubic-bezier(0.22, 0.61, 0.36, 1), opacity 1.4s var(--dur, 0s) ease-out; }
-.dia__titulo--junto .dia__letra { translate: var(--dx, 0) 0; opacity: 0; transition: none; }
+.dia__letra { display: inline-block; transition: translate 2.2s var(--dur, 0s) cubic-bezier(0.22, 0.61, 0.36, 1); }
+.dia__titulo--junto .dia__letra { translate: var(--dx, 0) 0; transition: none; }
 @media (prefers-reduced-motion: reduce) { .dia__letra { transition: none; } }
-.dia__grilla { max-width: 52rem; }
-.dia details { border-top: 1.5px solid var(--oliva); }
-.dia details:last-of-type { border-bottom: 1.5px solid var(--oliva); }
+/* Oferta: acordeón horizontal. Las cerradas son pestañas verticales con su foto agrandada y desenfocada
+   bajo un velo oliva; al abrirse, la foto se enfoca y baja a su tamaño, el velo se desvanece y el nombre
+   rotado se achica hasta desaparecer. La foto y el velo son capas del propio details (::before y ::after),
+   que se dibujan abierto o cerrado, así todo transiciona. En celular
+   las pestañas son franjas horizontales y el degradé sube desde abajo. */
+.dia h2 { margin-bottom: var(--espacio-4); }
+.dia__oferta { --alto: clamp(26rem, 42vw, 34rem); --pestana: 4.5rem; --curva: cubic-bezier(0.65, 0, 0.25, 1); --tiempo: 0.9s;
+  display: flex; gap: var(--espacio-2); height: var(--alto); }
+.dia details {
+  position: relative; flex: 0 0 var(--pestana); border-radius: var(--radio); overflow: hidden; isolation: isolate;
+  background-color: var(--oliva); background-size: 0 0; color: var(--crema-oscura);
+  transition: flex-grow var(--tiempo) var(--curva);
+}
+.dia details[open] { flex-grow: 1; }
+.dia details:has(summary:focus-visible) { outline: 3px solid var(--naranja); outline-offset: 3px; }
+/* Fotos de cada sección (en celular, verticales salvo Para acompañar, que no tiene). */
+.dia__item--picar { background-image: url(../img/dia-tabla-picar-960.webp); background-image: image-set(url(../img/dia-tabla-picar-960.webp) 1x, url(../img/dia-tabla-picar-1920.webp) 2x); }
+.dia__item--combos { background-image: url(../img/dia-cafe-frio-960.webp); background-image: image-set(url(../img/dia-cafe-frio-960.webp) 1x, url(../img/dia-cafe-frio-1920.webp) 2x); }
+.dia__item--acompanar { background-image: url(../img/dia-pasteleria-960.webp); background-image: image-set(url(../img/dia-pasteleria-960.webp) 1x, url(../img/dia-pasteleria-1920.webp) 2x); }
+.dia__item--cafe { background-image: url(../img/dia-capuchino-960.webp); background-image: image-set(url(../img/dia-capuchino-960.webp) 1x, url(../img/dia-capuchino-1920.webp) 2x); }
+/* Foto: mide lo que la sección abierta (alto fijo), así no cambia de escala mientras la caja se ensancha. */
+.dia details::before, .dia details::after { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+.dia details::before {
+  background: inherit; background-size: max(100%, var(--alto) * 16 / 9) auto; background-position: center;
+  filter: blur(10px); scale: 1.5;
+  transition: filter var(--tiempo) var(--curva), scale var(--tiempo) var(--curva);
+}
+/* Velo oliva (color de fondo) y degradé hacia oliva donde va el texto (imagen de fondo). El degradé se
+   funde con --degradado (0 cerrado, 1 abierto), registrada con @property para que transicione al abrir y al cerrar. */
+@property --degradado { syntax: '<number>'; inherits: false; initial-value: 0; }
+.dia details::after {
+  --degradado: 0;
+  background: rgb(48 55 23 / 0.6) linear-gradient(var(--hacia, to right), transparent 40%, rgb(48 55 23 / calc(0.85 * var(--degradado))) 72%, rgb(48 55 23 / var(--degradado)));
+  transition: background-color var(--tiempo) var(--curva), --degradado var(--tiempo) var(--curva);
+}
+.dia details[open]::before { filter: blur(0); scale: 1; }
+.dia details[open]::after { background-color: rgb(48 55 23 / 0); --degradado: 1; }
+@media (hover: hover) { .dia details:not([open]):hover::after { background-color: rgb(48 55 23 / 0.4); } }
+/* Nombre rotado: ocupa toda la pestaña (toda es zona de clic), centrado y abajo. Al abrir se achica y
+   se vuelve transparente; sigue ahí para lectores de pantalla y el título visible pasa al panel. */
 .dia summary {
-  display: flex; justify-content: space-between; align-items: center;
-  min-height: 44px; padding: var(--espacio-2) 0;
-  font: 400 clamp(1.5rem, 3vw, 2.25rem)/1.1 var(--font-display);
-  cursor: pointer; list-style: none;
+  position: absolute; inset: 0 auto 0 0; z-index: 1; width: var(--pestana);
+  display: flex; align-items: center; justify-content: flex-start; /* girado 180°: el inicio queda abajo */
+  padding: var(--espacio-3) 0; list-style: none; cursor: pointer; outline: none;
+  font: 400 clamp(1.5rem, 2.4vw, 2rem)/1 var(--font-display); white-space: nowrap;
+  writing-mode: vertical-rl; rotate: 180deg;
 }
 .dia summary::-webkit-details-marker { display: none; }
-.dia summary::after { content: '+'; font-family: var(--font-texto); font-size: 1.75rem; }
-.dia details[open] summary::after { content: '–'; }
-.dia__panel { display: grid; gap: var(--espacio-3); padding-bottom: var(--espacio-3); }
-@media (min-width: 768px) { .dia__panel { grid-template-columns: 1.2fr 1fr; align-items: center; } }
-.dia__panel img { border-radius: var(--radio); aspect-ratio: 16 / 10; object-fit: cover; background: var(--oliva); }
-.dia__panel p { margin: 0; font-size: 1.125rem; }
+.dia summary span { transform-origin: 50% 0; transition: scale calc(var(--tiempo) * 0.6) var(--curva), color calc(var(--tiempo) * 0.5) ease-out; }
+.dia details[open] summary { cursor: default; }
+.dia details[open] summary span { scale: 0.6; color: transparent; }
+/* Panel abierto: la foto de verdad queda solo para lectores de pantalla (la visible es el ::before). */
+.dia__panel { position: absolute; inset: 0; display: flex; justify-content: flex-end; align-items: flex-end; }
+.dia__panel img { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+/* Ancho fijo (no relativo al panel, que crece al abrirse) y entra cuando el panel ya terminó de abrirse. */
+/* Al cerrar, el contenido del details se oculta recién cuando termina el fundido (allow-discrete; sin
+   soporte se oculta al instante). */
+.dia details::details-content { transition: content-visibility calc(var(--tiempo) * 0.5) allow-discrete; }
+.dia__texto { position: relative; z-index: 1; flex: none; width: min(24rem, 32vw); padding: var(--espacio-4) var(--espacio-4) var(--espacio-4) 0; transition: opacity calc(var(--tiempo) * 0.5) ease-out; }
+/* Entra con retraso, cuando el panel casi terminó de abrirse; al cerrar se va sin retraso. Con transición
+   (no animación): quitar una animación al cerrar haría saltar la opacidad. */
+.dia details[open] .dia__texto { transition-duration: 0.5s; transition-delay: calc(var(--tiempo) * 0.75); }
+.dia details:not([open]) .dia__texto { opacity: 0; }
+.dia__texto p { margin: 0; font-size: 1.125rem; line-height: 1.45; }
+/* Línea vertical a la izquierda del texto: arranca a la altura del título y baja hasta el borde de la caja. */
+.dia__texto::before { content: ''; position: absolute; top: var(--espacio-4); bottom: 0; left: calc(-1 * var(--espacio-3)); width: 1.5px; background: var(--crema-oscura); }
+.dia__texto .dia__nombre { margin-bottom: var(--espacio-2); font: 400 clamp(2.25rem, 4vw, 3.25rem)/1 var(--font-display); }
+@media (max-width: 767px) {
+  .dia__oferta { --alto: 30rem; --pestana: 3.75rem; --hacia: to bottom; flex-direction: column; height: auto; gap: var(--espacio-1); }
+  /* La abierta toma la altura de la foto vertical (9:16) para mostrarla entera, con tope. */
+  .dia__oferta { --alto: min((100vw - 2rem) * 16 / 9, 40rem); }
+  .dia details::before { background-position: left center; } /* foto horizontal: se ve desde su extremo izquierdo */
+  .dia .dia__item--vertical::before, .dia .dia__item--acompanar::before { background-size: max(100%, var(--alto) * 9 / 16) auto; background-position: center 60%; }
+  .dia__item--picar { background-image: url(../img/dia-tabla-picar-v-1280.webp); background-image: image-set(url(../img/dia-tabla-picar-v-1280.webp) 2x, url(../img/dia-tabla-picar-v-1920.webp) 3x); }
+  .dia__item--combos { background-image: url(../img/dia-cafe-frio-v-1280.webp); background-image: image-set(url(../img/dia-cafe-frio-v-1280.webp) 2x, url(../img/dia-cafe-frio-v-1920.webp) 3x); }
+  .dia__item--acompanar { background-image: url(../img/dia-pasteleria-v-1280.webp); background-image: image-set(url(../img/dia-pasteleria-v-1280.webp) 2x, url(../img/dia-pasteleria-v-1920.webp) 3x); }
+  .dia__item--cafe { background-image: url(../img/dia-capuchino-v-1280.webp); background-image: image-set(url(../img/dia-capuchino-v-1280.webp) 2x, url(../img/dia-capuchino-v-1920.webp) 3x); }
+  .dia details { flex: none; height: var(--pestana); border-radius: var(--radio); transition: height var(--tiempo) var(--curva); }
+  .dia details[open] { height: var(--alto); }
+  .dia summary { inset: 0 0 auto 0; width: auto; height: var(--pestana); padding: 0 var(--espacio-3); writing-mode: horizontal-tb; rotate: none; font-size: 1.5rem; }
+  .dia summary span { transform-origin: 0 50%; }
+  .dia__texto { width: 100%; padding: var(--espacio-3) var(--espacio-3) var(--espacio-3) var(--espacio-4); }
+  .dia__texto::before { top: var(--espacio-3); left: var(--espacio-3); }
+}
+@media (prefers-reduced-motion: reduce) { .dia details, .dia details::before, .dia details::after, .dia summary span, .dia__texto, .dia details::details-content { transition: none; animation: none !important; } }
 
 /* Momento firma */
 .firma { background: var(--oliva); color: var(--crema); }

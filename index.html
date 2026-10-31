@@ -207,34 +207,48 @@
       <div class="contenedor dia__grilla">
         <div>
           <h2 id="dia-titulo">De día café, de tarde aperitivo.</h2>
-          <details name="oferta" open>
-            <summary>Café</summary>
-            <div class="dia__panel">
-              <img src="img/capuchino-960.webp" alt="Capuchino con arte latte en taza verde salvia junto a una porción de torta de zanahoria" width="960" height="536" loading="lazy">
-              <p>Tinto, espresso, capuccino, latte o prensa francesa. Y para el calor: cold brew, cold brew naranja, limonada de café y granizado.</p>
-            </div>
-          </details>
-          <details name="oferta">
-            <summary>Para acompañar</summary>
-            <div class="dia__panel">
-              <img src="img/pasteleria-960.webp" alt="Porciones de tarta vasca y torta de zanahoria con pastelitos de hojaldre" width="960" height="536" loading="lazy">
-              <p>Torta de zanahoria, tarta vasca y pasteles dulces de arequipe o guayaba. Salados de jamón y queso, tocineta, pollo, carne o el Il Rustico con salami, pepperoni y queso crema.</p>
-            </div>
-          </details>
-          <details name="oferta">
-            <summary>Combos</summary>
-            <div class="dia__panel">
-              <img src="img/cafe-frio-960.webp" alt="Cold brew con rodaja de naranja y granizado de café en vasos tallados" width="960" height="536" loading="lazy">
-              <p>Classico, Due, Freddo y Dolce: tu café con algo de la vitrina, desde $7.9k.</p>
-            </div>
-          </details>
-          <details name="oferta">
-            <summary>Para picar</summary>
-            <div class="dia__panel">
-              <img src="img/tabla-picar-960.webp" alt="Tabla de quesos madurados y embutidos con crostinis de cerdo desmechado y un Aperol Spritz" width="960" height="536" loading="lazy">
-              <p>Panini y crostinis de pulled pork, y la tabla de madurados y quesos para compartir con el spritz.</p>
-            </div>
-          </details>
+          <div class="dia__oferta">
+            <details class="dia__item dia__item--picar dia__item--vertical" name="oferta">
+              <summary><span>Para picar</span></summary>
+              <div class="dia__panel">
+                <img src="img/dia-tabla-picar-960.webp" alt="Tabla de quesos madurados, embutidos y aceitunas con crostinis de cerdo desmechado y un Aperol Spritz" width="960" height="540" loading="lazy">
+                <div class="dia__texto">
+                  <p class="dia__nombre" aria-hidden="true">Para picar</p>
+                  <p>Panini y crostinis de pulled pork, y la tabla de madurados y quesos para compartir con el spritz.</p>
+                </div>
+              </div>
+            </details>
+            <details class="dia__item dia__item--combos dia__item--vertical" name="oferta">
+              <summary><span>Combos</span></summary>
+              <div class="dia__panel">
+                <img src="img/dia-cafe-frio-960.webp" alt="Cold brew con rodaja de naranja y granizado de café en vasos tallados" width="960" height="540" loading="lazy">
+                <div class="dia__texto">
+                  <p class="dia__nombre" aria-hidden="true">Combos</p>
+                  <p>Classico, Due, Freddo y Dolce: tu café con algo de la vitrina, desde $7.9k.</p>
+                </div>
+              </div>
+            </details>
+            <details class="dia__item dia__item--acompanar dia__item--vertical" name="oferta">
+              <summary><span>Para acompañar</span></summary>
+              <div class="dia__panel">
+                <img src="img/dia-pasteleria-960.webp" alt="Porciones de torta de zanahoria y tarta vasca con croissants y pastelitos de hojaldre" width="960" height="540" loading="lazy">
+                <div class="dia__texto">
+                  <p class="dia__nombre" aria-hidden="true">Para acompañar</p>
+                  <p>Torta de zanahoria, tarta vasca y pasteles dulces de arequipe o guayaba. Salados de jamón y queso, tocineta, pollo, carne o el Il Rustico con salami, pepperoni y queso crema.</p>
+                </div>
+              </div>
+            </details>
+            <details class="dia__item dia__item--cafe dia__item--vertical" name="oferta" open>
+              <summary><span>Café</span></summary>
+              <div class="dia__panel">
+                <img src="img/dia-capuchino-960.webp" alt="Capuchino con arte latte en taza verde salvia junto a una porción de torta de zanahoria" width="960" height="540" loading="lazy">
+                <div class="dia__texto">
+                  <p class="dia__nombre" aria-hidden="true">Café</p>
+                  <p>Tinto, espresso, capuccino, latte o prensa francesa. Y para el calor: cold brew, cold brew naranja, limonada de café y granizado.</p>
+                </div>
+              </div>
+            </details>
+          </div>
         </div>
       </div>
     </section>
