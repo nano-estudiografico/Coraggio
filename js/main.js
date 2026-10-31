@@ -42,6 +42,41 @@ if (titular && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced
   verTitular.observe(titular);
 }
 
+// Titular de «De día café…»: las letras parten apretadas entre sí, con un apriete distinto al azar
+// en cada una, y se separan suavemente hasta su lugar. Cada letra se desplaza hacia el centro de su palabra.
+const tituloDia = document.getElementById('dia-titulo');
+if (tituloDia && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const texto = tituloDia.textContent;
+  tituloDia.setAttribute('aria-label', texto);
+  tituloDia.textContent = '';
+  const palabras = texto.split(' ').map((palabra, i, todas) => {
+    const p = document.createElement('span');
+    p.className = 'dia__palabra';
+    p.setAttribute('aria-hidden', 'true');
+    p.innerHTML = [...palabra].map((c) => `<span class="dia__letra">${c}</span>`).join('');
+    tituloDia.append(p, i < todas.length - 1 ? ' ' : '');
+    return p;
+  });
+  // Se mide con la fuente ya cargada y antes de que el titular se vea: así las letras ya están apretadas al aparecer.
+  document.fonts.ready.then(() => {
+    palabras.forEach((p) => {
+      const centro = p.offsetWidth / 2;
+      p.querySelectorAll('.dia__letra').forEach((l) => {
+        const apriete = 0.45 + Math.random() * 0.5; // 45–95 % del camino hacia el centro
+        l.style.setProperty('--dx', `${(centro - (l.offsetLeft + l.offsetWidth / 2)) * apriete}px`);
+        l.style.setProperty('--dur', `${Math.round(Math.random() * 350)}ms`);
+      });
+    });
+    tituloDia.classList.add('dia__titulo--junto');
+    const verDia = new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting) return;
+      verDia.disconnect();
+      requestAnimationFrame(() => tituloDia.classList.remove('dia__titulo--junto'));
+    }, { threshold: 0.8 });
+    verDia.observe(tituloDia);
+  });
+}
+
 // Entrada de las copas: al acercarse a la pantalla las tarjetas esperan fuera, por el borde izquierdo;
 // al verse entran juntas como un mazo hasta el lugar de la primera (Aperol). Por inercia, mientras viajan
 // se inclinan hacia atrás (izquierda) y al frenar se balancean hacia adelante (derecha); ese impulso lanza

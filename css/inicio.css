@@ -191,9 +191,24 @@ section { padding-block: var(--espacio-6); }
 .copas__promo strong { white-space: nowrap; }
 .copas__sep { display: inline-block; width: 0.35em; height: 0.35em; margin-inline: 0.4em; border-radius: 50%; background: var(--naranja); vertical-align: 0.15em; }
 .copas__ico { display: inline-block; width: auto; height: 1.15em; margin-right: 0.3em; vertical-align: -0.2em; }
+/* Celular: la franja de promos ocupa todo el ancho de la pantalla, sin esquinas redondeadas, con
+   "Promos:" y cada combo en su propia línea; el botón queda centrado debajo. */
+@media (max-width: 639px) {
+  .copas__pie { flex-direction: column; align-items: center; }
+  .copas__promo { align-self: stretch; margin-inline: calc(50% - 50vw); border-radius: 0; justify-content: center; padding: var(--espacio-2) 1rem; }
+  .copas__titulo, .copas__sep + strong { display: block; }
+  /* Mismo ancho para los dos íconos (el de copas es más angosto): el "2" de cada línea empieza igual. */
+  .copas__promo .copas__ico { width: 1.5em; object-fit: contain; }
+}
 
 /* Día y tarde */
 .dia { background: var(--crema-oscura); }
+/* Titular: cada letra nace pegada a las vecinas (cada una con su propio apriete al azar) y se separa
+   despacio hasta su lugar (js/main.js). Solo se mueven con transform: las líneas no se reacomodan. */
+.dia__palabra { display: inline-block; white-space: nowrap; }
+.dia__letra { display: inline-block; transition: translate 2.2s var(--dur, 0s) cubic-bezier(0.22, 0.61, 0.36, 1), opacity 1.4s var(--dur, 0s) ease-out; }
+.dia__titulo--junto .dia__letra { translate: var(--dx, 0) 0; opacity: 0; transition: none; }
+@media (prefers-reduced-motion: reduce) { .dia__letra { transition: none; } }
 .dia__grilla { max-width: 52rem; }
 .dia details { border-top: 1.5px solid var(--oliva); }
 .dia details:last-of-type { border-bottom: 1.5px solid var(--oliva); }
