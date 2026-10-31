@@ -361,7 +361,8 @@ section { padding-block: var(--espacio-6); }
 .resenas__flechas .icono:hover, .resenas__flechas .icono:focus-visible { background: var(--oliva); color: var(--crema); }
 
 /* Marca gigante con la copa */
-.marca { padding-block: var(--espacio-5); overflow: hidden; }
+/* Ocupa el alto de la ventana; svh evita que salte en móvil al mostrarse u ocultarse la barra del navegador. */
+.marca { min-height: 100vh; min-height: 100svh; display: grid; align-content: center; padding-block: var(--espacio-5); overflow: hidden; }
 .marca__escena { position: relative; display: grid; place-items: center; }
 .marca__palabra { position: relative; z-index: 1; font: 400 min(18vw, 18rem)/0.9 var(--font-display); color: var(--oliva); letter-spacing: -0.02em; white-space: nowrap; }
 /* Copa en órbita (fotogramas sin fondo en img/orbita/): js/main.js cambia la <img> por un <canvas>
