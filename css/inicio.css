@@ -296,11 +296,14 @@ section { padding-block: var(--espacio-6); }
 @media (prefers-reduced-motion: reduce) { .dia details, .dia details::before, .dia details::after, .dia summary span, .dia__texto, .dia details::details-content { transition: none; animation: none !important; } }
 
 /* Momento firma */
-.firma { background: var(--oliva); color: var(--crema); }
-.firma__grilla { display: grid; gap: var(--espacio-3); }
-.firma__palabra { color: var(--naranja); font-size: min(14.5vw, 12rem); line-height: 0.9; margin: 0; letter-spacing: -0.01em; }
+.firma { background: var(--oliva); color: var(--crema); position: relative; min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; }
+/* Velo de olas (SVG) que cubre la sección hasta que se ve; el JS lo retira hacia arriba. */
+.firma__velo { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+@media (prefers-reduced-motion: reduce) { .firma__velo { display: none; } }
+.firma__grilla { display: grid; gap: var(--espacio-3); container-type: inline-size; }
+.firma__palabra { color: var(--naranja); font-size: 17.2cqi; /* "CORAGGIO:" mide ≈ 5,96 em en Gloock (sin kerning): 100cqi / 5,96 ≈ 16,8; algo más porque el kerning la acorta */ white-space: nowrap; justify-self: end; width: max-content; line-height: 0.9; margin: 0; letter-spacing: -0.01em; }
 .firma__texto { max-width: 40rem; font-size: clamp(1.125rem, 1.8vw, 1.375rem); }
-.firma__fonetica { font-weight: 600; font-size: 1.5rem; color: var(--naranja); }
+.firma__fonetica { font-family: var(--font-fonetica); font-weight: 300; font-size: 3rem; color: var(--naranja); text-align: right; margin: calc(-1 * var(--espacio-3)) 0 0; line-height: 1; }
 .firma__texto strong { color: var(--blanco); }
 .firma__remate { font: 400 clamp(1.75rem, 3.4vw, 2.75rem)/1.2 var(--font-display); margin-top: var(--espacio-3); }
 .firma__remate strong { color: var(--naranja); font-weight: 400; }
@@ -309,16 +312,39 @@ section { padding-block: var(--espacio-6); }
   .firma__texto p { break-inside: avoid; }
   .firma__remate { column-span: all; }
 }
+/* Acentos (img/acento.svg) a ambos lados del texto, en los márgenes que deja el contenedor: el izquierdo
+   reflejado. Su tamaño y separación son proporcionales al margen; solo donde hay sitio para verlos. */
+@media (min-width: 1500px) {
+  .firma__grilla { position: relative; }
+  .firma__grilla::before, .firma__grilla::after {
+    content: ""; position: absolute; grid-row: 3; top: 1.1rem; pointer-events: none;
+    width: min(calc((100vw - 100%) / 2 * 0.69), 20rem); aspect-ratio: 185.51 / 48.35;
+    background: url("../img/acento.svg") center / contain no-repeat;
+  }
+  .firma__grilla::before { right: calc(100% + (100vw - 100%) / 2 * 0.14); scale: -1 1; }
+  .firma__grilla::after { left: calc(100% + (100vw - 100%) / 2 * 0.14); }
+}
 
 /* Reseñas */
 .resenas__cabecera { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: var(--espacio-2); margin-bottom: var(--espacio-4); }
 .resenas__cabecera h2 { margin: 0; }
+.resenas__dato { display: flex; flex-direction: column; align-items: flex-end; gap: var(--espacio-1); text-align: right; }
+/* Sello centrado sobre el borde superior de la sección: su mitad cae sobre .firma. Alineado con el borde
+   derecho del contenedor. */
+.resenas { position: relative; }
+.resenas__sello { position: absolute; z-index: 2; top: 36px; right: max(1rem, calc((100% - var(--ancho-max)) / 2)); transform: translateY(-50%) rotate(16deg); width: 10.5rem; height: auto; }
 .resenas__nota { margin: 0; font-size: 1.125rem; }
 .resenas__nota .estrellas { color: var(--oliva); } /* sobre crema el naranja da 2,65:1 */
 .estrellas { color: var(--naranja); letter-spacing: 0.1em; margin: 0 0 var(--espacio-1); }
+/* La lista ocupa todo el ancho del navegador (sale del .contenedor); el margen izquierdo que deja
+   el contenedor se conserva como relleno, así la primera tarjeta queda donde estaba. */
 .resenas__lista {
-  list-style: none; margin: 0; padding: 0 0 var(--espacio-2);
-  display: grid; grid-auto-flow: column; grid-auto-columns: min(85%, 26rem); gap: var(--espacio-3);
+  --ancho: min(100vw - 2rem, var(--ancho-max));
+  --margen: max(1rem, calc((100vw - var(--ancho-max)) / 2));
+  box-sizing: border-box; width: 100vw; margin-inline: calc(50% - 50vw);
+  list-style: none; margin-block: 0; padding: 0 var(--margen) var(--espacio-2);
+  scroll-padding-inline: var(--margen);
+  display: grid; grid-auto-flow: column; grid-auto-columns: min(calc(var(--ancho) * 0.85), 26rem); gap: var(--espacio-3);
   overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin;
 }
 .resena { scroll-snap-align: start; background: var(--blanco); border-radius: var(--radio); padding: var(--espacio-3); display: flex; flex-direction: column; }
@@ -327,7 +353,12 @@ section { padding-block: var(--espacio-6); }
 .resenas__pie { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--espacio-2); margin-top: var(--espacio-3); }
 .resenas__flechas { display: flex; gap: var(--espacio-1); }
 .resenas__flechas[hidden] { display: none; }
-.resenas__flechas .icono { background: transparent; font-size: 1.25rem; cursor: pointer; }
+/* Flechas en SVG con tamaño fijo: no dependen de la tipografía ni del dispositivo. */
+.resenas__flechas .icono { width: 44px; height: 44px; background: transparent; cursor: pointer; }
+.resenas__flechas .icono svg { width: 22px; height: 22px; }
+/* Al pasar el cursor, el fondo verde del .icono general no aplica aquí (el fondo es transparente):
+   el icono crema quedaba invisible sobre crema. Se invierte junto con el fondo. */
+.resenas__flechas .icono:hover, .resenas__flechas .icono:focus-visible { background: var(--oliva); color: var(--crema); }
 
 /* Marca gigante con la copa */
 .marca { padding-block: var(--espacio-5); overflow: hidden; }

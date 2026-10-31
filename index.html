@@ -13,10 +13,10 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Instrument+Sans:wght@400;600&display=swap">
-  <link rel="stylesheet" href="css/tokens.css?v=8">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&family=Gloock&family=Instrument+Sans:wght@400;600&display=swap">
+  <link rel="stylesheet" href="css/tokens.css?v=9">
   <link rel="stylesheet" href="css/base.css?v=8">
-  <link rel="stylesheet" href="css/inicio.css?v=8">
+  <link rel="stylesheet" href="css/inicio.css?v=16">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -255,10 +255,20 @@
 
     <!-- ===== 7. Momento firma: CORAGGIO ===== -->
     <section class="firma" id="firma" aria-labelledby="firma-titulo">
+      <svg class="firma__velo" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="firma-velo-atras" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#ffb27a"/>
+            <stop offset="100%" stop-color="#FF5E00"/>
+          </linearGradient>
+        </defs>
+        <path class="firma__velo-capa" fill="url(#firma-velo-atras)"></path>
+        <path class="firma__velo-capa" fill="#EAE1D0"></path>
+      </svg>
       <div class="contenedor firma__grilla">
         <h2 id="firma-titulo" class="firma__palabra">CORAGGIO:</h2>
+        <p class="firma__fonetica">/co-rà-ggio/</p>
         <div class="firma__texto">
-          <p class="firma__fonetica">/co-rà-ggio/</p>
           <p>…del latín vulgar <em>coraticum</em>, una palabra que se construye a partir de la raíz «cor» (que significa <strong>corazón</strong>) y el sufijo «-aticum» (que en italiano evolucionó a -aggio y denota <strong>una acción o un estado</strong>).</p>
           <p>Es la expresión cotidiana por excelencia para dar aliento. Cuando alguien te dice «¡Coraggio!», te está diciendo «¡Ánimo!», «¡Fuerza!», «Ponle corazón que tú puedes».</p>
           <p class="firma__remate">Coraggio no es solo valentía; en su raíz más antigua significa <strong>vivir con el corazón por delante</strong>.</p>
@@ -271,7 +281,10 @@
       <div class="contenedor">
         <div class="resenas__cabecera">
           <h2 id="resenas-titulo">Lo que dicen en Google</h2>
-          <p class="resenas__nota"><span class="estrellas" role="img" aria-label="4,9 de 5 estrellas">★★★★★</span> <strong>4,9</strong> en Google · 31 reseñas</p>
+          <div class="resenas__dato">
+            <img class="resenas__sello" src="img/sello-clienti.svg" alt="" width="190" height="190">
+            <p class="resenas__nota"><span class="estrellas" role="img" aria-label="4,9 de 5 estrellas">★★★★★</span> <strong>4,9</strong> en Google · 31 reseñas</p>
+          </div>
         </div>
         <ul class="resenas__lista" id="resenas-lista" tabindex="0" aria-label="Reseñas de Google">
           <li class="resena">
@@ -294,13 +307,33 @@
             <blockquote><p>Ambiente tranquilo y los mejores Aperol de Medallo</p></blockquote>
             <p class="resena__autor">Guillermo Yepes</p>
           </li>
+          <li class="resena">
+            <p class="estrellas" role="img" aria-label="5 de 5 estrellas">★★★★★</p>
+            <blockquote><p>Excelente para cualquier ocasión sea para tomar café o como nosotros tomar aperitivos y cerveza!</p></blockquote>
+            <p class="resena__autor">Juan Esteban Fernandez</p>
+          </li>
+          <li class="resena">
+            <p class="estrellas" role="img" aria-label="5 de 5 estrellas">★★★★★</p>
+            <blockquote><p>Un ambiente genial. Buen café. Los croissant de chocolate una delicia</p></blockquote>
+            <p class="resena__autor">Juan Camilo Lopez Cuartas</p>
+          </li>
+          <li class="resena">
+            <p class="estrellas" role="img" aria-label="5 de 5 estrellas">★★★★★</p>
+            <blockquote><p>Excelente lugar, para tardear y hacer co Working café y cervezas</p></blockquote>
+            <p class="resena__autor">jose mesa</p>
+          </li>
+          <li class="resena">
+            <p class="estrellas" role="img" aria-label="5 de 5 estrellas">★★★★★</p>
+            <blockquote><p>Me encantó el ambiente🥰</p></blockquote>
+            <p class="resena__autor">juliana tapias</p>
+          </li>
         </ul>
         <div class="resenas__pie">
           <div class="resenas__flechas" hidden>
-            <button class="icono" type="button" data-dir="-1" aria-controls="resenas-lista" aria-label="Reseña anterior">←</button>
-            <button class="icono" type="button" data-dir="1" aria-controls="resenas-lista" aria-label="Reseña siguiente">→</button>
+            <button class="icono" type="button" data-dir="-1" aria-controls="resenas-lista" aria-label="Reseña anterior"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 12H5M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <button class="icono" type="button" data-dir="1" aria-controls="resenas-lista" aria-label="Reseña siguiente"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
           </div>
-          <a class="btn btn--secundario" href="https://www.google.com/maps/place/Coraggio+Aperitivos/@6.2346475,-75.5694637,17z/data=!4m6!3m5!1s0x8e442976cf9ba0d1:0xa5ca79516951902a" target="_blank" rel="noopener">Ver todas en Google</a>
+          <a class="btn btn--secundario" href="https://www.google.com/maps/place/Coraggio+Aperitivos/@6.2346475,-75.5694637,17z/data=!4m6!3m5!1s0x8e442976cf9ba0d1:0xa5ca79516951902a!8m2!3d6.2346475!4d-75.5694637!16s%2Fg%2F11zz4ybm2m?entry=ttu&g_ep=EgoyMDI2MTAyOC4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener">Ver todas en Google</a>
         </div>
       </div>
     </section>
@@ -463,6 +496,6 @@
   </footer>
 
   <!-- ===== Barra de acciones en celular ===== -->
-  <script type="module" src="js/main.js?v=20"></script>
+  <script type="module" src="js/main.js?v=25"></script>
 </body>
 </html>
