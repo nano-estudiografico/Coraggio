@@ -8,6 +8,7 @@
   --blanco: #FFFFFF;
 
   --font-display: 'Gloock', 'Georgia', serif;
+  --font-fonetica: 'Cormorant Garamond', 'Georgia', serif;
   --font-texto: 'Instrument Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --texto-base: 1.0625rem; /* 17 px */
   --texto-chico: 0.9375rem; /* 15 px, solo etiquetas */

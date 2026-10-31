@@ -77,6 +77,56 @@ if (tituloDia && 'IntersectionObserver' in window && !matchMedia('(prefers-reduc
   });
 }
 
+// Momento firma: dos capas de olas cubren la sección y se retiran hacia arriba al verla (efecto
+// "SVG Shape Overlays" de GreenSock, sin GSAP: los 10 puntos de cada ola bajan de 100 a 0 con un
+// retraso al azar y power2.inOut). Sin "reducir movimiento" no se dibuja nada y el texto queda a la vista.
+const firma = document.getElementById('firma');
+const velo = firma?.querySelector('.firma__velo');
+if (velo && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const capas = [...velo.querySelectorAll('.firma__velo-capa')];
+  const puntos = 10;
+  const retrasoMax = 0.3; // s, retraso aleatorio por punto
+  const retrasoCapa = 0.25; // s, entre capas
+  const duracion = 0.9; // s por punto
+  const valores = capas.map(() => Array(puntos).fill(100));
+  const retrasosPunto = Array.from({ length: puntos }, () => Math.random() * retrasoMax);
+  const dibujar = () => {
+    capas.forEach((capa, i) => {
+      const y = valores[i];
+      let d = `M 0 ${y[0]} C`;
+      for (let j = 0; j < puntos - 1; j++) {
+        const p = ((j + 1) / (puntos - 1)) * 100;
+        const cp = p - ((1 / (puntos - 1)) * 100) / 2;
+        d += ` ${cp} ${y[j]} ${cp} ${y[j + 1]} ${p} ${y[j + 1]}`;
+      }
+      capa.setAttribute('d', `${d} V 0 H 0`);
+    });
+  };
+  const suavizar = (t) => (t < 0.5 ? 2 * t * t : 1 - ((-2 * t + 2) ** 2) / 2); // power2.inOut
+  dibujar();
+  const verFirma = new IntersectionObserver(([e]) => {
+    if (!e.isIntersecting) return;
+    verFirma.disconnect();
+    const inicio = performance.now();
+    const total = (retrasoMax + retrasoCapa * (capas.length - 1) + duracion) * 1000;
+    const paso = (ahora) => {
+      const t = ahora - inicio;
+      capas.forEach((_, i) => {
+        const retrasoDeCapa = retrasoCapa * (capas.length - i - 1) * 1000;
+        for (let j = 0; j < puntos; j++) {
+          const local = Math.min(Math.max((t - (retrasosPunto[j] * 1000 + retrasoDeCapa)) / (duracion * 1000), 0), 1);
+          valores[i][j] = 100 * (1 - suavizar(local));
+        }
+      });
+      dibujar();
+      if (t < total) requestAnimationFrame(paso);
+      else velo.remove();
+    };
+    requestAnimationFrame(paso);
+  }, { threshold: Math.min(0.7, (innerHeight * 0.7) / firma.offsetHeight) }); // 70 % visible; si la sección es más alta que la pantalla, con 70 % de la pantalla cubierta por ella
+  verFirma.observe(firma);
+}
+
 // Oferta: siempre queda una abierta; tocar la que ya está abierta no la cierra.
 document.querySelectorAll('.dia__oferta summary').forEach((s) => {
   s.addEventListener('click', (e) => { if (s.parentElement.open) e.preventDefault(); });

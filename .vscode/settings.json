@@ -1,8 +1,8 @@
 {
   "github.copilot.chat.commitMessageGeneration.instructions": [
     {
-      "text": "Escribe siempre los mensajes de commit en español, siguiendo el estándar de Conventional Commits (por ejemplo: feat: ..., fix: ..., chore: ...)."
+      "text": "Always write the commit message in Spanish (español). Never use English. Follow the Conventional Commits format (feat: ..., fix: ..., chore: ..., style: ...). Keep the subject concise and imperative."
     }
-  ]
+  ],
+  "gitlens.ai.experimental.generateCommitMessage.prompt": "Generate the commit message in Spanish (español) using Conventional Commits format (feat: ..., fix: ..., chore: ...)."
 }
-
