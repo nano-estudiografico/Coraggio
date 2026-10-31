@@ -364,11 +364,12 @@ section { padding-block: var(--espacio-6); }
 .marca { padding-block: var(--espacio-5); overflow: hidden; }
 .marca__escena { position: relative; display: grid; place-items: center; }
 .marca__palabra { position: relative; z-index: 1; font: 400 min(18vw, 18rem)/0.9 var(--font-display); color: var(--oliva); letter-spacing: -0.02em; white-space: nowrap; }
+/* Recorte de la copa: gira 360° sobre su eje Y según el scroll (--giro de 0 a 1, lo fija js/main.js). */
 .marca__copa {
-  position: absolute; height: 125%; width: auto; aspect-ratio: 3 / 4;
-  object-fit: cover; object-position: 70% 50%;
-  border-radius: 999px; border: 6px solid var(--crema);
-  background: var(--oliva);
+  position: absolute; z-index: 2; height: 125%; width: auto; aspect-ratio: 1200 / 1607;
+  object-fit: contain;
+  transform: perspective(1200px) rotateY(calc(var(--giro, 0) * 360deg));
+  will-change: transform;
 }
 
 /* Momentos */

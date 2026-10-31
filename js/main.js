@@ -330,3 +330,20 @@ if (burger) {
   addEventListener('click', (e) => { if (!menu.contains(e.target)) abrir(false); });
   addEventListener('resize', () => { if (innerWidth >= 768) abrir(false); });
 }
+
+// Marca gigante: la copa da una vuelta completa sobre su eje Y mientras la sección cruza la pantalla.
+const copaMarca = document.querySelector('.marca__copa');
+if (copaMarca && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const seccion = copaMarca.closest('.marca');
+  let pendiente = false;
+  const girar = () => {
+    pendiente = false;
+    const r = seccion.getBoundingClientRect();
+    const avance = (innerHeight - r.top) / (innerHeight + r.height); // 0 al asomar, 1 al salir
+    const giro = Math.min(1, Math.max(0, (avance - 0.2) / 0.6));      // vuelta completa entre el 20 % y el 80 %
+    copaMarca.style.setProperty('--giro', giro.toFixed(4));
+  };
+  addEventListener('scroll', () => { if (!pendiente) { pendiente = true; requestAnimationFrame(girar); } }, { passive: true });
+  addEventListener('resize', girar);
+  girar();
+}
