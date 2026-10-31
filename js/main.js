@@ -348,7 +348,8 @@ if (copaMarca && 'IntersectionObserver' in window && !matchMedia('(prefers-reduc
   const dibujar = () => {
     pendiente = false;
     const r = seccion.getBoundingClientRect();
-    const avance = (innerHeight - r.top) / (innerHeight + r.height); // 0 al asomar, 1 al salir
+    // 0 cuando la escena se fija arriba, 1 cuando se suelta: la vuelta ocurre durante el 150 % extra de la sección.
+    const avance = -r.top / (r.height - innerHeight);
     const i = Math.round(Math.min(1, Math.max(0, avance)) * (TOTAL - 1));
     // Si el fotograma aún no llegó, se usa el cargado más cercano hacia atrás.
     for (let j = i; j >= 0; j--) {

@@ -361,9 +361,12 @@ section { padding-block: var(--espacio-6); }
 .resenas__flechas .icono:hover, .resenas__flechas .icono:focus-visible { background: var(--oliva); color: var(--crema); }
 
 /* Marca gigante con la copa */
-/* Ocupa el alto de la ventana; svh evita que salte en móvil al mostrarse u ocultarse la barra del navegador. */
-.marca { min-height: 100vh; min-height: 100svh; display: grid; align-content: center; padding-block: var(--espacio-5); overflow: hidden; }
-.marca__escena { position: relative; display: grid; place-items: center; }
+/* La escena (alto de la ventana) queda fija mientras se recorre la sección: 100 % visible + 150 % extra
+   de scroll, que es lo que dura la órbita de la copa. svh evita saltos en móvil con la barra del navegador.
+   overflow: clip (no hidden) para no romper el sticky. */
+.marca { height: 250vh; height: 250svh; padding-block: 0; overflow: clip; }
+.marca__escena { position: sticky; top: 0; height: 100vh; height: 100svh; display: grid; place-items: center; }
+@media (prefers-reduced-motion: reduce) { .marca { height: auto; } .marca__escena { position: relative; } }
 .marca__palabra { position: relative; z-index: 1; font: 400 min(18vw, 18rem)/0.9 var(--font-display); color: var(--oliva); letter-spacing: -0.02em; white-space: nowrap; }
 /* Copa en órbita (fotogramas sin fondo en img/orbita/): js/main.js cambia la <img> por un <canvas>
    que dibuja el fotograma según el scroll. */
