@@ -198,4 +198,8 @@ a.visualmente-oculto:focus {
 .pie__titulo { color: var(--naranja); margin-top: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; font-size: var(--texto-chico); margin-bottom: var(--espacio-1); }
 .pie__legal { font-size: var(--texto-chico); padding-block: var(--espacio-3); }
 .pie__legal p { margin-bottom: var(--espacio-1); }
+.pie__base { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 0 var(--espacio-3); padding-bottom: var(--espacio-3); }
+.pie__base .pie__legal { padding-bottom: 0; }
+.pie__credito { font-size: var(--texto-chico); margin-bottom: var(--espacio-1); white-space: nowrap; }
+.pie__credito img { display: inline-block; height: 0.8em; width: auto; vertical-align: baseline; margin-inline: 0.15em; }
 .pie__foto { display: block; width: 100%; height: auto; }
