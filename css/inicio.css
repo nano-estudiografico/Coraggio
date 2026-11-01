@@ -385,7 +385,7 @@ section { padding-block: var(--espacio-6); }
   --alto: max(22rem, calc(100svh - var(--alto-menu) - 3rem)); /* la ventana menos el header y 3 rem */
   --ancho-foto: max(100cqi, var(--alto) * 16 / 9); /* ancho de la foto con object-fit: cover */
 }
-.momentos__foto { display: block; border-radius: var(--radio); overflow: hidden; }
+.momentos__foto { display: block; border-radius: var(--radio); overflow: hidden; background-color: var(--crema); } /* crema detrás de la foto tenue, no el oliva de picture */
 .momentos__foto img { display: block; width: 100%; height: var(--alto); object-fit: cover; }
 /* Mientras se lee el título la foto queda más grande, desenfocada y tenue; vuelve al entrar los stickers. */
 .momentos--espera .momentos__foto img { scale: 1.12; filter: blur(8px); opacity: 0.55; }
