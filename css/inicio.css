@@ -82,6 +82,11 @@ section { padding-block: var(--espacio-6); }
 .copa__giro { position: relative; height: 100%; transform-style: preserve-3d; transition: transform var(--giro) cubic-bezier(0.2, 0.7, 0.2, 1); }
 /* --g: 0 muestra el frente y 1 el reverso. Con cursor gira al pasar por encima; en pantallas táctiles
    cada toque alterna .copa--girada (js/main.js); con teclado, al enfocarla. */
+/* --g es un número registrado: así js/main.js puede animarlo (vaivén de la primera tarjeta al entrar) y todo lo
+   que depende de él (giro, desenfoque, orden de las copas, líquido) lo sigue de forma continua. */
+@property --g { syntax: '<number>'; inherits: true; initial-value: 0; }
+/* Durante ese vaivén las transiciones sobran: seguirían a --g con retraso en vez de moverse con él. */
+.copa--vaiven, .copa--vaiven *, .copa--vaiven .copa__giro::before { transition: none !important; }
 .copa { --g: 0; }
 @media (hover: hover) { .copa:hover { --g: 1; } }
 .copa:focus-visible, .copa--girada { --g: 1; }

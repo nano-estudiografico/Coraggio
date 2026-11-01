@@ -171,8 +171,9 @@ document.querySelectorAll('.dia__oferta summary').forEach((s) => {
 // Entrada de las copas: al acercarse a la pantalla las tarjetas esperan fuera, por el borde izquierdo;
 // al verse entran juntas como un mazo hasta el lugar de la primera (Aperol). Por inercia, mientras viajan
 // se inclinan hacia atrás (izquierda) y al frenar se balancean hacia adelante (derecha); ese impulso lanza
-// a las demás hasta su sitio, donde se enderezan. La primera se asienta en el suyo. Solo con varias
-// columnas y sin "reducir movimiento".
+// a las demás hasta su sitio, donde se enderezan. La primera se asienta en el suyo y hace un vaivén de
+// giro. La entrada solo corre con varias columnas; en celular (una columna) queda solo el vaivén de la
+// primera tarjeta. Nada de esto corre con "reducir movimiento".
 const grillaCopas = document.querySelector('.copas__grilla');
 if (grillaCopas && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
   const copas = [...grillaCopas.children];
@@ -232,14 +233,47 @@ if (grillaCopas && 'IntersectionObserver' in window && !matchMedia('(prefers-red
       ];
       return [copa.animate(mover, { duration: duracion }), copa.animate(inclinar, { duration: duracion })];
     }).flat();
-    Promise.all(animaciones.map((a) => a.finished)).then(() => copas.forEach((copa) => {
-      copa.style.zIndex = copa.style.transformOrigin = '';
-    }));
+    Promise.all(animaciones.map((a) => a.finished)).then(() => {
+      copas.forEach((copa) => { copa.style.zIndex = copa.style.transformOrigin = ''; });
+      mostrarDorso(copas[0]);
+    });
+  };
+  // Al terminar la entrada, la primera tarjeta gira hacia el dorso con la misma curva y velocidad que el
+  // hover y, al llegar a 170°, se devuelve de inmediato (la vuelta es esa misma curva en reversa). Se anima
+  // --g, el estado de giro de la tarjeta. Si la persona toca la tarjeta durante el vaivén, se cancela y toma
+  // el control.
+  const mostrarDorso = (copa) => {
+    if (!window.CSS?.registerProperty || copa.classList.contains('copa--girada')) return;
+    const giro = parseFloat(getComputedStyle(copa).getPropertyValue('--giro')) * 1000;
+    const a170 = 0.5412 * giro; // con la curva del giro (0.2, 0.7, 0.2, 1) el 94 % del recorrido (170° de 180°) se alcanza al 54,12 % del tiempo
+    copa.classList.add('copa--vaiven');
+    const vaiven = copa.animate([{ '--g': '0' }, { '--g': '1' }], { duration: giro, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)' });
+    const vigilar = () => {
+      if (vaiven.playState !== 'running' || vaiven.playbackRate < 0) return;
+      if (vaiven.currentTime >= a170) vaiven.reverse();
+      else requestAnimationFrame(vigilar);
+    };
+    requestAnimationFrame(vigilar);
+    const cancelar = () => vaiven.cancel();
+    copa.addEventListener('pointerdown', cancelar, { once: true });
+    const terminar = () => {
+      copa.removeEventListener('pointerdown', cancelar);
+      copa.classList.remove('copa--vaiven');
+    };
+    vaiven.addEventListener('finish', terminar);
+    vaiven.addEventListener('cancel', terminar);
   };
   const cerca = new IntersectionObserver(([e]) => {
     if (!e.isIntersecting) return;
     cerca.disconnect();
-    if (columnas() > 1) sacar();
+    if (columnas() > 1) { sacar(); return; }
+    // En una sola columna (celular) no hay entrada: la primera tarjeta hace el vaivén al verse.
+    const primeraVista = new IntersectionObserver(([v]) => {
+      if (!v.isIntersecting) return;
+      primeraVista.disconnect();
+      mostrarDorso(copas[0]);
+    }, { threshold: 0.6 });
+    primeraVista.observe(copas[0]);
   }, { rootMargin: '0px 0px 300px 0px' });
   const visible = new IntersectionObserver(([e]) => {
     if (!e.isIntersecting || !recorridos) return;
