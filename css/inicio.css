@@ -375,14 +375,98 @@ section { padding-block: var(--espacio-6); }
   object-fit: contain;
 }
 
-/* Momentos */
-.momentos { background: var(--crema-oscura); padding-top: 0; }
-.momentos__foto { display: block; margin-bottom: var(--espacio-5); } /* foto a sangre: todo el ancho de la sección */
+/* Momentos: la foto con el título encima; el título se va (opacidad y desenfoque) y los stickers
+   entran desde todos lados hasta su taza o copa. js/main.js pone .momentos--espera hasta que la escena
+   se ve. Sin JS queda la escena final: stickers en su lugar. */
+.momentos { background: var(--crema-oscura); overflow: clip; } /* los stickers llegan desde fuera sin scroll lateral */
+.momentos__escena { position: relative; container-type: inline-size; }
+.momentos__foto { display: block; border-radius: var(--radio); overflow: hidden; }
 .momentos__foto img { display: block; width: 100%; height: auto; }
+
+.momentos__titulo {
+  position: absolute; inset: 0 0 auto; aspect-ratio: 1920 / 1080; margin: 0;
+  display: grid; place-items: center; padding: var(--espacio-2); text-align: center;
+  font-size: clamp(2rem, 6.5cqi, 5.5rem); color: var(--oliva);
+  background: radial-gradient(ellipse 42% 48% at center, rgb(244 238 227 / 0.92), rgb(244 238 227 / 0));
+  opacity: 0; filter: blur(14px); transform: scale(1.06); pointer-events: none;
+}
+.momentos--espera .momentos__titulo { opacity: 1; filter: blur(0); transform: none; }
+.momentos__escena:not(.momentos--espera) .momentos__titulo {
+  transition: opacity 1s ease 1.6s, filter 1s ease 1.6s, transform 1s ease 1.6s;
+}
+
+.momentos__lista {
+  list-style: none; margin: var(--espacio-3) 0 0; padding: 0;
+  display: flex; flex-wrap: wrap; justify-content: center; gap: var(--espacio-2) var(--espacio-1);
+}
+.sticker {
+  --centro: translate(0, 0);
+  font: 600 0.95rem/1.15 var(--font-texto); white-space: nowrap;
+  filter: drop-shadow(0 0.15em 0.25em rgb(48 55 23 / 0.28));
+  transform: var(--centro) rotate(var(--r));
+}
+.momentos--espera .sticker {
+  opacity: 0; transform: var(--centro) translate(var(--dx), var(--dy)) rotate(calc(var(--r) + 50deg)) scale(0.7);
+}
+.momentos__escena:not(.momentos--espera) .sticker {
+  transition: transform 0.9s cubic-bezier(0.3, 1.35, 0.5, 1) calc(2.5s + var(--i) * 0.12s), opacity 0.2s linear calc(2.5s + var(--i) * 0.12s);
+}
+@media (min-width: 760px) {
+  .momentos__lista { position: absolute; inset: 0; margin: 0; pointer-events: none; }
+  .sticker {
+    --centro: translate(-50%, -50%);
+    position: absolute; left: var(--x); top: var(--y); pointer-events: auto;
+    font-size: clamp(0.75rem, 1.35cqi, 1.15rem);
+  }
+}
+
+/* Forma de cada sticker: ::after es el color, ::before el borde blanco recortado (misma forma, más grande). */
+.sticker span {
+  position: relative; isolation: isolate; display: grid; place-items: center; text-align: center;
+  padding: 0.6em 1.1em; color: var(--oliva); --fondo: var(--crema); --forma: 999px;
+}
+.sticker span::before, .sticker span::after {
+  content: ''; position: absolute; z-index: -1; border-radius: var(--forma); clip-path: var(--recorte, none);
+}
+.sticker span::before { inset: -0.28em; background: var(--blanco); }
+.sticker span::after { inset: 0; background: var(--fondo); }
+@media (hover: hover) {
+  .sticker span { transition: scale 0.2s ease; }
+  .sticker:hover span { scale: 1.08; animation: tambaleo 0.55s ease-in-out; }
+}
+@keyframes tambaleo {
+  0%, 100% { rotate: 0deg; }
+  20% { rotate: -7deg; }
+  45% { rotate: 6deg; }
+  70% { rotate: -3deg; }
+}
+
+.sticker--pastilla span { --fondo: var(--naranja); }
+.sticker--circulo span { --forma: 50%; aspect-ratio: 1; width: 6.6em; padding: 0.8em; white-space: normal; }
+.sticker--mancha span { --fondo: var(--oliva); --forma: 62% 38% 55% 45% / 55% 60% 40% 45%; color: var(--crema); padding: 1em 1.5em; }
+.sticker--globo span { --fondo: var(--blanco); --forma: 1.4em 1.4em 1.4em 0.25em; }
+.sticker--globo span::before { background: var(--crema); }
+.sticker--estrella span {
+  --fondo: var(--naranja); --forma: 0; aspect-ratio: 1; width: 7.4em; padding: 1.4em; white-space: normal;
+  --recorte: polygon(50.0% 0.0%, 59.6% 8.1%, 71.7% 5.0%, 76.8% 16.4%, 89.1% 18.8%, 88.7% 31.3%, 98.7% 38.9%, 93.0% 50.0%, 98.7% 61.1%, 88.7% 68.7%, 89.1% 81.2%, 76.8% 83.6%, 71.7% 95.0%, 59.6% 91.9%, 50.0% 100.0%, 40.4% 91.9%, 28.3% 95.0%, 23.2% 83.6%, 10.9% 81.2%, 11.3% 68.7%, 1.3% 61.1%, 7.0% 50.0%, 1.3% 38.9%, 11.3% 31.3%, 10.9% 18.8%, 23.2% 16.4%, 28.3% 5.0%, 40.4% 8.1%);
+}
+.sticker--boleto span { --fondo: var(--oliva-suave); --forma: 0.35em; color: var(--crema); padding: 0.75em 1.3em; }
+.sticker--boleto span::after { outline: 1.5px dashed rgb(244 238 227 / 0.7); outline-offset: -0.35em; }
+.sticker--banderin span { --forma: 0; --recorte: polygon(0 0, 100% 0, 91% 50%, 100% 100%, 0 100%, 9% 50%); padding: 0.65em 2em; }
+.sticker--sello span { --fondo: var(--oliva); --forma: 0.4em; color: var(--crema); padding: 0.9em 1.3em; }
+.sticker--sello span::before, .sticker--sello span::after { /* borde dentado de estampilla */
+  padding: 0.3em;
+  mask: conic-gradient(#000 0 0) content-box, radial-gradient(circle 0.3em, #000 96%, #0000) 0 0 / 0.75em 0.75em round padding-box;
+}
+
+/* Movimiento reducido: solo opacidad, sin desenfoque ni viajes. */
+@media (prefers-reduced-motion: reduce) {
+  .momentos__titulo { filter: none; transform: none; }
+  .momentos--espera .sticker { transform: var(--centro) rotate(var(--r)); }
+  .sticker:hover span { animation: none; }
+}
+
 .historia__grilla picture { border-radius: var(--radio); overflow: hidden; }
-.momentos__lista { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--espacio-1); }
-.momentos__lista li { padding: 0.5rem 1.1rem; border-radius: 999px; border: 1.5px solid var(--oliva); font-weight: 600; }
-.momentos__lista li:nth-child(3n + 1) { background: var(--oliva); color: var(--crema); }
 
 /* Historia */
 .historia__grilla { display: grid; gap: var(--espacio-4); align-items: center; }

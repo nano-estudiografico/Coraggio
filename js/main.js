@@ -42,6 +42,18 @@ if (titular && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced
   verTitular.observe(titular);
 }
 
+// Momentos: el título se lee sobre la foto, se desvanece y entran los stickers (el CSS lleva los tiempos).
+const escenaMomentos = document.querySelector('.momentos__escena');
+if (escenaMomentos && 'IntersectionObserver' in window) {
+  escenaMomentos.classList.add('momentos--espera');
+  const verMomentos = new IntersectionObserver(([e]) => {
+    if (!e.isIntersecting) return;
+    verMomentos.disconnect();
+    requestAnimationFrame(() => escenaMomentos.classList.remove('momentos--espera'));
+  }, { threshold: 0.6 });
+  verMomentos.observe(escenaMomentos);
+}
+
 // Titular de «De día café…»: las letras parten apretadas entre sí, con un apriete distinto al azar
 // en cada una, y se separan suavemente hasta su lugar. Cada letra se desplaza hacia el centro de su palabra.
 const tituloDia = document.getElementById('dia-titulo');
