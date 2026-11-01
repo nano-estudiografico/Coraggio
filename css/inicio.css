@@ -410,7 +410,7 @@ section { padding-block: var(--espacio-6); }
   display: flex; flex-wrap: wrap; justify-content: center; gap: var(--espacio-2) var(--espacio-1);
 }
 .sticker {
-  --centro: translate(0, 0);
+  --centro: translate(0, 0); position: relative;
   font: 600 0.95rem/1.15 var(--font-texto); white-space: nowrap;
   filter: drop-shadow(0 0.15em 0.25em rgb(48 55 23 / 0.28));
   transform: var(--centro) rotate(var(--r));
@@ -443,8 +443,12 @@ section { padding-block: var(--espacio-6); }
 }
 .sticker span::before { inset: -0.28em; background: var(--blanco); }
 .sticker span::after { inset: 0; background: var(--fondo); }
+/* Arrastre (js/main.js): el desplazamiento va en translate, aparte del transform de la entrada. */
+.sticker { cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; }
+.sticker--arrastrando { cursor: grabbing; filter: drop-shadow(0 0.5em 0.6em rgb(48 55 23 / 0.32)); }
+.sticker--arrastrando span { scale: 1.1; }
+.sticker span { transition: scale 0.2s ease; }
 @media (hover: hover) {
-  .sticker span { transition: scale 0.2s ease; }
   .sticker:hover span { scale: 1.08; animation: tambaleo 0.55s ease-in-out; }
 }
 @keyframes tambaleo {

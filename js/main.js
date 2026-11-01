@@ -54,6 +54,30 @@ if (escenaMomentos && 'IntersectionObserver' in window) {
   verMomentos.observe(escenaMomentos.querySelector('.momentos__foto'));
 }
 
+// Stickers de Momentos: se arrastran con el mouse o el dedo; el último que se toca queda encima.
+let capaSticker = 1;
+document.querySelectorAll('.sticker').forEach((sticker) => {
+  let inicio = null;
+  sticker.addEventListener('pointerdown', (e) => {
+    if (e.button !== 0) return;
+    e.preventDefault(); // sin selección de texto ni arrastre nativo, que cancelarían el puntero
+    const [x = 0, y = 0] = (sticker.style.translate || '0px 0px').split(' ').map(parseFloat);
+    inicio = { px: e.clientX, py: e.clientY, x, y };
+    sticker.setPointerCapture(e.pointerId);
+    sticker.style.zIndex = ++capaSticker;
+    sticker.classList.add('sticker--arrastrando');
+  });
+  const mover = (e) => {
+    if (!inicio) return;
+    sticker.style.translate = `${inicio.x + e.clientX - inicio.px}px ${inicio.y + e.clientY - inicio.py}px`;
+  };
+  sticker.addEventListener('pointermove', mover);
+  const soltar = () => { inicio = null; sticker.classList.remove('sticker--arrastrando'); };
+  sticker.addEventListener('pointerup', (e) => { mover(e); soltar(); });
+  sticker.addEventListener('pointercancel', soltar);
+  sticker.addEventListener('dragstart', (e) => e.preventDefault());
+});
+
 // Titular de «De día café…»: las letras parten apretadas entre sí, con un apriete distinto al azar
 // en cada una, y se separan suavemente hasta su lugar. Cada letra se desplaza hacia el centro de su palabra.
 const tituloDia = document.getElementById('dia-titulo');
