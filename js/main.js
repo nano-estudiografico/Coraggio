@@ -50,8 +50,8 @@ if (escenaMomentos && 'IntersectionObserver' in window) {
     if (!e.isIntersecting) return;
     verMomentos.disconnect();
     requestAnimationFrame(() => escenaMomentos.classList.remove('momentos--espera'));
-  }, { threshold: 0.6 });
-  verMomentos.observe(escenaMomentos);
+  }, { threshold: 0.8 }); // arranca cuando se ve el 80 % de la foto
+  verMomentos.observe(escenaMomentos.querySelector('.momentos__foto'));
 }
 
 // Titular de «De día café…»: las letras parten apretadas entre sí, con un apriete distinto al azar
