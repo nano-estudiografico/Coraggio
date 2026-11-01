@@ -387,6 +387,11 @@ section { padding-block: var(--espacio-6); }
 }
 .momentos__foto { display: block; border-radius: var(--radio); overflow: hidden; }
 .momentos__foto img { display: block; width: 100%; height: var(--alto); object-fit: cover; }
+/* Mientras se lee el título la foto queda más grande, desenfocada y tenue; vuelve al entrar los stickers. */
+.momentos--espera .momentos__foto img { scale: 1.12; filter: blur(8px); opacity: 0.55; }
+.momentos__escena:not(.momentos--espera) .momentos__foto img {
+  transition: scale 1.2s cubic-bezier(0.25, 1, 0.5, 1) 2.3s, filter 1s ease 2.3s, opacity 1s ease 2.3s;
+}
 
 .momentos__titulo {
   position: absolute; inset: 0 0 auto; height: var(--alto); margin: 0;
@@ -470,6 +475,7 @@ section { padding-block: var(--espacio-6); }
 /* Movimiento reducido: solo opacidad, sin desenfoque ni viajes. */
 @media (prefers-reduced-motion: reduce) {
   .momentos__titulo { filter: none; transform: none; }
+  .momentos--espera .momentos__foto img { scale: 1; }
   .momentos--espera .sticker { transform: var(--centro) rotate(var(--r)); }
   .sticker:hover span { animation: none; }
 }
