@@ -528,14 +528,14 @@ section { padding-block: var(--espacio-6); }
   /* El mapa cubre toda la sección; mide 150 % de ancho para que el pin (centro del mapa) quede al 75 %, a la derecha */
   .visitanos { padding-bottom: var(--espacio-6); }
   .visitanos::before { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
-    background: linear-gradient(to right, rgb(244 238 227 / 80%) 0%, transparent 44%); } /* crema al 80 % */
+    background: linear-gradient(to right, #f4eee3d9 34%, transparent 57%); }
   .visitanos__info { position: relative; z-index: 2; pointer-events: none; } /* deja arrastrar el mapa por debajo */
   .visitanos__info > div { max-width: 30rem; pointer-events: auto; }
 }
 .visitanos__dato { font-size: 1.25rem; }
 .visitanos .botones { margin-block: var(--espacio-3); }
 .visitanos__contacto a { font-weight: 600; }
-.visitanos__encargos { margin-top: var(--espacio-3); padding: var(--espacio-3); border-radius: var(--radio); background: var(--crema-oscura); }
+.visitanos__encargos { margin-top: var(--espacio-3); padding: var(--espacio-3); border-radius: var(--radio); border: 2px solid var(--oliva); }
 .visitanos__mapa { display: block; width: 100%; height: 22rem; margin-top: var(--espacio-4); border: 0; background: var(--oliva); }
 @media (min-width: 900px) { .visitanos__mapa { position: absolute; top: 0; left: 0; width: 150%; height: 100%; margin: 0; } }
 .estado { display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600; margin: 0; }
