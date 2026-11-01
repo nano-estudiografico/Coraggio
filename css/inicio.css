@@ -373,7 +373,7 @@ section { padding-block: var(--espacio-6); }
 .marca__copa {
   position: absolute; z-index: 2; height: 80vh; height: 80svh; width: auto; aspect-ratio: 400 / 834; /* la copa llena el fotograma: 80 % del alto de la ventana */
   object-fit: contain;
-  translate: 0 var(--alto-menu); /* baja la altura del header para que el menú fijo no tape el borde de la copa */
+  translate: 0 calc(var(--alto-menu) / 2); /* baja media altura del header: queda centrada en el espacio libre bajo el menú fijo */
 }
 
 /* Momentos: la foto con el título encima; el título se va (opacidad y desenfoque) y los stickers
