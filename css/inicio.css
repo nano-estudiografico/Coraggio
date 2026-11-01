@@ -543,7 +543,6 @@ section { padding-block: var(--espacio-6); }
 .estado--abierto::before { background: #2f7d32; }
 .estado--cerrado::before { background: #9a3412; }
 
-.pie__logo { width: 72px; height: 72px; margin-bottom: var(--espacio-2); }
 
 @media (prefers-reduced-motion: reduce) {
   .instagram__grilla img { transition: none; }
