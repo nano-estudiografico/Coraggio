@@ -491,7 +491,7 @@ section { padding-block: var(--espacio-6); }
 .historia h2 { color: var(--crema); margin: 0; }
 /* Sello de menú sobre el borde superior: su mitad cae sobre .momentos, como el de reseñas. */
 .historia__sello { position: absolute; z-index: 2; top: 42px; left: max(1rem, calc((100% - var(--ancho-max)) / 2)); transform: translateY(-50%) rotate(-12deg); width: 13.5rem; height: auto; }
-@media (max-width: 767px) { .historia__sello { width: 8.1rem; } } /* 40 % más chico en celular */
+@media (max-width: 767px) { .historia__sello { width: 8.91rem; top: 12px; } } /* más chico y más arriba en celular */
 .historia__grilla { display: grid; gap: var(--espacio-4); align-items: center; }
 @media (min-width: 900px) { .historia__grilla { grid-template-columns: 1.3fr 1fr; } }
 .historia p { font-size: 1.125rem; max-width: 40ch; }
