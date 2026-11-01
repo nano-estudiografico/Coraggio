@@ -190,6 +190,8 @@ a.visualmente-oculto:focus {
 .pie__columnas { display: grid; gap: var(--espacio-3); grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr)); margin-bottom: var(--espacio-4); }
 .pie__columnas ul { list-style: none; margin: 0; padding: 0; }
 .pie__columnas li a { display: inline-flex; min-height: 44px; align-items: center; max-width: 100%; overflow-wrap: anywhere; }
+.pie__columnas .pie__marca { width: 100%; margin-bottom: var(--espacio-2); }
+.pie__lema { font: italic 300 1.75rem/1.2 var(--font-fonetica); }
 .pie__titulo { font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; font-size: var(--texto-chico); margin-bottom: var(--espacio-1); }
 .pie__legal { font-size: var(--texto-chico); border-top: 1px solid rgb(244 238 227 / 0.2); padding-top: var(--espacio-3); }
 .pie__legal p { margin-bottom: var(--espacio-1); }
