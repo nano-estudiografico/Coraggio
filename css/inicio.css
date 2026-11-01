@@ -378,7 +378,7 @@ section { padding-block: var(--espacio-6); }
 /* Momentos: la foto con el título encima; el título se va (opacidad y desenfoque) y los stickers
    entran desde todos lados hasta su taza o copa. js/main.js pone .momentos--espera hasta que la escena
    se ve. Sin JS queda la escena final: stickers en su lugar. */
-.momentos { background: var(--crema-oscura); overflow: clip; } /* los stickers llegan desde fuera sin scroll lateral */
+.momentos { background: var(--crema); overflow: clip; } /* los stickers llegan desde fuera sin scroll lateral */
 .momentos__escena { position: relative; container-type: inline-size; }
 .momentos__foto { display: block; border-radius: var(--radio); overflow: hidden; }
 .momentos__foto img { display: block; width: 100%; height: auto; }
