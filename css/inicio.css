@@ -380,12 +380,16 @@ section { padding-block: var(--espacio-6); }
    se ve. Sin JS queda la escena final: stickers en su lugar. */
 .momentos { background: var(--crema); overflow: clip; } /* los stickers llegan desde fuera sin scroll lateral */
 .momentos__marco { padding-inline: var(--espacio-3); } /* foto al ancho de la pantalla, con el mismo margen que el gap de las tarjetas */
-.momentos__escena { position: relative; container-type: inline-size; }
+.momentos__escena {
+  position: relative; container-type: inline-size;
+  --alto: max(22rem, calc(100svh - var(--alto-menu) - 3rem)); /* la ventana menos el header y 3 rem */
+  --ancho-foto: max(100cqi, var(--alto) * 16 / 9); /* ancho de la foto con object-fit: cover */
+}
 .momentos__foto { display: block; border-radius: var(--radio); overflow: hidden; }
-.momentos__foto img { display: block; width: 100%; height: auto; }
+.momentos__foto img { display: block; width: 100%; height: var(--alto); object-fit: cover; }
 
 .momentos__titulo {
-  position: absolute; inset: 0 0 auto; aspect-ratio: 1920 / 1080; margin: 0;
+  position: absolute; inset: 0 0 auto; height: var(--alto); margin: 0;
   display: grid; place-items: center; padding: var(--espacio-2); text-align: center;
   font-size: clamp(2rem, 6.5cqi, 5.5rem); color: var(--oliva);
   background: radial-gradient(ellipse 42% 48% at center, rgb(244 238 227 / 0.92), rgb(244 238 227 / 0));
@@ -416,7 +420,10 @@ section { padding-block: var(--espacio-6); }
   .momentos__lista { position: absolute; inset: 0; margin: 0; pointer-events: none; }
   .sticker {
     --centro: translate(-50%, -50%);
-    position: absolute; left: var(--x); top: var(--y); pointer-events: auto;
+    position: absolute; pointer-events: auto;
+    /* el recipiente en la foto recortada por cover (centrada); si el recorte lo deja fuera, el sticker queda en el borde */
+    left: clamp(6.5em, 50cqi + (var(--x) - 0.5) * var(--ancho-foto), 100cqi - 6.5em);
+    top: clamp(4em, var(--alto) / 2 + (var(--y) - 0.5) * var(--ancho-foto) * 9 / 16, var(--alto) - 4em);
     font-size: clamp(0.75rem, 1.35cqi, 1.15rem);
   }
 }
