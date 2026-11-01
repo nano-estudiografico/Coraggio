@@ -528,7 +528,7 @@ section { padding-block: var(--espacio-6); }
   /* El mapa cubre toda la sección; mide 150 % de ancho para que el pin (centro del mapa) quede al 75 %, a la derecha */
   .visitanos { padding-bottom: var(--espacio-6); }
   .visitanos::before { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
-    background: linear-gradient(to right, var(--crema) 0%, var(--crema) 32%, transparent 50%); }
+    background: linear-gradient(to right, rgb(244 238 227 / 80%) 0%, transparent 44%); } /* crema al 80 % */
   .visitanos__info { position: relative; z-index: 2; pointer-events: none; } /* deja arrastrar el mapa por debajo */
   .visitanos__info > div { max-width: 30rem; pointer-events: auto; }
 }
