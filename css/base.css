@@ -184,17 +184,18 @@ a.visualmente-oculto:focus {
 }
 
 /* Pie */
-.pie { background: var(--oliva); color: var(--crema); padding: var(--espacio-5) 0 0; overflow-x: clip; }
-.pie a { color: var(--crema); }
+.pie { background: var(--oliva); color: var(--crema-oscura); padding: var(--espacio-5) 0 0; overflow-x: clip; }
+.pie a { color: var(--crema-oscura); }
 .pie__marca { display: block; width: min(100%, 44rem); height: auto; margin: 0 0 var(--espacio-4); }
 .pie__columnas { display: grid; gap: var(--espacio-3); grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr)); margin-bottom: var(--espacio-4); }
 .pie__columnas ul { list-style: none; margin: 0; padding: 0; }
-.pie__columnas li a { display: inline-flex; min-height: 44px; align-items: center; max-width: 100%; overflow-wrap: anywhere; }
+.pie__columnas li a { display: inline-flex; min-height: 44px; align-items: center; max-width: 100%; overflow-wrap: anywhere; text-decoration: none; }
+.pie__columnas li a:hover { text-decoration: underline; }
 .pie__columnas .pie__marca { width: 100%; margin-bottom: var(--espacio-2); }
 /* El lema mide lo mismo que la palabra CORAGGIO del logo (67.7 % de su ancho): la letra escala con la columna */
 .pie__columnas > :has(.pie__lema) { container-type: inline-size; }
 .pie__lema { font: italic 300 4.9cqi/1.25 var(--font-fonetica); text-align: right; margin-inline: 10px; white-space: nowrap; }
-.pie__titulo { color: var(--naranja); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; font-size: var(--texto-chico); margin-bottom: var(--espacio-1); }
+.pie__titulo { color: var(--naranja); margin-top: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; font-size: var(--texto-chico); margin-bottom: var(--espacio-1); }
 .pie__legal { font-size: var(--texto-chico); padding-block: var(--espacio-3); }
 .pie__legal p { margin-bottom: var(--espacio-1); }
 .pie__foto { display: block; width: 100%; height: auto; }
