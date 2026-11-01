@@ -427,6 +427,14 @@ section { padding-block: var(--espacio-6); }
   }
 }
 
+.momentos--espera .sticker {
+  opacity: 0; transform: var(--centro) translate(var(--dx), var(--dy)) rotate(calc(var(--r) + 50deg)) scale(0.7);
+}
+/* Entran cuando el título ya se fue (sale de 1,6 s a 2,6 s). */
+.momentos__escena:not(.momentos--espera) .sticker {
+  transition: transform 0.9s cubic-bezier(0.3, 1.35, 0.5, 1) calc(2.6s + var(--i) * 0.12s), opacity 0.2s linear calc(2.6s + var(--i) * 0.12s);
+}
+
 /* Forma de cada sticker: ::after es el color, ::before el borde blanco recortado (misma forma, más grande). */
 .sticker span {
   position: relative; isolation: isolate; display: grid; place-items: center; text-align: center;
