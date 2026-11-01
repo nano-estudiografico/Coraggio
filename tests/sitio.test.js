@@ -26,7 +26,7 @@ test('hero con Ver la carta y Pedir a domicilio', () => {
 });
 
 test('secciones 8-16 presentes en orden después de firma', () => {
-  const ids = ['firma', 'resenas', 'cinta-animo', 'marca', 'momentos', 'historia', 'recetas', 'instagram', 'visitanos'];
+  const ids = ['firma', 'resenas', 'cinta-animo', 'marca', 'momentos', 'historia', 'instagram', 'visitanos'];
   const pos = ids.map((id) => inicio().indexOf(`id="${id}"`));
   assert.ok(pos.every((p) => p > 0), pos.join());
   assert.deepEqual([...pos].sort((a, b) => a - b), pos);
@@ -39,8 +39,8 @@ test('las cuatro reseñas reales, con 4,9 y 31 reseñas', () => {
   assert.match(inicio(), /31 reseñas/);
 });
 
-test('recetas con medidas exactas, en la sección y en el reverso de las copas', () => {
-  for (const id of ['recetas', 'copas']) {
+test('recetas con medidas exactas, en el reverso de las copas', () => {
+  for (const id of ['copas']) {
     const seccion = inicio().match(new RegExp(`<section class="${id}"[\\s\\S]*?</section>`))[0];
     assert.equal((seccion.match(/90 ml de prosecco/g) || []).length, 3, id);
     for (const l of ['Aperol', 'Campari', 'limoncello']) assert.match(seccion, new RegExp(`60 ml de ${l}`), id);

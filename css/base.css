@@ -40,7 +40,7 @@ p { margin: 0 0 var(--espacio-2); }
 a { color: inherit; text-underline-offset: 0.2em; }
 :focus-visible { outline: 3px solid var(--oliva); outline-offset: 3px; border-radius: 4px; }
 /* En secciones oscuras el contorno de foco va en crema (10,8:1); el naranja sobre crema no llega a 3:1. */
-:is(.hero, .firma, .recetas, .pie, .cinta, #combos) :focus-visible { outline-color: var(--crema); }
+:is(.hero, .firma, .historia, .pie, .cinta, #combos) :focus-visible { outline-color: var(--crema); }
 
 /* Utilidades */
 .contenedor { width: min(100% - 2rem, var(--ancho-max)); margin-inline: auto; }

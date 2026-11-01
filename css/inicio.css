@@ -486,23 +486,15 @@ section { padding-block: var(--espacio-6); }
   .sticker:hover span { animation: none; }
 }
 
-.historia__grilla picture { border-radius: var(--radio); overflow: hidden; }
-
 /* Historia */
+.historia { position: relative; background: var(--oliva); color: var(--crema); }
+.historia h2 { color: var(--crema); margin: 0; }
+/* Sello de menú sobre el borde superior: su mitad cae sobre .momentos, como el de reseñas. */
+.historia__sello { position: absolute; z-index: 2; top: 0; left: max(1rem, calc((100% - var(--ancho-max)) / 2)); transform: translateY(-50%) rotate(-12deg); width: 10.5rem; height: auto; }
 .historia__grilla { display: grid; gap: var(--espacio-4); align-items: center; }
 @media (min-width: 900px) { .historia__grilla { grid-template-columns: 1.3fr 1fr; } }
 .historia p { font-size: 1.125rem; max-width: 40ch; }
-
-/* Recetas */
-.recetas { background: var(--oliva); color: var(--crema); }
-.recetas h2 { color: var(--crema); }
-.recetas__grilla { list-style: none; margin: var(--espacio-4) 0 0; padding: 0; display: grid; gap: var(--espacio-3); }
-@media (min-width: 900px) { .recetas__grilla { grid-template-columns: repeat(3, 1fr); } }
-.receta { border: 1.5px solid rgb(244 238 227 / 0.35); border-radius: var(--radio); padding: var(--espacio-3); }
-.receta h3 { color: var(--naranja); font-size: 2rem; }
-.receta__tag { font-weight: 600; }
-.receta__medidas { list-style: none; margin: var(--espacio-2) 0 0; padding: var(--espacio-2) 0 0; border-top: 1px solid rgb(244 238 227 / 0.35); }
-.receta__medidas li { padding: 0.2rem 0; }
+.btn--grande { min-height: 56px; padding: 1rem 2.25rem; font-size: 1.25rem; margin-top: var(--espacio-2); }
 
 /* Instagram */
 .instagram__cabecera { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: var(--espacio-2); margin-bottom: var(--espacio-4); }
