@@ -190,7 +190,7 @@ a.visualmente-oculto:focus {
 .pie__columnas { display: grid; gap: var(--espacio-3); grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr)); margin-bottom: var(--espacio-2); }
 /* Con el logo: aire a su derecha y Visítanos + Contacto juntos a la derecha */
 @media (min-width: 60rem) {
-  .pie__columnas:has(.pie__lema) { grid-template-columns: minmax(16rem, 24rem) minmax(0, 1fr) auto auto; column-gap: var(--espacio-4); }
+  .pie__columnas:has(.pie__lema) { grid-template-columns: minmax(16rem, 24rem) minmax(0, 1fr) auto auto; column-gap: calc(2 * var(--espacio-4)); }
   .pie__columnas:has(.pie__lema) > :nth-child(2) { grid-column: 3; }
   .pie__columnas:has(.pie__lema) > :nth-child(3) { grid-column: 4; }
 }
