@@ -515,9 +515,10 @@ section { padding-block: var(--espacio-6); }
 .instagram__cabecera { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: var(--espacio-2); margin-bottom: var(--espacio-4); }
 .instagram__cabecera h2 { margin: 0; max-width: 18ch; }
 .instagram__grilla { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--espacio-2); grid-template-columns: repeat(2, 1fr); }
-@media (min-width: 900px) { .instagram__grilla { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 600px) { .instagram__grilla { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 900px) { .instagram__grilla { grid-template-columns: repeat(6, 1fr); } }
 .instagram__grilla a { display: block; border-radius: var(--radio); overflow: hidden; background: var(--oliva); }
-.instagram__grilla img { aspect-ratio: 1; object-fit: cover; width: 100%; transition: transform 0.3s ease; }
+.instagram__grilla img { aspect-ratio: 639 / 1148; object-fit: cover; width: 100%; transition: transform 0.3s ease; }
 .instagram__grilla a:hover img { transform: scale(1.04); }
 
 /* Visítanos */
