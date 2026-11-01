@@ -379,6 +379,7 @@ section { padding-block: var(--espacio-6); }
    entran desde todos lados hasta su taza o copa. js/main.js pone .momentos--espera hasta que la escena
    se ve. Sin JS queda la escena final: stickers en su lugar. */
 .momentos { background: var(--crema); overflow: clip; } /* los stickers llegan desde fuera sin scroll lateral */
+.momentos__marco { padding-inline: var(--espacio-3); } /* foto al ancho de la pantalla, con el mismo margen que el gap de las tarjetas */
 .momentos__escena { position: relative; container-type: inline-size; }
 .momentos__foto { display: block; border-radius: var(--radio); overflow: hidden; }
 .momentos__foto img { display: block; width: 100%; height: auto; }
