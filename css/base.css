@@ -200,6 +200,8 @@ a.visualmente-oculto:focus {
 .pie__legal p { margin-bottom: var(--espacio-1); }
 .pie__base { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 0 var(--espacio-3); padding-bottom: var(--espacio-3); }
 .pie__base .pie__legal { padding-bottom: 0; }
-.pie__credito { font-size: var(--texto-chico); margin-bottom: var(--espacio-1); white-space: nowrap; }
-.pie__credito img { display: inline-block; height: 0.8em; width: auto; vertical-align: baseline; margin-inline: 0.15em; }
+.pie__credito { display: flex; align-items: center; gap: var(--espacio-2); font-size: var(--texto-chico); line-height: 1.3; margin-bottom: var(--espacio-1); }
+.pie__credito p { margin: 0; text-align: right; }
+.pie__credito a { display: flex; flex-direction: column; align-items: flex-start; gap: 0.3rem; text-decoration: none; }
+.pie__credito img { display: block; height: 1.5rem; width: auto; }
 .pie__foto { display: block; width: 100%; height: auto; }
