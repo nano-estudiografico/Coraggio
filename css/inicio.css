@@ -405,27 +405,20 @@ section { padding-block: var(--espacio-6); }
   transition: opacity 1s ease 1.6s, filter 1s ease 1.6s, transform 1s ease 1.6s;
 }
 
-.momentos__lista {
-  list-style: none; margin: var(--espacio-3) 0 0; padding: 0;
-  display: flex; flex-wrap: wrap; justify-content: center; gap: var(--espacio-2) var(--espacio-1);
-}
+.momentos__lista { list-style: none; position: absolute; inset: 0 0 auto; height: var(--alto); margin: 0; padding: 0; pointer-events: none; }
 .sticker {
-  --centro: translate(0, 0); position: relative;
-  font: 600 0.95rem/1.15 var(--font-texto); white-space: nowrap;
+  --centro: translate(-50%, -50%);
+  position: absolute; pointer-events: auto;
+  /* Móvil: la foto es un recorte angosto del centro y casi todas las tazas quedan fuera; los stickers
+     van en zigzag sobre lo visible (--xm, --ym: fracción del marco). */
+  left: clamp(4.5em, var(--xm) * 100cqi, 100cqi - 4.5em);
+  top: clamp(3em, var(--ym) * var(--alto), var(--alto) - 3em);
+  font: 600 0.85rem/1.15 var(--font-texto); white-space: nowrap;
   filter: drop-shadow(0 0.15em 0.25em rgb(48 55 23 / 0.28));
   transform: var(--centro) rotate(var(--r));
 }
-.momentos--espera .sticker {
-  opacity: 0; transform: var(--centro) translate(var(--dx), var(--dy)) rotate(calc(var(--r) + 50deg)) scale(0.7);
-}
-.momentos__escena:not(.momentos--espera) .sticker {
-  transition: transform 0.9s cubic-bezier(0.3, 1.35, 0.5, 1) calc(2.5s + var(--i) * 0.12s), opacity 0.2s linear calc(2.5s + var(--i) * 0.12s);
-}
 @media (min-width: 760px) {
-  .momentos__lista { position: absolute; inset: 0; margin: 0; pointer-events: none; }
   .sticker {
-    --centro: translate(-50%, -50%);
-    position: absolute; pointer-events: auto;
     /* el recipiente en la foto recortada por cover (centrada); si el recorte lo deja fuera, el sticker queda en el borde */
     left: clamp(6.5em, 50cqi + (var(--x) - 0.5) * var(--ancho-foto), 100cqi - 6.5em);
     top: clamp(4em, var(--alto) / 2 + (var(--y) - 0.5) * var(--ancho-foto) * 9 / 16, var(--alto) - 4em);
