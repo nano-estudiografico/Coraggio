@@ -159,7 +159,7 @@ if (velo && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-mo
       else velo.remove();
     };
     requestAnimationFrame(paso);
-  }, { threshold: Math.min(0.7, (innerHeight * 0.7) / firma.offsetHeight) }); // 70 % visible; si la sección es más alta que la pantalla, con 70 % de la pantalla cubierta por ella
+  }, { threshold: Math.min(0.6, (innerHeight * 0.6) / firma.offsetHeight) }); // 60 % visible; si la sección es más alta que la pantalla, con 60 % de la pantalla cubierta por ella
   verFirma.observe(firma);
 }
 
