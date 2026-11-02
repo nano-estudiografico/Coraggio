@@ -448,3 +448,12 @@ if (copaMarca && 'IntersectionObserver' in window && !matchMedia('(prefers-reduc
   }, { rootMargin: '600px 0px' });
   cerca.observe(seccion);
 }
+
+// Visítanos (celular): el mapa sube hasta el borde superior de «Por encargo» y queda debajo de esa caja.
+// Su alto depende del texto, así que se mide y pasa a CSS como --encargo-alto.
+const encargo = document.querySelector('.visitanos__encargos');
+if (encargo && 'ResizeObserver' in window) {
+  new ResizeObserver(([e]) => {
+    encargo.closest('.visitanos').style.setProperty('--encargo-alto', `${e.borderBoxSize[0].blockSize}px`);
+  }).observe(encargo);
+}
