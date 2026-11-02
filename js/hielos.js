@@ -14,7 +14,7 @@ const HIELOS = [
   [1, 222.92 / 183.21], [2, 224.27 / 182.4], [3, 204.93 / 183.5],
   [4, 212.31 / 194.26], [5, 219.02 / 193.11], [6, 155.16 / 189.05],
 ].map(([n, proporcion]) => ({ src: `img/hielos/hielo${n}.svg`, proporcion, asoma: 0.08 }));
-const NARANJA = { src: 'img/hielos/naranja.svg', proporcion: 400.5 / 338.19, asoma: -0.06, escala: 1.35 };
+const NARANJA = { src: 'img/hielos/naranja.svg', proporcion: 400.5 / 338.19, asoma: -0.06, escala: 2.7 };
 
 const olas = document.querySelector('.pie__olas');
 const capa = olas?.querySelector('.pie__hielos');
@@ -55,7 +55,7 @@ function iniciar() {
     const cantidad = Math.max(3, Math.min(7, Math.round(ancho / 230)));
     const escala = ancho < 640 ? 0.8 : 1;
     const t = tiempo();
-    const conNaranja = Math.floor(cantidad / 2); // una rodaja, hacia el centro
+    const conNaranja = cantidad - 2; // una rodaja, segunda desde la derecha
     hielos = Array.from({ length: cantidad }, (_, i) => {
       const tipo = i === conNaranja ? NARANJA : HIELOS[(i > conNaranja ? i - 1 : i) % HIELOS.length];
       const lado = (48 + ((i * 37) % 5) * 5) * escala * (tipo.escala ?? 1); // 48–68 px, variados
