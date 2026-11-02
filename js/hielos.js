@@ -1,4 +1,4 @@
-// Hielos flotando sobre la ola naranja del pie.
+// Hielos y una rodaja de naranja flotando sobre la ola naranja del pie.
 // La superficie es la misma ola que pinta el CSS (.pie__agua): periodo de 50rem, 2.5rem de alto,
 // empieza 2rem bajo el borde de .pie__olas y se desplaza a la izquierda un periodo cada 14 s.
 // Cada hielo es un cuerpo con flotación (resorte amortiguado hacia la superficie), torque que lo
@@ -8,7 +8,13 @@ const OLA_PERIODO_REM = 50;
 const OLA_ALTO_REM = 2.5;
 const OLA_TOPE_REM = 2;
 const OLA_DURACION = 14; // s, igual que @keyframes pie-ola
-const IMAGENES = [1, 2, 3, 4, 5, 6].map((n) => `img/hielos/hielo${n}.svg`);
+// asoma: cuánto del alto queda sobre el nivel del agua respecto al centro (+ asoma más, − se hunde más).
+// El hielo flota alto; la rodaja de naranja es casi tan densa como el líquido y va más hundida.
+const HIELOS = [
+  [1, 222.92 / 183.21], [2, 224.27 / 182.4], [3, 204.93 / 183.5],
+  [4, 212.31 / 194.26], [5, 219.02 / 193.11], [6, 155.16 / 189.05],
+].map(([n, proporcion]) => ({ src: `img/hielos/hielo${n}.svg`, proporcion, asoma: 0.08 }));
+const NARANJA = { src: 'img/hielos/naranja.svg', proporcion: 400.5 / 338.19, asoma: -0.06, escala: 1.35 };
 
 const olas = document.querySelector('.pie__olas');
 const capa = olas?.querySelector('.pie__hielos');
@@ -49,30 +55,33 @@ function iniciar() {
     const cantidad = Math.max(3, Math.min(7, Math.round(ancho / 230)));
     const escala = ancho < 640 ? 0.8 : 1;
     const t = tiempo();
+    const conNaranja = Math.floor(cantidad / 2); // una rodaja, hacia el centro
     hielos = Array.from({ length: cantidad }, (_, i) => {
-      const lado = (48 + ((i * 37) % 5) * 5) * escala; // 48–68 px, variados
+      const tipo = i === conNaranja ? NARANJA : HIELOS[(i > conNaranja ? i - 1 : i) % HIELOS.length];
+      const lado = (48 + ((i * 37) % 5) * 5) * escala * (tipo.escala ?? 1); // 48–68 px, variados
+      const alto = lado * tipo.proporcion;
       const img = new Image();
-      img.src = IMAGENES[i % IMAGENES.length];
+      img.src = tipo.src;
       img.alt = '';
       img.decoding = 'async';
       img.width = lado;
       capa.append(img);
       const x = ((i + 0.5) / cantidad) * ancho + (((i * 53) % 7) - 3) * 9;
-      const h = flotacion(x, lado, t);
-      return { img, lado, masa: lado * lado, x, vx: 0, y: h.y, vy: 0, giro: h.angulo, vgiro: 0, deriva: 5 + ((i * 29) % 4) };
+      const h = flotacion(x, lado, alto, tipo.asoma, t);
+      return { img, lado, alto, asoma: tipo.asoma, masa: lado * alto, x, vx: 0, y: h.y, vy: 0, giro: h.angulo, vgiro: 0, deriva: 5 + ((i * 29) % 4) };
     });
     pintar();
   }
 
   // Lo que el agua le pide a un hielo: promedia la superficie en tres puntos de su base
   // (un hielo ancho no sigue ondas cortas) y se inclina con la pendiente entre sus bordes.
-  function flotacion(x, lado, t) {
+  function flotacion(x, lado, alto, asoma, t) {
     const izq = superficie(x - lado * 0.45, t);
     const cen = superficie(x, t);
     const der = superficie(x + lado * 0.45, t);
     const nivel = (izq.y + 2 * cen.y + der.y) / 4;
     return {
-      y: nivel - lado * 0.08, // centro un poco por encima del nivel: asoma algo más de la mitad
+      y: nivel - alto * asoma,
       angulo: Math.atan2(der.y - izq.y, lado * 0.9) * 0.85,
       elevacion: cen.elevacion,
     };
@@ -86,8 +95,8 @@ function iniciar() {
   function paso(dt, t) {
     const { ancho, alto } = medidas;
     for (const h of hielos) {
-      const f = flotacion(h.x, h.lado, t);
-      const inercia = 60 / h.lado; // los grandes responden más lento
+      const f = flotacion(h.x, h.lado, h.alto, h.asoma, t);
+      const inercia = 60 / Math.sqrt(h.lado * h.alto); // los grandes responden más lento
       // Flotación: resorte amortiguado (subamortiguado, ζ≈0.35) hacia el nivel del agua.
       const k = 14 * inercia;
       h.vy += (k * (f.y - h.y) - 2 * 0.35 * Math.sqrt(k) * h.vy) * dt;
@@ -133,7 +142,7 @@ function iniciar() {
 
   function pintar() {
     for (const h of hielos) {
-      h.img.style.transform = `translate(${h.x - h.lado / 2}px, ${h.y - h.lado / 2}px) rotate(${h.giro}rad)`;
+      h.img.style.transform = `translate(${h.x - h.lado / 2}px, ${h.y - h.alto / 2}px) rotate(${h.giro}rad)`;
     }
   }
 
