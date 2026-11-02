@@ -218,7 +218,9 @@ a.visualmente-oculto:focus {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 40' preserveAspectRatio='none'%3E%3Cpath d='M0 20 Q100 0 200 20 T400 20 T600 20 T800 20 V40 H0Z' fill='%23F4EEE3'/%3E%3C/svg%3E"), linear-gradient(var(--crema), var(--crema));
   background-size: 36rem 2.5rem, 100% calc(100% - 2.5rem + 1px); background-position: 0 0, 0 2.5rem; background-repeat: repeat-x, no-repeat;
   animation: pie-ola-crema 14.4s linear infinite; }
-.pie__agua { position: absolute; inset: 1.625rem 0 0; opacity: 0.8; pointer-events: none;
+/* Agua: opaca en la mitad de abajo y del 100 % al 80 % de opacidad desde la mitad hacia arriba */
+.pie__agua { position: absolute; inset: 1.125rem 0 0; pointer-events: none;
+  -webkit-mask-image: linear-gradient(to top, #000 50%, rgb(0 0 0 / 0.8)); mask-image: linear-gradient(to top, #000 50%, rgb(0 0 0 / 0.8));
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 40' preserveAspectRatio='none'%3E%3Cpath d='M0 20 Q100 0 200 20 T400 20 T600 20 T800 20 V40 H0Z' fill='%23FF5E00'/%3E%3C/svg%3E"), linear-gradient(var(--naranja), var(--naranja));
   background-size: 50rem 3.25rem, 100% calc(100% - 3.25rem + 1px); background-position: 0 0, 0 3.25rem; background-repeat: repeat-x, no-repeat;
   animation: pie-ola 14s linear infinite; }

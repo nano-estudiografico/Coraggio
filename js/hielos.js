@@ -6,7 +6,7 @@
 
 const OLA_PERIODO_REM = 50;
 const OLA_ALTO_REM = 3.25;
-const OLA_TOPE_REM = 1.625;
+const OLA_TOPE_REM = 1.125;
 const OLA_DURACION = 14; // s, igual que @keyframes pie-ola
 // asoma: cuánto del alto queda sobre el nivel del agua respecto al centro (+ asoma más, − se hunde más).
 // El hielo flota alto; la rodaja de naranja es casi tan densa como el líquido y va más hundida.
