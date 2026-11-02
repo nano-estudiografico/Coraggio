@@ -210,14 +210,14 @@ a.visualmente-oculto:focus {
 .pie__credito { display: flex; align-items: center; gap: var(--espacio-2); font-size: var(--texto-chico); line-height: 1.3; margin-bottom: var(--espacio-1); }
 .pie__credito p { margin: 0; text-align: right; }
 .pie__credito a { display: flex; flex-direction: column; align-items: flex-start; gap: 0.3rem; text-decoration: none; }
-/* Olas al pie. Orden de capas: ola crema al 50 % (más arriba) · agua naranja opaca · hielos · agua naranja translúcida
+/* Olas al pie. Orden de capas: ola crema al 50 % (más arriba y con olas más cortas) · agua naranja opaca · hielos · agua naranja translúcida
    (la parte sumergida de los hielos se ve a través del líquido) · legales y crédito.
    js/hielos.js reproduce esta misma ola (50rem de periodo, 2.5rem de alto, 14 s) para que los hielos floten sobre ella. */
 .pie__olas { position: relative; isolation: isolate; padding-top: 6.5rem; margin-top: var(--espacio-3); color: var(--oliva); }
-.pie__olas::before { content: ""; position: absolute; inset-inline: 0; top: 0; height: 4.5rem; opacity: 0.5;
+.pie__olas::before { content: ""; position: absolute; inset-inline: 0; top: 0.75rem; height: 3.75rem; opacity: 0.5;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 40' preserveAspectRatio='none'%3E%3Cpath d='M0 20 Q100 0 200 20 T400 20 T600 20 T800 20 V40 H0Z' fill='%23F4EEE3'/%3E%3C/svg%3E"), linear-gradient(var(--crema), var(--crema));
-  background-size: 50rem 2.5rem, 100% calc(100% - 2.5rem + 1px); background-position: 0 0, 0 2.5rem; background-repeat: repeat-x, no-repeat;
-  animation: pie-ola-crema 20s linear infinite; }
+  background-size: 36rem 2.5rem, 100% calc(100% - 2.5rem + 1px); background-position: 0 0, 0 2.5rem; background-repeat: repeat-x, no-repeat;
+  animation: pie-ola-crema 14.4s linear infinite; }
 .pie__agua { position: absolute; inset: 2rem 0 0;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 40' preserveAspectRatio='none'%3E%3Cpath d='M0 20 Q100 0 200 20 T400 20 T600 20 T800 20 V40 H0Z' fill='%23FF5E00'/%3E%3C/svg%3E"), linear-gradient(var(--naranja), var(--naranja));
   background-size: 50rem 2.5rem, 100% calc(100% - 2.5rem + 1px); background-position: 0 0, 0 2.5rem; background-repeat: repeat-x, no-repeat;
@@ -227,7 +227,7 @@ a.visualmente-oculto:focus {
 .pie__hielos img { position: absolute; left: 0; top: 0; height: auto; will-change: transform; }
 .pie__olas > .contenedor { position: relative; }
 @keyframes pie-ola { from { background-position: 0 0, 0 2.5rem; } to { background-position: -50rem 0, 0 2.5rem; } }
-@keyframes pie-ola-crema { from { background-position: 0 0, 0 2.5rem; } to { background-position: 50rem 0, 0 2.5rem; } }
+@keyframes pie-ola-crema { from { background-position: 0 0, 0 2.5rem; } to { background-position: 36rem 0, 0 2.5rem; } }
 @media (prefers-reduced-motion: reduce) { .pie__olas::before, .pie__agua { animation: none; } }
 .pie__olas a { color: var(--oliva); }
 .pie__nano { display: block; height: 1.5rem; width: auto; }
