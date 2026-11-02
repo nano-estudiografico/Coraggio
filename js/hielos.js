@@ -1,12 +1,12 @@
 // Hielos y una rodaja de naranja flotando sobre la ola naranja del pie.
-// La superficie es la misma ola que pinta el CSS (.pie__agua): periodo de 50rem, 2.5rem de alto,
-// empieza 2rem bajo el borde de .pie__olas y se desplaza a la izquierda un periodo cada 14 s.
+// La superficie es la misma ola que pinta el CSS (.pie__agua): periodo de 50rem, 3.25rem de alto,
+// empieza 1.625rem bajo el borde de .pie__olas y se desplaza a la izquierda un periodo cada 14 s.
 // Cada hielo es un cuerpo con flotación (resorte amortiguado hacia la superficie), torque que lo
 // inclina según la pendiente bajo él, arrastre del agua (corriente orbital + deriva) y choques entre hielos.
 
 const OLA_PERIODO_REM = 50;
-const OLA_ALTO_REM = 2.5;
-const OLA_TOPE_REM = 2;
+const OLA_ALTO_REM = 3.25;
+const OLA_TOPE_REM = 1.625;
 const OLA_DURACION = 14; // s, igual que @keyframes pie-ola
 // asoma: cuánto del alto queda sobre el nivel del agua respecto al centro (+ asoma más, − se hunde más).
 // El hielo flota alto; la rodaja de naranja es casi tan densa como el líquido y va más hundida.
