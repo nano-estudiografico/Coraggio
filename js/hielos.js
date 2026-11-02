@@ -14,7 +14,7 @@ const HIELOS = [
   [1, 222.92 / 183.21], [2, 224.27 / 182.4], [3, 204.93 / 183.5],
   [4, 212.31 / 194.26], [5, 219.02 / 193.11], [6, 155.16 / 189.05],
 ].map(([n, proporcion]) => ({ src: `img/hielos/hielo${n}.svg`, proporcion, asoma: 0.08 }));
-const NARANJA = { src: 'img/hielos/naranja.svg', proporcion: 400.5 / 338.19, asoma: -0.06, escala: 2.7 };
+const NARANJA = { src: 'img/hielos/naranja.svg', proporcion: 400.5 / 338.19, asoma: -0.06, escala: 1.62 };
 
 const olas = document.querySelector('.pie__olas');
 const capa = olas?.querySelector('.pie__hielos');
