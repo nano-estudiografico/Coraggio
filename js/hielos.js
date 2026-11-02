@@ -16,6 +16,10 @@ const HIELOS = [
 ].map(([n, proporcion]) => ({ src: `img/hielos/hielo${n}.svg`, proporcion, asoma: 0.08 }));
 const NARANJA = { src: 'img/hielos/naranja.svg', proporcion: 400.5 / 338.19, asoma: -0.06, escala: 1.944 };
 
+const VAPOR = [ // posición horizontal (% del ancho) y retraso de cada voluta
+  [9, 0], [22, 1.6], [37, 0.7], [53, 2.4], [68, 1.1], [83, 2.9], [94, 0.4],
+];
+
 const olas = document.querySelector('.pie__olas');
 const capa = olas?.querySelector('.pie__hielos');
 const agua = olas?.querySelector('.pie__agua');
@@ -88,7 +92,7 @@ function iniciar() {
   }
 
   function tiempo() {
-    const anim = agua.getAnimations?.()[0];
+    const anim = agua.getAnimations?.({ subtree: true }).find((a) => a.animationName === 'pie-ola');
     return anim && anim.currentTime != null ? (anim.currentTime / 1000) % OLA_DURACION : 0;
   }
 
@@ -170,6 +174,7 @@ function iniciar() {
 
   medir();
   crear();
+  alternarEscenas(quieto);
 
   new IntersectionObserver(([e]) => {
     visible = e.isIntersecting;
@@ -188,4 +193,19 @@ function iniciar() {
       else pintar();
     }, 150);
   });
+}
+
+// Escenas del pie: aperitivo (hielos) y café (vapor) se alternan cada 5 s.
+// Con "reducir movimiento" se queda en la escena de aperitivo.
+
+function alternarEscenas(quieto) {
+  const pie = olas.closest('.pie');
+  if (!pie || quieto) return;
+  const vapor = document.createElement('div');
+  vapor.className = 'pie__vapor';
+  vapor.setAttribute('aria-hidden', 'true');
+  vapor.innerHTML = VAPOR.map(([x, d]) =>
+    `<svg viewBox="0 0 40 140" style="left:${x}%;--retraso:${d}s"><path d="M20 140C6 118 34 100 20 78S6 36 20 14"/></svg>`).join('');
+  olas.insertBefore(vapor, olas.querySelector('.contenedor'));
+  setInterval(() => pie.classList.toggle('pie--cafe'), 5000);
 }

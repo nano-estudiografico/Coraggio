@@ -184,8 +184,14 @@ a.visualmente-oculto:focus {
 }
 
 /* Pie */
-.pie { background: var(--oliva); color: var(--crema-oscura); padding: var(--espacio-5) 0 0; overflow-x: clip; }
-.pie a { color: var(--crema-oscura); }
+/* Dos escenas que se alternan cada 5 s (js/hielos.js pone y quita .pie--cafe):
+   aperitivo (fondo oliva, ola crema, agua naranja con hielos) y café (fondo crema, ola oliva, agua crema oscura con vapor). */
+.pie { --pie-fondo: var(--oliva); --pie-texto: var(--crema-oscura); --pie-titulo: var(--naranja); --pie-ola: var(--crema); --pie-agua: var(--naranja);
+  --pie-cambio: 1.2s ease;
+  background: var(--pie-fondo); color: var(--pie-texto); padding: var(--espacio-5) 0 0; overflow-x: clip;
+  transition: background-color var(--pie-cambio), color var(--pie-cambio); }
+.pie--cafe { --pie-fondo: var(--crema); --pie-texto: var(--oliva); --pie-titulo: var(--oliva); --pie-ola: var(--oliva); --pie-agua: var(--crema-oscura); }
+.pie a { color: var(--pie-texto); transition: color var(--pie-cambio); }
 .pie__marca { display: block; width: min(100%, 44rem); height: auto; margin: 0 0 var(--espacio-4); }
 .pie__columnas { display: grid; gap: var(--espacio-3); grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr)); margin-bottom: var(--espacio-4); }
 /* Con el logo: aire a su derecha y Visítanos + Contacto juntos a la derecha */
@@ -202,7 +208,7 @@ a.visualmente-oculto:focus {
 /* El lema mide lo mismo que la palabra CORAGGIO del logo (67.7 % de su ancho): la letra escala con la columna */
 .pie__columnas > :has(.pie__lema) { container-type: inline-size; }
 .pie__lema { font: italic 300 4.9cqi/1.25 var(--font-fonetica); text-align: right; margin-inline: 10px; white-space: nowrap; }
-.pie__titulo { color: var(--naranja); margin-top: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; font-size: var(--texto-chico); margin-bottom: var(--espacio-1); }
+.pie__titulo { color: var(--pie-titulo); transition: color var(--pie-cambio); margin-top: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; font-size: var(--texto-chico); margin-bottom: var(--espacio-1); }
 .pie__legal { font-size: var(--texto-chico); padding-block: var(--espacio-3); }
 .pie__legal p { margin-bottom: var(--espacio-1); }
 .pie__base { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 0 var(--espacio-3); padding-bottom: var(--espacio-3); }
@@ -210,25 +216,42 @@ a.visualmente-oculto:focus {
 .pie__credito { display: flex; align-items: center; gap: var(--espacio-2); font-size: var(--texto-chico); line-height: 1.3; margin-bottom: var(--espacio-1); }
 .pie__credito p { margin: 0; text-align: right; }
 .pie__credito a { display: flex; flex-direction: column; align-items: flex-start; gap: 0.3rem; text-decoration: none; }
-/* Olas al pie. Orden de capas: ola crema al 50 % (más arriba y con olas más cortas; baja hasta el fondo para que el naranja
-   translúcido se vea parejo) · hielos · agua naranja al 80 % (la parte sumergida de los hielos se ve a través) · legales y crédito.
-   js/hielos.js reproduce la ola naranja (50rem de periodo, 3.25rem de alto desde 1.625rem, 14 s) para que los hielos floten sobre ella. */
-.pie__olas { position: relative; isolation: isolate; padding-top: 6.5rem; margin-top: var(--espacio-3); color: var(--oliva); }
+/* Olas al pie. Orden de capas: ola de fondo al 50 % (más arriba y con olas más cortas; baja hasta el fondo para que el agua
+   translúcida se vea pareja) · hielos · agua (la parte sumergida de los hielos se ve a través) · vapor · legales y crédito.
+   Cada ola es un color recortado con máscara (forma de ola + rectángulo debajo), así el color cambia con una transición.
+   js/hielos.js reproduce la ola del agua (50rem de periodo, 3.25rem de alto desde 1.125rem, 14 s) para que los hielos floten sobre ella. */
+.pie__olas { --ola: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 40' preserveAspectRatio='none'%3E%3Cpath d='M0 20 Q100 0 200 20 T400 20 T600 20 T800 20 V40 H0Z'/%3E%3C/svg%3E"); position: relative; isolation: isolate; padding-top: 6.5rem; margin-top: var(--espacio-3); color: var(--oliva); }
 .pie__olas::before { content: ""; position: absolute; inset-inline: 0; top: 0.75rem; bottom: 0; opacity: 0.5;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 40' preserveAspectRatio='none'%3E%3Cpath d='M0 20 Q100 0 200 20 T400 20 T600 20 T800 20 V40 H0Z' fill='%23F4EEE3'/%3E%3C/svg%3E"), linear-gradient(var(--crema), var(--crema));
-  background-size: 36rem 2.5rem, 100% calc(100% - 2.5rem + 1px); background-position: 0 0, 0 2.5rem; background-repeat: repeat-x, no-repeat;
-  animation: pie-ola-crema 14.4s linear infinite; }
+  background: var(--pie-ola); transition: background-color var(--pie-cambio);
+  -webkit-mask: var(--ola) 0 0 / 36rem 2.5rem repeat-x, linear-gradient(#000 0 0) 0 2.5rem / 100% calc(100% - 2.5rem + 1px) no-repeat;
+  mask: var(--ola) 0 0 / 36rem 2.5rem repeat-x, linear-gradient(#000 0 0) 0 2.5rem / 100% calc(100% - 2.5rem + 1px) no-repeat;
+  animation: pie-ola-fondo 14.4s linear infinite; }
 /* Agua: opaca en la mitad de abajo y del 100 % al 80 % de opacidad desde la mitad hacia arriba */
 .pie__agua { position: absolute; inset: 1.125rem 0 0; pointer-events: none;
-  -webkit-mask-image: linear-gradient(to top, #000 50%, rgb(0 0 0 / 0.8)); mask-image: linear-gradient(to top, #000 50%, rgb(0 0 0 / 0.8));
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 40' preserveAspectRatio='none'%3E%3Cpath d='M0 20 Q100 0 200 20 T400 20 T600 20 T800 20 V40 H0Z' fill='%23FF5E00'/%3E%3C/svg%3E"), linear-gradient(var(--naranja), var(--naranja));
-  background-size: 50rem 3.25rem, 100% calc(100% - 3.25rem + 1px); background-position: 0 0, 0 3.25rem; background-repeat: repeat-x, no-repeat;
+  -webkit-mask-image: linear-gradient(to top, #000 50%, rgb(0 0 0 / 0.8)); mask-image: linear-gradient(to top, #000 50%, rgb(0 0 0 / 0.8)); }
+.pie__agua::before { content: ""; position: absolute; inset: 0; background: var(--pie-agua); transition: background-color var(--pie-cambio);
+  -webkit-mask: var(--ola) 0 0 / 50rem 3.25rem repeat-x, linear-gradient(#000 0 0) 0 3.25rem / 100% calc(100% - 3.25rem + 1px) no-repeat;
+  mask: var(--ola) 0 0 / 50rem 3.25rem repeat-x, linear-gradient(#000 0 0) 0 3.25rem / 100% calc(100% - 3.25rem + 1px) no-repeat;
   animation: pie-ola 14s linear infinite; }
-.pie__hielos { position: absolute; inset: 0; pointer-events: none; }
+.pie__hielos { position: absolute; inset: 0; pointer-events: none; transition: opacity var(--pie-cambio); }
 .pie__hielos img { position: absolute; left: 0; top: 0; height: auto; will-change: transform; }
+.pie--cafe .pie__hielos { opacity: 0; }
+/* Vapor: líneas onduladas crema, muy desenfocadas, que suben desde el agua y se desvanecen. Solo en la escena café. */
+.pie__vapor { position: absolute; inset-inline: 0; bottom: calc(100% - 3rem); height: 11rem; pointer-events: none;
+  filter: blur(6px); opacity: 0; transition: opacity var(--pie-cambio); }
+.pie--cafe .pie__vapor { opacity: 0.5; }
+.pie__vapor svg { position: absolute; bottom: 0; width: 2.5rem; height: 9rem; overflow: visible; transform-origin: 50% 100%;
+  animation: pie-vapor 4.2s ease-in-out var(--retraso, 0s) infinite both; }
+.pie__vapor path { fill: none; stroke: var(--crema); stroke-width: 4; stroke-linecap: round; }
 .pie__olas > .contenedor { position: relative; }
-@keyframes pie-ola { from { background-position: 0 0, 0 3.25rem; } to { background-position: -50rem 0, 0 3.25rem; } }
-@keyframes pie-ola-crema { from { background-position: 0 0, 0 2.5rem; } to { background-position: 36rem 0, 0 2.5rem; } }
-@media (prefers-reduced-motion: reduce) { .pie__olas::before, .pie__agua { animation: none; } }
+@keyframes pie-ola { from { -webkit-mask-position: 0 0, 0 3.25rem; mask-position: 0 0, 0 3.25rem; } to { -webkit-mask-position: -50rem 0, 0 3.25rem; mask-position: -50rem 0, 0 3.25rem; } }
+@keyframes pie-ola-fondo { from { -webkit-mask-position: 0 0, 0 2.5rem; mask-position: 0 0, 0 2.5rem; } to { -webkit-mask-position: 36rem 0, 0 2.5rem; mask-position: 36rem 0, 0 2.5rem; } }
+@keyframes pie-vapor {
+  0% { transform: translateY(2rem) scaleY(0.5) skewX(0deg); opacity: 0; }
+  30% { opacity: 1; }
+  60% { transform: translateY(-1rem) scaleY(0.9) skewX(-8deg); }
+  100% { transform: translateY(-3.5rem) scaleY(1.15) skewX(6deg); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .pie__olas::before, .pie__agua::before, .pie__vapor svg { animation: none; } }
 .pie__olas a { color: var(--oliva); }
 .pie__nano { display: block; height: 1.5rem; width: auto; }
