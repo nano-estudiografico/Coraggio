@@ -221,7 +221,7 @@ a.visualmente-oculto:focus {
 .pie__legal p { margin-bottom: var(--espacio-1); }
 .pie__base { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 0 var(--espacio-3); padding-bottom: var(--espacio-3); }
 .pie__base .pie__legal { padding-bottom: 0; }
-.pie__credito { display: flex; align-items: center; gap: var(--espacio-2); font-size: var(--texto-chico); line-height: 1.3; margin-bottom: var(--espacio-1); }
+.pie__credito { display: flex; align-items: last baseline; gap: var(--espacio-2); font-size: var(--texto-chico); line-height: 1.3; margin-bottom: var(--espacio-1); }
 .pie__credito p { margin: 0; text-align: right; }
 .pie__credito a { display: flex; flex-direction: column; align-items: flex-start; gap: 0.3rem; text-decoration: none; }
 /* Olas al pie. Orden de capas: ola de fondo al 50 % (más arriba y con olas más cortas; baja hasta el fondo para que el agua
@@ -266,4 +266,4 @@ a.visualmente-oculto:focus {
 }
 @media (prefers-reduced-motion: reduce) { .pie__olas::before, .pie__agua::before, .pie__vapor svg { animation: none; } }
 .pie__olas a { color: var(--oliva); }
-.pie__nano { display: block; height: 1.5rem; width: auto; }
+.pie__nano { display: block; height: 2.25rem; width: auto; }
