@@ -236,13 +236,17 @@ a.visualmente-oculto:focus {
 .pie__hielos { position: absolute; inset: 0; pointer-events: none; transition: opacity var(--pie-cambio); }
 .pie__hielos img { position: absolute; left: 0; top: 0; height: auto; will-change: transform; }
 .pie--cafe .pie__hielos { opacity: 0; }
-/* Vapor: líneas onduladas oliva al 35 % (el crema no se ve sobre el fondo crema), muy desenfocadas, que suben desde el agua y se desvanecen. Solo en la escena café. */
+/* Vapor: líneas onduladas oliva (el crema no se ve sobre el fondo crema), muy desenfocadas, que suben desde el agua y se desvanecen.
+   Cada línea degrada de abajo hacia arriba: oliva al 35 % hasta el 20 % de su alto y de ahí a 0 %. La mitad de abajo
+   tiene el doble de grosor (el desenfoque oculta el cambio). Solo en la escena café. */
 .pie__vapor { position: absolute; inset-inline: 0; bottom: calc(100% - 3rem); height: 11rem; pointer-events: none;
   filter: blur(6px); opacity: 0; transition: opacity var(--pie-cambio); }
-.pie--cafe .pie__vapor { opacity: 0.35; }
+.pie--cafe .pie__vapor { opacity: 1; }
 .pie__vapor svg { position: absolute; bottom: 0; width: 2.5rem; height: 9rem; overflow: visible; transform-origin: 50% 100%;
   animation: pie-vapor 4.2s ease-in-out var(--retraso, 0s) infinite both; }
-.pie__vapor path { fill: none; stroke: var(--oliva); stroke-width: 4; stroke-linecap: round; }
+.pie__vapor path { fill: none; stroke: url(#pie-vapor-color); stroke-width: 4; stroke-linecap: round; }
+.pie__vapor .pie__vapor-base { stroke-width: 8; }
+.pie__vapor .pie__vapor-color { color: var(--oliva); width: 0; height: 0; animation: none; }
 .pie__olas > .contenedor { position: relative; }
 @keyframes pie-ola { from { -webkit-mask-position: 0 0, 0 3.25rem; mask-position: 0 0, 0 3.25rem; } to { -webkit-mask-position: -50rem 0, 0 3.25rem; mask-position: -50rem 0, 0 3.25rem; } }
 @keyframes pie-ola-fondo { from { -webkit-mask-position: 0 0, 0 2.5rem; mask-position: 0 0, 0 2.5rem; } to { -webkit-mask-position: 36rem 0, 0 2.5rem; mask-position: 36rem 0, 0 2.5rem; } }

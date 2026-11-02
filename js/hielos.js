@@ -204,8 +204,17 @@ function alternarEscenas(quieto) {
   const vapor = document.createElement('div');
   vapor.className = 'pie__vapor';
   vapor.setAttribute('aria-hidden', 'true');
-  vapor.innerHTML = VAPOR.map(([x, d]) =>
-    `<svg viewBox="0 0 40 140" style="left:${x}%;--retraso:${d}s"><path d="M20 140C6 118 34 100 20 78S6 36 20 14"/></svg>`).join('');
+  // Degradado y recortes compartidos (userSpaceOnUse: se aplican en las coordenadas de cada voluta, 0–140 de abajo a arriba).
+  const defs = `<svg class="pie__vapor-color" width="0" height="0"><defs>
+    <linearGradient id="pie-vapor-color" gradientUnits="userSpaceOnUse" x1="0" y1="140" x2="0" y2="0">
+      <stop offset="0" stop-color="currentColor" stop-opacity="0.35"/><stop offset="0.2" stop-color="currentColor" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="currentColor" stop-opacity="0"/></linearGradient>
+    <clipPath id="pie-vapor-abajo" clipPathUnits="userSpaceOnUse"><rect x="-20" y="77" width="80" height="80"/></clipPath>
+    <clipPath id="pie-vapor-arriba" clipPathUnits="userSpaceOnUse"><rect x="-20" y="-20" width="80" height="97"/></clipPath>
+  </defs></svg>`;
+  const linea = 'M20 140C6 118 34 100 20 78S6 36 20 14';
+  vapor.innerHTML = defs + VAPOR.map(([x, d]) =>
+    `<svg viewBox="0 0 40 140" style="left:${x}%;--retraso:${d}s"><path class="pie__vapor-base" clip-path="url(#pie-vapor-abajo)" d="${linea}"/><path clip-path="url(#pie-vapor-arriba)" d="${linea}"/></svg>`).join('');
   olas.insertBefore(vapor, olas.querySelector('.contenedor'));
   setInterval(() => pie.classList.toggle('pie--cafe'), 5000);
 }
