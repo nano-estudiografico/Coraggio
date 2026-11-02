@@ -195,7 +195,7 @@ function iniciar() {
   });
 }
 
-// Escenas del pie: aperitivo (hielos) y café (vapor) se alternan cada 5 s.
+// Escenas del pie: aperitivo (hielos) y café (vapor) se alternan cada 10 s.
 // Con "reducir movimiento" se queda en la escena de aperitivo.
 
 function alternarEscenas(quieto) {
@@ -216,5 +216,5 @@ function alternarEscenas(quieto) {
   vapor.innerHTML = defs + VAPOR.map(([x, d]) =>
     `<svg viewBox="0 0 40 140" style="left:${x}%;--retraso:${d}s"><path class="pie__vapor-base" clip-path="url(#pie-vapor-abajo)" d="${linea}"/><path clip-path="url(#pie-vapor-arriba)" d="${linea}"/></svg>`).join('');
   olas.insertBefore(vapor, olas.querySelector('.contenedor'));
-  setInterval(() => pie.classList.toggle('pie--cafe'), 5000);
+  setInterval(() => pie.classList.toggle('pie--cafe'), 10000);
 }

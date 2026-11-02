@@ -184,7 +184,7 @@ a.visualmente-oculto:focus {
 }
 
 /* Pie */
-/* Dos escenas que se alternan cada 5 s (js/hielos.js pone y quita .pie--cafe):
+/* Dos escenas que se alternan cada 10 s (js/hielos.js pone y quita .pie--cafe):
    aperitivo (fondo oliva, ola crema, agua naranja con hielos) y café (fondo crema, ola oliva, agua crema oscura con vapor). */
 .pie { --pie-fondo: var(--oliva); --pie-texto: var(--crema-oscura); --pie-titulo: var(--naranja); --pie-ola: var(--crema); --pie-agua: var(--naranja);
   --pie-cambio: 1.2s ease;
