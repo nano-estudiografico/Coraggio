@@ -194,11 +194,11 @@ a.visualmente-oculto:focus {
   transition: background-color var(--pie-cambio), color var(--pie-cambio); }
 .pie--cafe { --pie-fondo: var(--crema); --pie-texto: var(--oliva); --pie-titulo: var(--oliva); --pie-ola: var(--oliva); --pie-agua: var(--crema-oscura); }
 /* Borde de arriba ondulado: sobresale sobre la sección anterior (la toca) y cambia de color con la escena */
-/* Las ondulaciones tienen largos y alturas variados: un tramo de 7 olas irregulares que se repite cada 110rem */
+/* Las ondulaciones tienen todas el mismo largo y alturas variadas: un tramo de 6 olas que se repite cada 120rem */
 .pie::before { content: ""; position: absolute; inset-inline: 0; bottom: calc(100% - 1px); height: 2.5rem; pointer-events: none;
-  --ola-borde: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2159 40' preserveAspectRatio='none'%3E%3Cpath d='M0 4.9C57.5 5.6 79.3 31.4 115.6 31.8C152.0 32.2 175.5 8.6 218.0 7.4C260.4 6.2 315.4 25.7 370.1 24.7C424.9 23.7 489.7 1.4 546.4 1.4C603.1 1.5 665.3 24.1 710.1 24.8C755.0 25.6 759.5 6.0 815.5 6.1C871.5 6.2 986.3 25.1 1046.1 25.5C1105.8 25.9 1110.9 7.6 1174.0 8.5C1237.2 9.4 1357.1 30.2 1425.2 30.9C1493.2 31.6 1540.0 12.2 1582.6 12.7C1625.2 13.3 1641.0 36.0 1680.5 34.3C1720.0 32.6 1778.2 3.8 1819.7 2.7C1861.3 1.6 1873.2 27.3 1929.8 27.7C1986.3 28.1 2101.5 4.2 2159.0 4.9V40H0Z'/%3E%3C/svg%3E");
+  --ola-borde: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2400 40' preserveAspectRatio='none'%3E%3Cpath d='M0 6.4C66.7 6.9 133.3 29.8 200.0 30.7C266.7 31.7 333.3 12.3 400.0 12.1C466.7 11.9 533.3 30.4 600.0 29.6C666.7 28.8 733.3 6.9 800.0 7.1C866.7 7.3 933.3 31.7 1000.0 31.0C1066.7 30.4 1133.3 3.4 1200.0 3.2C1266.7 3.1 1333.3 29.3 1400.0 30.1C1466.7 31.0 1533.3 8.0 1600.0 8.6C1666.7 9.1 1733.3 34.6 1800.0 33.5C1866.7 32.4 1933.3 3.1 2000.0 2.1C2066.7 1.2 2133.3 26.9 2200.0 27.6C2266.7 28.4 2333.3 5.9 2400.0 6.4V40H0Z'/%3E%3C/svg%3E");
   background: var(--pie-fondo); transition: background-color var(--pie-cambio);
-  -webkit-mask: var(--ola-borde) 0 0 / 110rem 100% repeat-x; mask: var(--ola-borde) 0 0 / 110rem 100% repeat-x; }
+  -webkit-mask: var(--ola-borde) 0 0 / 120rem 100% repeat-x; mask: var(--ola-borde) 0 0 / 120rem 100% repeat-x; }
 .pie a { color: var(--pie-texto); transition: color var(--pie-cambio); }
 .pie__marca { display: block; width: min(100%, 44rem); height: auto; margin: 0 0 var(--espacio-4); }
 .pie__columnas { display: grid; gap: var(--espacio-3); grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr)); margin-bottom: var(--espacio-4); }
