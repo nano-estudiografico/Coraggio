@@ -188,9 +188,15 @@ a.visualmente-oculto:focus {
    aperitivo (fondo oliva, ola crema, agua naranja con hielos) y café (fondo crema, ola oliva, agua crema oscura con vapor). */
 .pie { --pie-fondo: var(--oliva); --pie-texto: var(--crema-oscura); --pie-titulo: var(--naranja); --pie-ola: var(--crema); --pie-agua: var(--naranja);
   --pie-cambio: 1.2s ease;
+  --ola: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 40' preserveAspectRatio='none'%3E%3Cpath d='M0 20 Q100 0 200 20 T400 20 T600 20 T800 20 V40 H0Z'/%3E%3C/svg%3E");
+  position: relative; z-index: 1;
   background: var(--pie-fondo); color: var(--pie-texto); padding: var(--espacio-5) 0 0; overflow-x: clip;
   transition: background-color var(--pie-cambio), color var(--pie-cambio); }
 .pie--cafe { --pie-fondo: var(--crema); --pie-texto: var(--oliva); --pie-titulo: var(--oliva); --pie-ola: var(--oliva); --pie-agua: var(--crema-oscura); }
+/* Borde de arriba ondulado: sobresale sobre la sección anterior (la toca) y cambia de color con la escena */
+.pie::before { content: ""; position: absolute; inset-inline: 0; bottom: calc(100% - 1px); height: 2rem; pointer-events: none;
+  background: var(--pie-fondo); transition: background-color var(--pie-cambio);
+  -webkit-mask: var(--ola) 0 0 / 40rem 100% repeat-x; mask: var(--ola) 0 0 / 40rem 100% repeat-x; }
 .pie a { color: var(--pie-texto); transition: color var(--pie-cambio); }
 .pie__marca { display: block; width: min(100%, 44rem); height: auto; margin: 0 0 var(--espacio-4); }
 .pie__columnas { display: grid; gap: var(--espacio-3); grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr)); margin-bottom: var(--espacio-4); }
@@ -220,7 +226,7 @@ a.visualmente-oculto:focus {
    translúcida se vea pareja) · hielos · agua (la parte sumergida de los hielos se ve a través) · vapor · legales y crédito.
    Cada ola es un color recortado con máscara (forma de ola + rectángulo debajo), así el color cambia con una transición.
    js/hielos.js reproduce la ola del agua (50rem de periodo, 3.25rem de alto desde 1.125rem, 14 s) para que los hielos floten sobre ella. */
-.pie__olas { --ola: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 40' preserveAspectRatio='none'%3E%3Cpath d='M0 20 Q100 0 200 20 T400 20 T600 20 T800 20 V40 H0Z'/%3E%3C/svg%3E"); position: relative; isolation: isolate; padding-top: 6.5rem; margin-top: var(--espacio-3); color: var(--oliva); }
+.pie__olas { position: relative; isolation: isolate; padding-top: 6.5rem; margin-top: var(--espacio-3); color: var(--oliva); }
 .pie__olas::before { content: ""; position: absolute; inset-inline: 0; top: 0.75rem; bottom: 0; opacity: 0.5;
   background: var(--pie-ola); transition: background-color var(--pie-cambio);
   -webkit-mask: var(--ola) 0 0 / 36rem 2.5rem repeat-x, linear-gradient(#000 0 0) 0 2.5rem / 100% calc(100% - 2.5rem + 1px) no-repeat;
