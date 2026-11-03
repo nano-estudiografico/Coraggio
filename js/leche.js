@@ -201,10 +201,12 @@ function iniciar() {
     }
     if (actual.length) tramos.push(actual);
 
+    // Recorre un borde del tramo: lado −1 el izquierdo, +1 el derecho.
+    const borde = (t, lado) => t.forEach((q, i) => ctx[i ? 'lineTo' : 'moveTo'](q.x + (lado * q.w) / 2, q.y));
     for (const t of tramos) {
       if (t.length < 2) continue;
       ctx.beginPath();
-      t.forEach((q, i) => (i ? ctx.lineTo(q.x - q.w / 2, q.y) : ctx.moveTo(q.x - q.w / 2, q.y)));
+      borde(t, -1);
       for (let i = t.length - 1; i >= 0; i--) ctx.lineTo(t[i].x + t[i].w / 2, t[i].y);
       ctx.closePath();
       ctx.fillStyle = color;
@@ -220,11 +222,11 @@ function iniciar() {
       ctx.strokeStyle = oliva;
       ctx.lineWidth = 1;
       ctx.beginPath();
-      t.forEach((q, i) => (i ? ctx.lineTo(q.x + q.w / 2, q.y) : ctx.moveTo(q.x + q.w / 2, q.y)));
+      borde(t, 1);
       ctx.stroke();
       ctx.globalAlpha = 0.12;
       ctx.beginPath();
-      t.forEach((q, i) => (i ? ctx.lineTo(q.x - q.w / 2, q.y) : ctx.moveTo(q.x - q.w / 2, q.y)));
+      borde(t, -1);
       ctx.stroke();
       ctx.globalAlpha = 1;
     }

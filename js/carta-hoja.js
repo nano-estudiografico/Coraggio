@@ -5,11 +5,11 @@
 export const HOJA_ID = '16phbt83foQsoDgri45PA2p2ITIB9kqfKoeVUA31lGcw';
 export const HOJA_CSV = `https://docs.google.com/spreadsheets/d/${HOJA_ID}/gviz/tq?tqx=out:csv&headers=1&sheet=Carta`;
 
-// Ids de siempre, para no romper los enlaces del índice (#combos, #picar…). Lo nuevo se convierte en slug.
+// Ids de siempre que no salen del slug, para no romper los enlaces del índice (#picar, #spritz…).
+// El resto (cafe, combos, birras, sin-alcohol…) y lo nuevo se convierten en slug.
 const IDS = {
-  'café': 'cafe', 'aperitivos': 'aperitivos', 'bebidas calientes': 'calientes', 'bebidas frías': 'frias',
-  'combos': 'combos', 'para acompañar: dulce': 'dulce', 'para acompañar: salado': 'salado',
-  'spritz y copas': 'spritz', 'birras': 'birras', 'sin alcohol': 'sin-alcohol', 'para picar': 'picar',
+  'bebidas calientes': 'calientes', 'bebidas frías': 'frias', 'para acompañar: dulce': 'dulce',
+  'para acompañar: salado': 'salado', 'spritz y copas': 'spritz', 'para picar': 'picar',
 };
 const slug = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const idDe = (titulo) => IDS[titulo.toLowerCase()] ?? slug(titulo);

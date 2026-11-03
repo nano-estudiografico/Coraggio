@@ -1,5 +1,12 @@
 import { estadoHorario } from './horario.js';
 
+const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+// La primera vez que el elemento entra en pantalla deja de observarlo y corre fn.
+const alVerse = (el, opciones, fn) => {
+  const o = new IntersectionObserver(([e]) => { if (e.isIntersecting) { o.disconnect(); fn(); } }, opciones);
+  o.observe(el);
+};
+
 // Abierto / Cerrado según la hora de Medellín; sin JS queda solo el horario escrito.
 const estado = document.getElementById('estado-horario');
 if (estado) {
@@ -18,7 +25,7 @@ if (lista && flechas) {
     const boton = e.target.closest('button[data-dir]');
     if (!boton) return;
     const paso = lista.querySelector('.resena').offsetWidth + 24;
-    lista.scrollBy({ left: paso * Number(boton.dataset.dir), behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    lista.scrollBy({ left: paso * Number(boton.dataset.dir), behavior: quieto ? 'auto' : 'smooth' });
   });
 }
 
@@ -32,26 +39,17 @@ if (matchMedia('(hover: none)').matches) {
 
 // Frase de marca: la barra con oleaje sube desde abajo cuando la frase se ve.
 const titular = document.querySelector('.frase__titular');
-if (titular && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+if (titular && 'IntersectionObserver' in window && !quieto) {
   titular.classList.add('frase__titular--vacia');
-  const verTitular = new IntersectionObserver(([e]) => {
-    if (!e.isIntersecting) return;
-    verTitular.disconnect();
-    requestAnimationFrame(() => titular.classList.remove('frase__titular--vacia'));
-  }, { threshold: 0.6 });
-  verTitular.observe(titular);
+  alVerse(titular, { threshold: 0.6 }, () => requestAnimationFrame(() => titular.classList.remove('frase__titular--vacia')));
 }
 
 // Momentos: el título se lee sobre la foto, se desvanece y entran los stickers (el CSS lleva los tiempos).
 const escenaMomentos = document.querySelector('.momentos__escena');
 if (escenaMomentos && 'IntersectionObserver' in window) {
   escenaMomentos.classList.add('momentos--animada', 'momentos--espera');
-  const verMomentos = new IntersectionObserver(([e]) => {
-    if (!e.isIntersecting) return;
-    verMomentos.disconnect();
-    requestAnimationFrame(() => escenaMomentos.classList.remove('momentos--espera'));
-  }, { threshold: 0.8 }); // arranca cuando se ve el 80 % de la foto
-  verMomentos.observe(escenaMomentos.querySelector('.momentos__foto'));
+  alVerse(escenaMomentos.querySelector('.momentos__foto'), { threshold: 0.8 }, // arranca cuando se ve el 80 % de la foto
+    () => requestAnimationFrame(() => escenaMomentos.classList.remove('momentos--espera')));
 }
 
 // Stickers de Momentos: se arrastran con el mouse o el dedo; el último que se toca queda encima.
@@ -81,7 +79,7 @@ document.querySelectorAll('.sticker').forEach((sticker) => {
 // Titular de «De día café…»: las letras parten apretadas entre sí, con un apriete distinto al azar
 // en cada una, y se separan suavemente hasta su lugar. Cada letra se desplaza hacia el centro de su palabra.
 const tituloDia = document.getElementById('dia-titulo');
-if (tituloDia && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+if (tituloDia && 'IntersectionObserver' in window && !quieto) {
   const texto = tituloDia.textContent;
   tituloDia.setAttribute('aria-label', texto);
   tituloDia.textContent = '';
@@ -104,12 +102,7 @@ if (tituloDia && 'IntersectionObserver' in window && !matchMedia('(prefers-reduc
       });
     });
     tituloDia.classList.add('dia__titulo--junto');
-    const verDia = new IntersectionObserver(([e]) => {
-      if (!e.isIntersecting) return;
-      verDia.disconnect();
-      requestAnimationFrame(() => tituloDia.classList.remove('dia__titulo--junto'));
-    }, { threshold: 0.8 });
-    verDia.observe(tituloDia);
+    alVerse(tituloDia, { threshold: 0.8 }, () => requestAnimationFrame(() => tituloDia.classList.remove('dia__titulo--junto')));
   });
 }
 
@@ -118,7 +111,7 @@ if (tituloDia && 'IntersectionObserver' in window && !matchMedia('(prefers-reduc
 // retraso al azar y power2.inOut). Sin "reducir movimiento" no se dibuja nada y el texto queda a la vista.
 const firma = document.getElementById('firma');
 const velo = firma?.querySelector('.firma__velo');
-if (velo && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+if (velo && 'IntersectionObserver' in window && !quieto) {
   const capas = [...velo.querySelectorAll('.firma__velo-capa')];
   const puntos = 10;
   const retrasoMax = 0.3; // s, retraso aleatorio por punto
@@ -140,9 +133,8 @@ if (velo && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-mo
   };
   const suavizar = (t) => (t < 0.5 ? 2 * t * t : 1 - ((-2 * t + 2) ** 2) / 2); // power2.inOut
   dibujar();
-  const verFirma = new IntersectionObserver(([e]) => {
-    if (!e.isIntersecting) return;
-    verFirma.disconnect();
+  // 30 % visible (el velo no retiene el texto); si la sección es más alta que la pantalla, con 30 % de la pantalla cubierta por ella.
+  alVerse(firma, { threshold: Math.min(0.3, (innerHeight * 0.3) / firma.offsetHeight) }, () => {
     const inicio = performance.now();
     const total = (retrasoMax + retrasoCapa * (capas.length - 1) + duracion) * 1000;
     const paso = (ahora) => {
@@ -159,8 +151,7 @@ if (velo && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-mo
       else velo.remove();
     };
     requestAnimationFrame(paso);
-  }, { threshold: Math.min(0.3, (innerHeight * 0.3) / firma.offsetHeight) }); // 30 % visible (el velo no retiene el texto); si la sección es más alta que la pantalla, con 30 % de la pantalla cubierta por ella
-  verFirma.observe(firma);
+  });
 }
 
 // Oferta: siempre queda una abierta; tocar la que ya está abierta no la cierra.
@@ -175,7 +166,7 @@ document.querySelectorAll('.dia__oferta summary').forEach((s) => {
 // giro. La entrada solo corre con varias columnas; en celular (una columna) queda solo el vaivén de la
 // primera tarjeta. Nada de esto corre con "reducir movimiento".
 const grillaCopas = document.querySelector('.copas__grilla');
-if (grillaCopas && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+if (grillaCopas && 'IntersectionObserver' in window && !quieto) {
   const copas = [...grillaCopas.children];
   const columnas = () => getComputedStyle(grillaCopas).gridTemplateColumns.split(' ').length;
   const llegada = 550; // ms del viaje del mazo hasta el lugar de la primera
@@ -263,25 +254,16 @@ if (grillaCopas && 'IntersectionObserver' in window && !matchMedia('(prefers-red
     vaiven.addEventListener('finish', terminar);
     vaiven.addEventListener('cancel', terminar);
   };
-  const cerca = new IntersectionObserver(([e]) => {
-    if (!e.isIntersecting) return;
-    cerca.disconnect();
-    if (columnas() > 1) { sacar(); return; }
+  // Cerca de la pantalla las tarjetas salen por la izquierda; al verse el 35 % de la grilla, entran.
+  alVerse(grillaCopas, { rootMargin: '0px 0px 300px 0px' }, () => {
+    if (columnas() > 1) {
+      sacar();
+      alVerse(grillaCopas, { threshold: 0.35 }, () => requestAnimationFrame(repartir));
+      return;
+    }
     // En una sola columna (celular) no hay entrada: la primera tarjeta hace el vaivén al verse.
-    const primeraVista = new IntersectionObserver(([v]) => {
-      if (!v.isIntersecting) return;
-      primeraVista.disconnect();
-      mostrarDorso(copas[0]);
-    }, { threshold: 0.6 });
-    primeraVista.observe(copas[0]);
-  }, { rootMargin: '0px 0px 300px 0px' });
-  const visible = new IntersectionObserver(([e]) => {
-    if (!e.isIntersecting || !recorridos) return;
-    visible.disconnect();
-    requestAnimationFrame(repartir);
-  }, { threshold: 0.35 });
-  cerca.observe(grillaCopas);
-  visible.observe(grillaCopas);
+    alVerse(copas[0], { threshold: 0.6 }, () => mostrarDorso(copas[0]));
+  });
 }
 
 const anio = document.getElementById('anio');
@@ -310,9 +292,9 @@ const mezcla = (a, b, t) => a + (b - a) * t;
 let progresoHero = 1; // fuera del modo animado, el menú se comporta como siempre
 
 // Con "reducir movimiento" el video no corre: queda el póster (pause() también anula el autoplay pendiente).
-if (matchMedia('(prefers-reduced-motion: reduce)').matches) hero?.querySelector('.hero__video')?.pause();
+if (quieto) hero?.querySelector('.hero__video')?.pause();
 
-if (hero && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+if (hero && !quieto) {
   hero.classList.add('hero--animado');
   const escena = hero.querySelector('.hero__escena');
   const video = hero.querySelector('.hero__video');
@@ -407,7 +389,7 @@ if (burger) {
 // Marca gigante: como si una cámara orbitara la copa. El scroll elige cuál de los 90 fotogramas
 // (sacados de imagenes/Aperol_Spritz_camera_orbit.mp4, el último es el final real del video) se dibuja en un canvas.
 const copaMarca = document.querySelector('.marca__copa');
-if (copaMarca && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+if (copaMarca && 'IntersectionObserver' in window && !quieto) {
   const TOTAL = 90;
   const FIN = 0.85; // la vuelta termina al 85 % del tramo fijo: el último fotograma queda quieto antes de soltarse
   const seccion = copaMarca.closest('.marca');
@@ -436,9 +418,7 @@ if (copaMarca && 'IntersectionObserver' in window && !matchMedia('(prefers-reduc
   const pedir = () => { if (!pendiente) { pendiente = true; requestAnimationFrame(dibujar); } };
 
   // Los fotogramas se piden recién cuando la sección está por aparecer.
-  const cerca = new IntersectionObserver(([e]) => {
-    if (!e.isIntersecting) return;
-    cerca.disconnect();
+  alVerse(seccion, { rootMargin: '600px 0px' }, () => {
     for (let n = 0; n < TOTAL; n++) {
       const f = new Image();
       f.decoding = 'async';
@@ -449,8 +429,7 @@ if (copaMarca && 'IntersectionObserver' in window && !matchMedia('(prefers-reduc
     fotos[0].addEventListener('load', () => copaMarca.replaceWith(lienzo), { once: true });
     addEventListener('scroll', pedir, { passive: true });
     addEventListener('resize', pedir);
-  }, { rootMargin: '600px 0px' });
-  cerca.observe(seccion);
+  });
 }
 
 // Visítanos (celular): el mapa sube hasta el borde superior de «Por encargo» y queda debajo de esa caja.
