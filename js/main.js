@@ -48,7 +48,7 @@ if (titular && 'IntersectionObserver' in window && !quieto) {
 const escenaMomentos = document.querySelector('.momentos__escena');
 if (escenaMomentos && 'IntersectionObserver' in window) {
   escenaMomentos.classList.add('momentos--animada', 'momentos--espera');
-  alVerse(escenaMomentos.querySelector('.momentos__foto'), { threshold: 0.5 }, // se ve el 50 % de la foto...
+  alVerse(escenaMomentos.querySelector('.momentos__foto'), { threshold: 0.2 }, // se ve el 20 % de la foto...
     () => requestAnimationFrame(() => escenaMomentos.classList.remove('momentos--espera')));
 }
 
