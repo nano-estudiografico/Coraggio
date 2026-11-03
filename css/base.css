@@ -212,6 +212,7 @@ a.visualmente-oculto:focus {
 /* Área táctil de 44px con el texto arriba: la primera línea se alinea con el texto de las otras columnas */
 .pie__columnas li a { display: inline-flex; min-height: 44px; align-items: flex-start; max-width: 100%; overflow-wrap: anywhere; text-decoration: none; }
 .pie__columnas li a:hover { text-decoration: underline; }
+.pie__tenue { opacity: 0.8; } /* Ver la carta y Pedir en Rappi */
 .pie__columnas .pie__marca { width: 100%; margin-bottom: var(--espacio-2); }
 /* El lema mide lo mismo que la palabra CORAGGIO del logo (67.7 % de su ancho): la letra escala con la columna */
 .pie__columnas > :has(.pie__lema) { container-type: inline-size; }
