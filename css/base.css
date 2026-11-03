@@ -267,3 +267,7 @@ a.visualmente-oculto:focus {
 @media (prefers-reduced-motion: reduce) { .pie__olas::before, .pie__agua::before, .pie__vapor svg { animation: none; } }
 .pie__olas a { color: var(--oliva); }
 .pie__nano { display: block; height: 2.25rem; width: auto; }
+/* Leche: chorro que js/leche.js dibuja por detrás de las franjas de ola en la escena café. Asoma desvanecido arriba. */
+.pie__leche { position: absolute; left: 0; width: 100%; z-index: -1; pointer-events: none; opacity: 0; transition: opacity var(--pie-cambio);
+  -webkit-mask-image: linear-gradient(transparent, #000 4rem); mask-image: linear-gradient(transparent, #000 4rem); }
+.pie--cafe .pie__leche { opacity: 1; }
