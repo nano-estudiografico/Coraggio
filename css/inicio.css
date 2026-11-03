@@ -533,6 +533,13 @@ section { padding-block: var(--espacio-6); }
   .visitanos__info { position: relative; z-index: 2; pointer-events: none; } /* deja arrastrar el mapa por debajo */
   .visitanos__info > div { max-width: 30rem; pointer-events: auto; }
 }
+.visitanos__info { position: relative; z-index: 2; } /* la información queda encima del degradado en celular */
+@media (max-width: 899px) {
+    .visitanos::after {
+        content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+        background: linear-gradient(var(--crema) 20%, transparent calc(var(--encargo-alto, 0px) + 4rem));
+    }
+}
 .visitanos__dato { font-size: 1.25rem; }
 /* «Cómo llegar» ocupa todo el ancho; WhatsApp y Pedir a domicilio se reparten la fila de abajo. */
 .visitanos .botones { margin-block: var(--espacio-3); display: grid; grid-template-columns: 1fr 1fr; }
