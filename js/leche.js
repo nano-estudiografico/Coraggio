@@ -37,17 +37,25 @@ function iniciar() {
     const dpr = Math.min(2, devicePixelRatio || 1);
     const ancho = olas.clientWidth;
     // En escritorio el chorro baja desde arriba del pie por el hueco vacío entre el logo y Visítanos;
-    // si no hay hueco (celular) asoma solo sobre las olas, a la derecha.
+    // si no hay hueco (celular) baja por la derecha, desde debajo de la última línea de texto que le cruzaría el camino.
     const cols = pie.querySelector('.pie__columnas');
     const [c1, c2] = cols ? cols.children : [];
     const caja = olas.getBoundingClientRect();
-    let x = ancho * 0.86, arriba = parseFloat(getComputedStyle(olas).marginTop) || 0;
-    if (c1 && c2) {
-      const a = c1.getBoundingClientRect(), b = c2.getBoundingClientRect();
-      if (Math.abs(a.top - b.top) < 4 && b.left - a.right > 6 * rem) {
-        x = (a.right + b.left) / 2 - caja.left;
-        arriba = olas.offsetTop;
+    let x = ancho - Math.max(2.5 * rem, ancho * 0.12), arriba = olas.offsetTop;
+    const a = c1?.getBoundingClientRect(), b = c2?.getBoundingClientRect();
+    if (a && b && Math.abs(a.top - b.top) < 4 && b.left - a.right > 6 * rem) {
+      x = (a.right + b.left) / 2 - caja.left;
+    } else if (cols) {
+      const izq = caja.left + x - ANCHO;
+      let bajo = -Infinity;
+      const recorrido = document.createTreeWalker(cols, NodeFilter.SHOW_TEXT);
+      const rango = document.createRange();
+      for (let n; (n = recorrido.nextNode());) {
+        if (!n.textContent.trim()) continue;
+        rango.selectNodeContents(n);
+        for (const r of rango.getClientRects()) if (r.right > izq) bajo = Math.max(bajo, r.bottom);
       }
+      if (bajo > -Infinity) arriba = Math.min(arriba, Math.max(0, caja.top - bajo - 0.75 * rem));
     }
     const alto = arriba + olas.clientHeight;
     m = {
