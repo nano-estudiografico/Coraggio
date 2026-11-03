@@ -432,7 +432,7 @@ section { padding-block: var(--espacio-6); }
   --ancho-sticker: clamp(5.5rem, 26cqi, 8rem);
   transform: var(--centro) rotate(var(--r));
 }
-.sticker img { display: block; width: var(--ancho-sticker); height: auto; max-width: none; pointer-events: none; }
+.sticker img { display: block; width: var(--ancho-sticker); height: auto; max-width: none; pointer-events: none; filter: drop-shadow(0 0.35em 0.45em rgb(48 55 23 / 0.32)); } /* sombra paralela */
 @media (min-width: 760px) {
   .sticker {
     /* el recipiente en la foto recortada por cover (centrada); si el recorte lo deja fuera, el sticker queda en el borde */
@@ -452,7 +452,8 @@ section { padding-block: var(--espacio-6); }
 
 /* Arrastre (js/main.js): el desplazamiento va en translate, aparte del transform de la entrada. */
 .sticker { cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; }
-.sticker--arrastrando { cursor: grabbing; filter: drop-shadow(0 0.5em 0.6em rgb(48 55 23 / 0.32)); }
+.sticker--arrastrando { cursor: grabbing; }
+.sticker--arrastrando img { filter: drop-shadow(0 0.6em 0.7em rgb(48 55 23 / 0.4)); }
 .sticker--arrastrando img { scale: 1.1; }
 .sticker img { transition: scale 0.2s ease; }
 @media (hover: hover) {
