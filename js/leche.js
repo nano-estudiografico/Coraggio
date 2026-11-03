@@ -207,7 +207,7 @@ function iniciar() {
         ctx.arc(q.x, q.y, q.w / 2, 0, Math.PI * 2);
         ctx.fill();
       }
-      // Volumen: sombra suave en el borde derecho y brillo en el izquierdo (cilindro iluminado desde la izquierda).
+      // Volumen: sombra suave en el borde derecho y más tenue en el izquierdo.
       ctx.globalAlpha = 0.22;
       ctx.strokeStyle = oliva;
       ctx.lineWidth = 1;
@@ -218,15 +218,6 @@ function iniciar() {
       ctx.beginPath();
       t.forEach((q, i) => (i ? ctx.lineTo(q.x - q.w / 2, q.y) : ctx.moveTo(q.x - q.w / 2, q.y)));
       ctx.stroke();
-      ctx.globalAlpha = 0.75;
-      ctx.strokeStyle = '#fff';
-      for (let i = 1; i < t.length; i++) {
-        ctx.lineWidth = Math.max(0.8, t[i].w * 0.16);
-        ctx.beginPath();
-        ctx.moveTo(t[i - 1].x - t[i - 1].w * 0.22, t[i - 1].y);
-        ctx.lineTo(t[i].x - t[i].w * 0.22, t[i].y);
-        ctx.stroke();
-      }
       ctx.globalAlpha = 1;
     }
 
