@@ -410,7 +410,7 @@ if (copaMarca && 'IntersectionObserver' in window && !matchMedia('(prefers-reduc
   const seccion = copaMarca.closest('.marca');
   const lienzo = document.createElement('canvas');
   lienzo.className = copaMarca.className;
-  lienzo.width = 406; lienzo.height = 834;
+  lienzo.width = 390; lienzo.height = 834; // cada fotograma va centrado en el tallo: no se mueve en horizontal
   lienzo.setAttribute('aria-hidden', 'true');
   const ctx = lienzo.getContext('2d');
   const fotos = [];
