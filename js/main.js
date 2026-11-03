@@ -45,7 +45,7 @@ if (titular && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced
 // Momentos: el título se lee sobre la foto, se desvanece y entran los stickers (el CSS lleva los tiempos).
 const escenaMomentos = document.querySelector('.momentos__escena');
 if (escenaMomentos && 'IntersectionObserver' in window) {
-  escenaMomentos.classList.add('momentos--espera');
+  escenaMomentos.classList.add('momentos--animada', 'momentos--espera');
   const verMomentos = new IntersectionObserver(([e]) => {
     if (!e.isIntersecting) return;
     verMomentos.disconnect();

@@ -140,9 +140,13 @@ test('sin localStorage, animaciones con reduced-motion y nada arranca invisible'
     // Excepciones: @keyframes (terminan visibles y reduced-motion los apaga), reglas de
     // .menu--abierto, estados que solo existen después de un clic, y contenido de un details
     // cerrado (el navegador ya lo oculta; la opacidad solo sirve para el fundido al cerrar).
+    // También .momentos--espera / .momentos--animada (solo las pone js/main.js) y los adornos del pie
+    // (hielos, vapor, leche), que se alternan entre la escena aperitivo y la café.
     const enReposo = css
       .replace(/@keyframes[^{]*\{(?:[^{}]*\{[^}]*\})*[^}]*\}/g, '')
       .replace(/\.menu--abierto[^{]*\{[^}]*\}/g, '')
+      .replace(/\.momentos--(espera|animada)[^{]*\{[^}]*\}/g, '')
+      .replace(/(\.pie--cafe )?\.pie__(hielos|vapor|leche)\s*\{[^}]*\}/g, '')
       .replace(/details:not\(\[open\]\)[^{]*\{[^}]*\}/g, '');
     assert.doesNotMatch(enReposo, /opacity:\s*0\s*[;}]/, `${f}: nada debe arrancar invisible`);
   }

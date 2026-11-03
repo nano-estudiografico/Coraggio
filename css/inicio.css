@@ -392,7 +392,7 @@ section { padding-block: var(--espacio-6); }
 
 /* Momentos: la foto con el título encima; el título se va (opacidad y desenfoque) y los stickers
    entran desde todos lados hasta su taza o copa. js/main.js pone .momentos--espera hasta que la escena
-   se ve. Sin JS queda la escena final: stickers en su lugar. */
+   se ve. Sin JS queda la escena final: stickers en su lugar y el título a la vista. */
 .momentos { background: var(--crema); overflow: clip; } /* los stickers llegan desde fuera sin scroll lateral */
 .momentos__marco { padding-inline: var(--espacio-3); } /* foto al ancho de la pantalla, con el mismo margen que el gap de las tarjetas */
 .momentos__escena {
@@ -413,10 +413,11 @@ section { padding-block: var(--espacio-6); }
   display: grid; place-items: center; padding: var(--espacio-2); text-align: center;
   font-size: clamp(2rem, 6.5cqi, 5.5rem); color: var(--oliva);
   background: radial-gradient(ellipse 42% 48% at center, rgb(244 238 227 / 0.92), rgb(244 238 227 / 0));
-  opacity: 0; filter: blur(14px); transform: scale(1.06); pointer-events: none;
+  pointer-events: none;
 }
-.momentos--espera .momentos__titulo { opacity: 1; filter: blur(0); transform: none; }
-.momentos__escena:not(.momentos--espera) .momentos__titulo {
+/* El título se ve por defecto (también sin JS); se va solo cuando js/main.js animó la escena. */
+.momentos--animada:not(.momentos--espera) .momentos__titulo {
+  opacity: 0; filter: blur(14px); transform: scale(1.06);
   transition: opacity 1s ease 1.6s, filter 1s ease 1.6s, transform 1s ease 1.6s;
 }
 
