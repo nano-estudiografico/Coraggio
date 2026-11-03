@@ -401,15 +401,15 @@ if (burger) {
   addEventListener('resize', () => { if (innerWidth >= 768) abrir(false); });
 }
 
-// Marca gigante: como si una cámara orbitara la copa. El scroll elige cuál de los 95 fotogramas
+// Marca gigante: como si una cámara orbitara la copa. El scroll elige cuál de los 89 fotogramas
 // (sacados de imagenes/Aperol_Spritz_camera_orbit.mp4) se dibuja en un canvas.
 const copaMarca = document.querySelector('.marca__copa');
 if (copaMarca && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  const TOTAL = 95;
+  const TOTAL = 89;
   const seccion = copaMarca.closest('.marca');
   const lienzo = document.createElement('canvas');
   lienzo.className = copaMarca.className;
-  lienzo.width = 400; lienzo.height = 834;
+  lienzo.width = 406; lienzo.height = 834;
   lienzo.setAttribute('aria-hidden', 'true');
   const ctx = lienzo.getContext('2d');
   const fotos = [];

@@ -385,7 +385,7 @@ section { padding-block: var(--espacio-6); }
 /* Copa en órbita (fotogramas sin fondo en img/orbita/): js/main.js cambia la <img> por un <canvas>
    que dibuja el fotograma según el scroll. */
 .marca__copa {
-  position: absolute; z-index: 2; height: 80vh; height: 80svh; width: auto; aspect-ratio: 400 / 834; /* la copa llena el fotograma: 80 % del alto de la ventana */
+  position: absolute; z-index: 2; height: 80vh; height: 80svh; width: auto; aspect-ratio: 406 / 834; /* la copa llena el fotograma: 80 % del alto de la ventana */
   object-fit: contain;
   translate: 0 calc(var(--alto-menu) / 2); /* baja media altura del header: queda centrada en el espacio libre bajo el menú fijo */
 }
