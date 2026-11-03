@@ -159,7 +159,7 @@ if (velo && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-mo
       else velo.remove();
     };
     requestAnimationFrame(paso);
-  }, { threshold: Math.min(0.6, (innerHeight * 0.6) / firma.offsetHeight) }); // 60 % visible; si la sección es más alta que la pantalla, con 60 % de la pantalla cubierta por ella
+  }, { threshold: Math.min(0.3, (innerHeight * 0.3) / firma.offsetHeight) }); // 30 % visible (el velo no retiene el texto); si la sección es más alta que la pantalla, con 30 % de la pantalla cubierta por ella
   verFirma.observe(firma);
 }
 
@@ -308,6 +308,9 @@ const tramo = (p, a, b) => Math.min(1, Math.max(0, (p - a) / (b - a)));
 const suave = (t) => 1 - (1 - t) ** 3;
 const mezcla = (a, b, t) => a + (b - a) * t;
 let progresoHero = 1; // fuera del modo animado, el menú se comporta como siempre
+
+// Con "reducir movimiento" el video no corre: queda el póster (pause() también anula el autoplay pendiente).
+if (matchMedia('(prefers-reduced-motion: reduce)').matches) hero?.querySelector('.hero__video')?.pause();
 
 if (hero && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
   hero.classList.add('hero--animado');

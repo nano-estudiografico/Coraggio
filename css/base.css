@@ -72,7 +72,7 @@ a.visualmente-oculto:focus {
   transition: transform 0.15s ease, background-color 0.15s ease;
 }
 .btn:hover { transform: translateY(-1px); }
-.btn--primario { background: var(--naranja); color: var(--oliva); }
+.btn--primario { background: var(--naranja); color: var(--oliva-profunda); }
 .btn--primario:hover { background: #ff7a2e; }
 .btn--secundario { border-color: currentColor; color: inherit; background: transparent; }
 .btn--secundario:hover { background: rgb(48 55 23 / 0.08); }
@@ -144,7 +144,7 @@ a.visualmente-oculto:focus {
     width: 100%; min-height: 4rem; justify-content: space-between;
     font: 400 2.25rem/1 var(--font-display); text-decoration: none !important;
   }
-  .menu__enlaces a[aria-current="page"] { color: var(--naranja); }
+  .menu__enlaces a[aria-current="page"] { color: var(--naranja-texto); }
   .menu__enlaces a::after { content: '→'; font: 400 1.25rem/1 var(--font-texto); opacity: 0.5; }
   .menu--abierto .menu__iconos { display: flex; grid-area: 4 / 1 / 5 / -1; align-self: end; justify-content: center; margin-bottom: calc(40px + env(safe-area-inset-bottom)); gap: var(--espacio-2); }
   .menu.menu--abierto .menu__iconos .icono { background: var(--oliva); color: var(--crema); border-color: var(--oliva); } /* invertidos: fondo verde, icono crema */
@@ -161,7 +161,7 @@ a.visualmente-oculto:focus {
 @media (prefers-reduced-motion: reduce) { .menu__enlaces li, .menu__iconos { animation: none !important; } }
 
 /* Cinta en movimiento */
-.cinta { overflow: hidden; background: var(--naranja); color: var(--oliva); }
+.cinta { overflow: hidden; background: var(--naranja); color: var(--oliva-profunda); }
 .cinta__pista {
   display: flex; width: max-content;
   animation: cinta 20.5s linear infinite;
@@ -186,7 +186,7 @@ a.visualmente-oculto:focus {
 /* Pie */
 /* Dos escenas que se alternan cada 10 s (js/hielos.js pone y quita .pie--cafe):
    aperitivo (fondo oliva, ola crema, agua naranja con hielos) y café (fondo crema, ola oliva, agua crema oscura con vapor). */
-.pie { --pie-fondo: var(--oliva); --pie-texto: var(--crema-oscura); --pie-titulo: var(--naranja); --pie-ola: var(--crema); --pie-agua: var(--naranja);
+.pie { --pie-fondo: var(--oliva); --pie-texto: var(--crema-oscura); --pie-titulo: var(--crema); /* el naranja sobre oliva da 4,07:1 a 15 px */ --pie-ola: var(--crema); --pie-agua: var(--naranja);
   --pie-cambio: 1.2s ease;
   --ola: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 40' preserveAspectRatio='none'%3E%3Cpath d='M0 20 Q100 0 200 20 T400 20 T600 20 T800 20 V40 H0Z'/%3E%3C/svg%3E");
   position: relative; z-index: 1;

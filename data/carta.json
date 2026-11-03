@@ -25,7 +25,7 @@
               "precio": 5.9
             },
             {
-              "nombre": "Capuccino",
+              "nombre": "Cappuccino",
               "precio": 6.9
             },
             {
@@ -95,7 +95,7 @@
             {
               "nombre": "Combo Dolce",
               "precio": 18.9,
-              "detalle": "Capuccino o americano + torta de zanahoria"
+              "detalle": "Cappuccino o americano + torta de zanahoria"
             }
           ]
         },

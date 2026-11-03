@@ -237,7 +237,7 @@ section { padding-block: var(--espacio-6); }
   transition: flex-grow var(--tiempo) var(--curva);
 }
 .dia details[open] { flex-grow: 1; }
-.dia details:has(summary:focus-visible) { outline: 3px solid var(--naranja); outline-offset: 3px; }
+.dia details:has(summary:focus-visible) { outline: 3px solid var(--oliva); outline-offset: 3px; }
 /* Fotos de cada sección (en celular, verticales salvo Para acompañar, que no tiene). */
 .dia__item--picar { background-image: url(../img/dia-tabla-picar-960.webp); background-image: image-set(url(../img/dia-tabla-picar-960.webp) 1x, url(../img/dia-tabla-picar-1920.webp) 2x); }
 .dia__item--combos { background-image: url(../img/dia-cafe-frio-960.webp); background-image: image-set(url(../img/dia-cafe-frio-960.webp) 1x, url(../img/dia-cafe-frio-1920.webp) 2x); }
