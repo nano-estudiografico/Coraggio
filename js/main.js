@@ -48,8 +48,8 @@ if (titular && 'IntersectionObserver' in window && !quieto) {
 const escenaMomentos = document.querySelector('.momentos__escena');
 if (escenaMomentos && 'IntersectionObserver' in window) {
   escenaMomentos.classList.add('momentos--animada', 'momentos--espera');
-  alVerse(escenaMomentos.querySelector('.momentos__foto'), { threshold: 0.8 }, // arranca cuando se ve el 80 % de la foto
-    () => requestAnimationFrame(() => escenaMomentos.classList.remove('momentos--espera')));
+  alVerse(escenaMomentos.querySelector('.momentos__foto'), { threshold: 0.5 }, // se ve el 50 % de la foto...
+    () => setTimeout(() => requestAnimationFrame(() => escenaMomentos.classList.remove('momentos--espera')), 500)); // ...y arranca 0,5 s después
 }
 
 // Stickers de Momentos: se arrastran con el mouse o el dedo; el último que se toca queda encima.
