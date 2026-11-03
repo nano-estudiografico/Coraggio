@@ -40,3 +40,25 @@ test('cartaAHtml escapa y estructura', () => {
 test('carta.html está generada con los datos actuales', () => {
   assert.ok(leer('carta.html').includes(cartaAHtml(carta)));
 });
+
+test('hojaACarta arma secciones, grupos, ids conocidos y promos', async () => {
+  const { hojaACarta } = await import('../js/carta-hoja.js');
+  const csv = 'Sección,Grupo,Nombre,Precio,Detalle\n' +
+    'Café,Combos,Combo Due,"12,9","Latte, o café"\n' +
+    'Café,Postres nuevos,Brownie,$7.5k,\n' +
+    'Café,Combos,Sin precio,,\n' +
+    'Promos,,2 spritz × $50k,,\n';
+  const c = hojaACarta(csv);
+  assert.equal(c.secciones[0].id, 'cafe');
+  assert.deepEqual(c.secciones[0].grupos.map((g) => g.id), ['combos', 'postres-nuevos']);
+  assert.deepEqual(c.secciones[0].grupos[0].items, [{ nombre: 'Combo Due', precio: 12.9, detalle: 'Latte, o café' }]);
+  assert.equal(c.secciones[0].grupos[1].items[0].precio, 7.5);
+  assert.deepEqual(c.promos, [{ texto: '2 spritz × $50k' }]);
+});
+
+test('leerPrecio acepta pesos completos', async () => {
+  const { leerPrecio } = await import('../js/carta-hoja.js');
+  assert.equal(leerPrecio('28000'), 28);
+  assert.equal(leerPrecio('4,9'), 4.9);
+  assert.equal(leerPrecio(''), null);
+});

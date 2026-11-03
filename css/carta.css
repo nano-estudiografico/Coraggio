@@ -65,3 +65,6 @@
 
 /* Al saltar desde el índice, el título queda debajo del menú y del índice pegajoso. */
 html { scroll-padding-top: calc(var(--alto-menu) + 5rem); }
+
+/* Envoltura de la carta que se actualiza desde la hoja de Drive */
+#carta-viva { display: contents; }
