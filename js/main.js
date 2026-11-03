@@ -401,11 +401,12 @@ if (burger) {
   addEventListener('resize', () => { if (innerWidth >= 768) abrir(false); });
 }
 
-// Marca gigante: como si una cámara orbitara la copa. El scroll elige cuál de los 89 fotogramas
-// (sacados de imagenes/Aperol_Spritz_camera_orbit.mp4) se dibuja en un canvas.
+// Marca gigante: como si una cámara orbitara la copa. El scroll elige cuál de los 90 fotogramas
+// (sacados de imagenes/Aperol_Spritz_camera_orbit.mp4, el último es el final real del video) se dibuja en un canvas.
 const copaMarca = document.querySelector('.marca__copa');
 if (copaMarca && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  const TOTAL = 89;
+  const TOTAL = 90;
+  const FIN = 0.85; // la vuelta termina al 85 % del tramo fijo: el último fotograma queda quieto antes de soltarse
   const seccion = copaMarca.closest('.marca');
   const lienzo = document.createElement('canvas');
   lienzo.className = copaMarca.className;
@@ -418,9 +419,9 @@ if (copaMarca && 'IntersectionObserver' in window && !matchMedia('(prefers-reduc
   const dibujar = () => {
     pendiente = false;
     const r = seccion.getBoundingClientRect();
-    // 0 cuando la escena se fija arriba, 1 cuando se suelta: la vuelta ocurre durante el 150 % extra de la sección.
+    // 0 cuando la escena se fija arriba, 1 cuando se suelta (el 150 % extra de la sección).
     const avance = -r.top / (r.height - innerHeight);
-    const i = Math.round(Math.min(1, Math.max(0, avance)) * (TOTAL - 1));
+    const i = Math.round(Math.min(1, Math.max(0, avance / FIN)) * (TOTAL - 1));
     // Si el fotograma aún no llegó, se usa el cargado más cercano hacia atrás.
     for (let j = i; j >= 0; j--) {
       if (fotos[j]?.complete && fotos[j].naturalWidth) {
