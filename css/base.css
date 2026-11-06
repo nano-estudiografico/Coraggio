@@ -15,7 +15,7 @@ body {
   line-height: 1.55;
   color: var(--oliva);
   background: var(--crema);
-  overflow-x: hidden;
+  overflow-x: hidden; overflow-x: clip; /* clip: también en iOS, donde hidden en body no evita el scroll lateral */
   overflow-wrap: break-word; /* correos y enlaces largos no rompen el ancho en celulares */
 }
 
@@ -142,12 +142,13 @@ a.visualmente-oculto:focus {
   .menu__barra > nav, .menu__iconos { display: none; grid-column: 1 / -1; }
 
   /* Abierto: ocupa toda la pantalla y desenfoca lo que queda detrás */
+  /* Pegado a los cuatro bordes (no 100dvh): así cubre hasta abajo aunque cambie la barra del navegador */
   .menu--abierto {
-    height: 100vh; height: 100dvh; overflow-y: auto;
+    position: fixed; inset: 0; height: auto; overflow-y: auto;
     background: rgb(244 238 227 / 0.8); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
   }
   .menu--abierto .menu__barra {
-    min-height: 100%; grid-template-rows: 1fr auto auto 1fr; /* filas 1 y 4 iguales: logo + ítems centrados */
+    position: relative; min-height: 100%; grid-template-rows: 1fr auto auto 1fr; /* filas 1 y 4 iguales: logo + ítems centrados */
   }
   .menu--abierto .menu__burger { align-self: start; margin-top: 14px; }
   /* Logo centrado y más grande (+80%), a ~40px de los ítems, que quedan en el medio vertical */
@@ -165,18 +166,21 @@ a.visualmente-oculto:focus {
   .menu--abierto .menu__iconos { display: flex; grid-area: 4 / 1 / 5 / -1; align-self: end; justify-content: center; margin-bottom: calc(40px + env(safe-area-inset-bottom)); gap: var(--espacio-2); }
   .menu.menu--abierto .menu__iconos .icono { background: var(--oliva); color: var(--crema); border-color: var(--oliva); } /* invertidos: fondo verde, icono crema */
   .menu .icono { width: 48px; height: 48px; }
-  .menu--abierto .idioma { margin-right: var(--espacio-2); font-size: 1.125rem; }
+  /* ES | EN arriba a la izquierda, en la misma línea que la X del burger */
+  .menu--abierto .idioma { position: absolute; top: 14px; left: 0; height: 44px; margin: 0; font-size: 1.125rem; }
+  .menu--abierto .idioma a { min-height: 44px; }
   .idioma a { min-height: 48px; }
   .menu .icono svg { width: 22px; height: 22px; }
 
-  .menu--abierto .menu__enlaces li, .menu--abierto .menu__iconos { animation: menu-entra 0.45s ease both; }
+  /* La animación va en los hijos de los iconos: un transform en .menu__iconos atraparía al .idioma absoluto */
+  .menu--abierto .menu__enlaces li, .menu--abierto .menu__iconos > * { animation: menu-entra 0.45s ease both; }
   .menu--abierto .menu__enlaces li:nth-child(2) { animation-delay: 0.05s; }
   .menu--abierto .menu__enlaces li:nth-child(3) { animation-delay: 0.1s; }
   .menu--abierto .menu__enlaces li:nth-child(4) { animation-delay: 0.15s; }
-  .menu--abierto .menu__iconos { animation-delay: 0.22s; }
+  .menu--abierto .menu__iconos > * { animation-delay: 0.22s; }
 }
 @keyframes menu-entra { from { opacity: 0; transform: translateY(0.75rem); } }
-@media (prefers-reduced-motion: reduce) { .menu__enlaces li, .menu__iconos { animation: none !important; } }
+@media (prefers-reduced-motion: reduce) { .menu__enlaces li, .menu__iconos > * { animation: none !important; } }
 
 /* Cinta en movimiento */
 .cinta { overflow: hidden; background: var(--naranja); color: var(--oliva-profunda); }

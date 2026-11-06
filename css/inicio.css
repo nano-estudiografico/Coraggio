@@ -23,7 +23,8 @@ section { padding-block: var(--espacio-6); }
 .menu--abierto::before { background: rgb(244 238 227 / 0.8); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
 .menu__logo img { display: block; transform-origin: center; }
 .menu--abierto .menu__logo img { transform: none !important; }
-@media (max-width: 767px) { .menu--abierto { position: fixed; inset: 0 0 auto 0; } } /* con la cinta arriba, el panel debe cubrir la pantalla entera */ /* con el panel abierto el logo no viaja por el hero */
+/* Móvil: el panel abierto va fijo a los cuatro bordes (aquí el .menu es sticky y le gana a base.css); cubre la pantalla entera aunque haya cinta arriba */
+@media (max-width: 767px) { .menu--abierto { position: fixed; inset: 0; margin: 0; } } /* sin el margin-bottom negativo, que lo estiraría más que la pantalla */
 @media (prefers-reduced-motion: reduce) { .menu, .menu::before, .menu .icono { transition: none; } }
 .hero { position: relative; padding: 0; color: var(--crema); background: #1e220e; }
 .hero__escena { position: relative; height: calc(100vh - var(--alto-cinta, 0px)); height: calc(100svh - var(--alto-cinta, 0px)); min-height: 30rem; overflow: hidden; }
@@ -346,6 +347,8 @@ section { padding-block: var(--espacio-6); }
 /* Sello centrado sobre el borde superior de la sección: su mitad cae sobre .firma. Alineado con el borde
    derecho del contenedor. */
 .resenas { position: relative; }
+/* El sello rotado sobresale unos px por la derecha en celular: la sección lo recorta para que no haya scroll lateral */
+.resenas { overflow-x: clip; }
 .resenas__sello { position: absolute; z-index: 2; top: 36px; right: max(1rem, calc((100% - var(--ancho-max)) / 2)); transform: translateY(-50%) rotate(16deg); width: 10.5rem; height: auto; }
 .resenas__nota { margin: 0; font-size: 1.125rem; }
 .resenas__nota .estrellas { color: var(--oliva); } /* sobre crema el naranja da 2,65:1 */
