@@ -122,7 +122,10 @@ test('metadatos y datos estructurados', () => {
     const h = leer(p);
     assert.match(h, /<html lang="es-CO">/);
     assert.match(h, /<meta name="description"/);
-    assert.match(h, /<meta property="og:image" content="img\/tres-spritz-1920\.jpg"/);
+    // Las redes solo leen og:image con dirección completa; además la imagen debe existir en el proyecto.
+    const og = h.match(/<meta property="og:image" content="https:\/\/[^"]+\/Coraggio\/([^"]+)"/);
+    assert.ok(og, `${p}: og:image debe ser una URL completa`);
+    assert.ok(fs.existsSync(new URL(`../${og[1]}`, import.meta.url)), `${p}: no existe ${og[1]}`);
     assert.match(h, /<link rel="icon" href="favicon\.svg"/);
   }
   const ld = JSON.parse(inicio().match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
@@ -180,6 +183,7 @@ test('selector ES | EN en el menú de las cuatro páginas, con la página actual
 test('versión en inglés: idioma, enlaces internos y avisos legales', () => {
   for (const p of ['en.html', 'carta-en.html']) {
     const h = leer(p);
+    assert.match(h, /<meta property="og:image" content="https:\/\/[^"]+\/img\/thumbnail\.png">/, p);
     assert.match(h, /<html lang="en">/, p);
     assert.match(h, /Excessive alcohol consumption is harmful to your health\. Sale of alcoholic beverages to minors is prohibited\./, p);
     assert.match(h, /Prices in thousands of Colombian pesos\. Consumption tax included\./, p);
