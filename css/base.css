@@ -161,7 +161,7 @@ a.visualmente-oculto:focus {
     width: 100%; min-height: 4rem; justify-content: space-between;
     font: 400 2.25rem/1 var(--font-display); text-decoration: none !important;
   }
-  .menu__enlaces a[aria-current="page"] { color: var(--naranja-texto); }
+  .menu__enlaces a[aria-current="page"] { color: var(--naranja); }
   .menu__enlaces a::after { content: '→'; font: 400 1.25rem/1 var(--font-texto); opacity: 0.5; }
   .menu--abierto .menu__iconos { display: flex; grid-area: 4 / 1 / 5 / -1; align-self: end; justify-content: center; margin-bottom: calc(40px + env(safe-area-inset-bottom)); gap: var(--espacio-2); }
   .menu.menu--abierto .menu__iconos .icono { background: var(--oliva); color: var(--crema); border-color: var(--oliva); } /* invertidos: fondo verde, icono crema */
