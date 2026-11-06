@@ -37,8 +37,16 @@ test('cartaAHtml escapa y estructura', () => {
   assert.match(html, /<span class="carta__precio">\$4\.9k<\/span>/);
 });
 
-test('carta.html está generada con los datos actuales', () => {
+test('carta.html y carta-en.html están generadas con los datos actuales', async () => {
+  const { traducirEn } = await import('../js/carta-en.js');
   assert.ok(leer('carta.html').includes(cartaAHtml(carta)));
+  assert.ok(leer('carta-en.html').includes(cartaAHtml(carta, traducirEn)));
+});
+
+test('la carta en inglés tiene traducidos todos los títulos y detalles actuales', async () => {
+  const { traducirEn } = await import('../js/carta-en.js');
+  const textos = carta.secciones.flatMap((s) => [s.titulo, ...s.grupos.flatMap((g) => [g.titulo, ...g.items.map((i) => i.detalle).filter(Boolean)])]);
+  for (const t of textos) if (!['Combos', 'x12'].includes(t)) assert.notEqual(traducirEn(t), t, t);
 });
 
 test('hojaACarta arma secciones, grupos, ids conocidos y promos', async () => {

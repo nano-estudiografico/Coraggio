@@ -1,5 +1,6 @@
 import { estadoHorario } from './horario.js';
 
+const ingles = document.documentElement.lang.startsWith('en');
 const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
 // La primera vez que el elemento entra en pantalla deja de observarlo y corre fn.
 const alVerse = (el, opciones, fn) => {
@@ -10,7 +11,7 @@ const alVerse = (el, opciones, fn) => {
 // Abierto / Cerrado según la hora de Medellín; sin JS queda solo el horario escrito.
 const estado = document.getElementById('estado-horario');
 if (estado) {
-  const { abierto, etiqueta, detalle } = estadoHorario(new Date());
+  const { abierto, etiqueta, detalle } = estadoHorario(new Date(), ingles ? 'en' : 'es');
   estado.textContent = `${etiqueta} · ${detalle}`;
   estado.classList.add(abierto ? 'estado--abierto' : 'estado--cerrado');
   estado.hidden = false;
@@ -377,7 +378,7 @@ if (burger) {
   const abrir = (si) => {
     menu.classList.toggle('menu--abierto', si);
     burger.setAttribute('aria-expanded', String(si));
-    burger.setAttribute('aria-label', si ? 'Cerrar el menú' : 'Abrir el menú');
+    burger.setAttribute('aria-label', ingles ? (si ? 'Close menu' : 'Open menu') : (si ? 'Cerrar el menú' : 'Abrir el menú'));
   };
   burger.addEventListener('click', () => abrir(!menu.classList.contains('menu--abierto')));
   menu.addEventListener('click', (e) => { if (e.target.closest('.menu__barra > nav a')) abrir(false); });

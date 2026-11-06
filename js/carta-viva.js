@@ -2,6 +2,7 @@
 // Si la hoja no responde, queda la carta generada en el HTML.
 import { HOJA_CSV, hojaACarta } from './carta-hoja.js';
 import { cartaAHtml } from './carta-html.js';
+import { traducirEn } from './carta-en.js';
 
 const destino = document.getElementById('carta-viva');
 if (destino) {
@@ -9,7 +10,7 @@ if (destino) {
     .then((r) => (r.ok ? r.text() : Promise.reject(r.status)))
     .then((csv) => {
       const carta = hojaACarta(csv);
-      if (carta.secciones.length) destino.innerHTML = cartaAHtml(carta);
+      if (carta.secciones.length) destino.innerHTML = cartaAHtml(carta, document.documentElement.lang.startsWith('en') ? traducirEn : undefined);
     })
     .catch(() => {});
 }

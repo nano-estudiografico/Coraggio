@@ -1,8 +1,9 @@
-// Uso: npm run carta — baja la carta de la hoja de Drive a data/carta.json y reescribe el bloque de carta.html.
+// Uso: npm run carta — baja la carta de la hoja de Drive a data/carta.json y reescribe el bloque de carta.html y carta-en.html.
 // Si la hoja no responde, usa el data/carta.json que ya hay.
 import fs from 'node:fs';
 import { cartaAHtml } from '../js/carta-html.js';
 import { HOJA_CSV, hojaACarta } from '../js/carta-hoja.js';
+import { traducirEn } from '../js/carta-en.js';
 
 const raiz = new URL('../', import.meta.url);
 const rutaJson = new URL('data/carta.json', raiz);
@@ -19,14 +20,14 @@ try {
 }
 
 const carta = JSON.parse(fs.readFileSync(rutaJson, 'utf8'));
-const ruta = new URL('carta.html', raiz);
-const html = fs.readFileSync(ruta, 'utf8');
-
 const INICIO = '<!-- CARTA:INICIO -->';
 const FIN = '<!-- CARTA:FIN -->';
-const a = html.indexOf(INICIO);
-const b = html.indexOf(FIN);
-if (a < 0 || b < a) throw new Error('carta.html no tiene los marcadores CARTA:INICIO / CARTA:FIN');
-
-fs.writeFileSync(ruta, `${html.slice(0, a + INICIO.length)}\n${cartaAHtml(carta)}\n${html.slice(b)}`);
-console.log('carta.html actualizada');
+for (const [pagina, t] of [['carta.html'], ['carta-en.html', traducirEn]]) {
+  const ruta = new URL(pagina, raiz);
+  const html = fs.readFileSync(ruta, 'utf8');
+  const a = html.indexOf(INICIO);
+  const b = html.indexOf(FIN);
+  if (a < 0 || b < a) throw new Error(`${pagina} no tiene los marcadores CARTA:INICIO / CARTA:FIN`);
+  fs.writeFileSync(ruta, `${html.slice(0, a + INICIO.length)}\n${cartaAHtml(carta, t)}\n${html.slice(b)}`);
+  console.log(`${pagina} actualizada`);
+}

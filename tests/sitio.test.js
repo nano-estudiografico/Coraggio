@@ -5,7 +5,7 @@ import fs from 'node:fs';
 const leer = (ruta) => fs.readFileSync(new URL(`../${ruta}`, import.meta.url), 'utf8');
 
 const inicio = () => leer('index.html');
-const paginasYEstilos = () => ['index.html', 'carta.html', ...fs.readdirSync(new URL('../css', import.meta.url)).map(f => `css/${f}`)].map(leer);
+const paginasYEstilos = () => ['index.html', 'carta.html', 'en.html', 'carta-en.html', ...fs.readdirSync(new URL('../css', import.meta.url)).map(f => `css/${f}`)].map(leer);
 
 test('secciones 1-7 presentes en orden', () => {
   const ids = ['cinta-superior', 'inicio', 'frase', 'copas', 'dia-y-tarde', 'firma'];
@@ -97,12 +97,14 @@ test('toda imagen tiene alt y no vacío salvo decorativas', () => {
   }
 });
 
+const todas = [...paginas, 'en.html', 'carta-en.html'];
+
 test('enlaces de solo ícono tienen aria-label', () => {
-  for (const p of paginas) for (const a of leer(p).match(/<a [^>]*class="[^"]*icono[^"]*"[^>]*>/g) || []) assert.match(a, /aria-label="/, a);
+  for (const p of todas) for (const a of leer(p).match(/<a [^>]*class="[^"]*icono[^"]*"[^>]*>/g) || []) assert.match(a, /aria-label="/, a);
 });
 
 test('externos con target _blank y rel noopener', () => {
-  for (const p of paginas) for (const a of leer(p).match(/<a [^>]*href="https?:[^>]*>/g)) {
+  for (const p of todas) for (const a of leer(p).match(/<a [^>]*href="https?:[^>]*>/g)) {
     assert.match(a, /target="_blank"/, a);
     assert.match(a, /rel="noopener"/, a);
   }
@@ -159,4 +161,33 @@ test('contenedores de imagen con color de fondo', () => {
 test('sin JS: el estado de horario arranca oculto y el horario está escrito', () => {
   assert.match(inicio(), /<p class="estado" id="estado-horario" hidden><\/p>/);
   assert.match(leer('css/base.css'), /\[hidden\]\s*\{\s*display:\s*none/);
+});
+
+test('selector ES | EN en el menú de las cuatro páginas, con la página actual marcada', () => {
+  const pares = { 'index.html': ['index.html', 'en.html', 'es'], 'en.html': ['index.html', 'en.html', 'en'],
+    'carta.html': ['carta.html', 'carta-en.html', 'es'], 'carta-en.html': ['carta.html', 'carta-en.html', 'en'] };
+  for (const [p, [es, en, actual]] of Object.entries(pares)) {
+    const iconos = leer(p).match(/<div class="menu__iconos">[\s\S]*?<\/div>/)[0];
+    const sel = iconos.match(/<p class="idioma">[\s\S]*?<\/p>/)?.[0];
+    assert.ok(sel, `${p}: falta el selector de idioma`);
+    assert.match(sel, new RegExp(`href="${es}"[^>]*>ES<`), p);
+    assert.match(sel, new RegExp(`href="${en}"[^>]*>EN<`), p);
+    assert.match(sel, new RegExp(`lang="${actual}"[^>]*aria-current="page"`), p);
+    assert.match(leer(p), new RegExp(`<link rel="alternate" hreflang="en" href="[^"]*${en}">`), p);
+  }
+});
+
+test('versión en inglés: idioma, enlaces internos y avisos legales', () => {
+  for (const p of ['en.html', 'carta-en.html']) {
+    const h = leer(p);
+    assert.match(h, /<html lang="en">/, p);
+    assert.match(h, /Excessive alcohol consumption is harmful to your health\. Sale of alcoholic beverages to minors is prohibited\./, p);
+    assert.match(h, /Prices in thousands of Colombian pesos\. Consumption tax included\./, p);
+    // Fuera del selector de idioma, ningún enlace interno lleva a las páginas en español.
+    const sinSelector = h.replace(/<p class="idioma">[\s\S]*?<\/p>/, '').replace(/<link rel="alternate"[^>]*>/g, '');
+    assert.doesNotMatch(sinSelector, /href="(index|carta)\.html/, p);
+  }
+  assert.match(leer('en.html'), /Not every spritz tastes the same\./);
+  assert.match(leer('en.html'), /Every day, 9:00 a\.m\. – 9:00 p\.m\./);
+  assert.match(leer('en.html'), /<p class="estado" id="estado-horario" hidden><\/p>/);
 });
