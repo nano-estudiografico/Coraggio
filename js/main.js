@@ -164,8 +164,8 @@ document.querySelectorAll('.dia__oferta summary').forEach((s) => {
 // al verse entran juntas como un mazo hasta el lugar de la primera (Aperol). Por inercia, mientras viajan
 // se inclinan hacia atrás (izquierda) y al frenar se balancean hacia adelante (derecha); ese impulso lanza
 // a las demás hasta su sitio, donde se enderezan. La primera se asienta en el suyo y hace un vaivén de
-// giro. La entrada solo corre con varias columnas; en celular (una columna) queda solo el vaivén de la
-// primera tarjeta. Nada de esto corre con "reducir movimiento".
+// giro. Con varias columnas entra el mazo; en celular (carrusel) entran desde la derecha (ver abajo).
+// Nada de esto corre con "reducir movimiento".
 const grillaCopas = document.querySelector('.copas__grilla');
 if (grillaCopas && 'IntersectionObserver' in window && !quieto) {
   const copas = [...grillaCopas.children];
@@ -262,9 +262,73 @@ if (grillaCopas && 'IntersectionObserver' in window && !quieto) {
       alVerse(grillaCopas, { threshold: 0.35 }, () => requestAnimationFrame(repartir));
       return;
     }
-    // En una sola columna (celular) no hay entrada: la primera tarjeta hace el vaivén al verse.
-    alVerse(copas[0], { threshold: 0.6 }, () => mostrarDorso(copas[0]));
+    // Celular (carrusel): las tarjetas esperan fuera, por el borde derecho, y al verse entran una tras
+    // otra hasta que la primera queda centrada. Al moverse a la izquierda se inclinan hacia atrás
+    // (derecha), al frenar se pasan un poco hacia adelante y se enderezan; luego la primera hace el vaivén.
+    grillaCopas.scrollLeft = 0;
+    const ancho = innerWidth;
+    const enJuego = copas.filter((copa) => copa.getBoundingClientRect().left < ancho); // la primera y la que asoma
+    const desde = enJuego.map((copa) => ancho - copa.getBoundingClientRect().left + 40);
+    enJuego.forEach((copa, i) => {
+      copa.style.translate = `${desde[i]}px 0px`;
+      copa.style.transformOrigin = '50% 100%';
+    });
+    alVerse(grillaCopas, { threshold: 0.35 }, () => requestAnimationFrame(() => {
+      const animaciones = enJuego.map((copa, i) => {
+        copa.style.translate = '';
+        const opciones = { duration: 900, delay: i * 90, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'backwards' };
+        return [
+          copa.animate([{ translate: `${desde[i]}px 0px` }, { translate: '0px 0px' }], opciones),
+          copa.animate([
+            { rotate: '7deg' },
+            { rotate: '7deg', offset: 0.15 },
+            { rotate: '-3deg', offset: 0.55, easing: 'ease-in-out' },
+            { rotate: '0deg' },
+          ], { ...opciones, easing: 'ease-out' }),
+        ];
+      }).flat();
+      Promise.all(animaciones.map((a) => a.finished)).then(() => {
+        enJuego.forEach((copa) => { copa.style.transformOrigin = ''; });
+        mostrarDorso(copas[0]);
+      });
+    }));
   });
+}
+
+// Carrusel de copas en celular: una barrita por tarjeta marca cuál se ve (y lleva a cualquiera al tocarla).
+// En pantallas anchas la grilla no desplaza y el CSS oculta las barritas.
+if (grillaCopas) {
+  const tarjetas = [...grillaCopas.children];
+  const puntos = document.createElement('div');
+  puntos.className = 'copas__puntos';
+  puntos.setAttribute('role', 'group');
+  puntos.setAttribute('aria-label', ingles ? 'Choose a drink' : 'Elegí una copa');
+  const botones = tarjetas.map((tarjeta, i) => {
+    const boton = document.createElement('button');
+    boton.type = 'button';
+    boton.setAttribute('aria-label', `${tarjeta.querySelector('h3').textContent} (${i + 1}/${tarjetas.length})`);
+    boton.addEventListener('click', () => tarjeta.scrollIntoView({ inline: 'center', block: 'nearest', behavior: quieto ? 'auto' : 'smooth' }));
+    puntos.append(boton);
+    return boton;
+  });
+  grillaCopas.after(puntos);
+  let actual = -1;
+  const marcar = () => {
+    const caja = grillaCopas.getBoundingClientRect();
+    const centro = caja.left + caja.width / 2;
+    const distancias = tarjetas.map((t) => { const r = t.getBoundingClientRect(); return Math.abs(r.left + r.width / 2 - centro); });
+    const i = distancias.indexOf(Math.min(...distancias));
+    if (i === actual) return;
+    actual = i;
+    botones.forEach((b, j) => b.setAttribute('aria-current', String(j === i)));
+  };
+  let pendiente = false;
+  grillaCopas.addEventListener('scroll', () => {
+    if (pendiente) return;
+    pendiente = true;
+    requestAnimationFrame(() => { pendiente = false; marcar(); });
+  }, { passive: true });
+  marcar();
 }
 
 const anio = document.getElementById('anio');

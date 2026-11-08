@@ -80,9 +80,33 @@ section { padding-block: var(--espacio-6); }
    sobresale + tarjeta) mide 1,67 × ancho + ~10rem de textos; el ancho se limita para que quepa
    entera bajo el menú. Se usa lvh (barras recogidas, como se ve casi siempre en iOS 26): svh
    subestima el alto visible y dvh cambiaría el tamaño de las tarjetas al hacer scroll. */
-@media (max-width: 639px) and (orientation: portrait) {
-  .copa { --ancho: min(100%, max(15rem, (100lvh - var(--alto-menu) - 11rem) / 1.67)); justify-self: center; }
+/* Celular: carrusel horizontal a todo el ancho de la pantalla, una tarjeta por vez con snap al centro.
+   --ancho no usa % (el 100 % del carrusel incluye su relleno): así la grilla también lo conoce y centra
+   la primera y la última con su relleno lateral. Se restan ~1,5rem más para los puntos de debajo. */
+@media (max-width: 639px) {
+  .copas__grilla, .copa { --ancho: min(100vw - 4rem, max(15rem, (100lvh - var(--alto-menu) - 12.5rem) / 1.67)); }
+  .copas__grilla {
+    display: flex; gap: var(--espacio-2);
+    margin-inline: calc(50% - 50vw); padding: 0 calc((100vw - var(--ancho)) / 2) var(--espacio-2);
+    overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none;
+  }
+  .copas__grilla::-webkit-scrollbar { display: none; }
+  .copa { flex: none; scroll-snap-align: center; scroll-snap-stop: always; }
 }
+/* Indicador del carrusel (lo crea js/main.js): una barrita por tarjeta; la actual se alarga en naranja. */
+.copas__puntos { display: none; }
+@media (max-width: 639px) {
+  .copas__puntos { display: flex; justify-content: center; gap: 0.4rem; margin-top: var(--espacio-1); }
+  .copas__puntos button {
+    width: 0.5rem; height: 0.5rem; padding: 0; border: 0; border-radius: 1rem; cursor: pointer;
+    background: var(--oliva); opacity: 0.3; transition: width 0.3s ease, opacity 0.3s ease, background-color 0.3s ease;
+  }
+  .copas__puntos button[aria-current="true"] { width: 1.75rem; opacity: 1; background: var(--naranja); }
+  /* Área táctil cómoda sin agrandar la barrita. */
+  .copas__puntos button { position: relative; }
+  .copas__puntos button::after { content: ""; position: absolute; inset: -0.75rem -0.2rem; }
+}
+@media (prefers-reduced-motion: reduce) { .copas__puntos button { transition: none; } }
 .copa__giro { position: relative; height: 100%; transform-style: preserve-3d; transition: transform var(--giro) cubic-bezier(0.2, 0.7, 0.2, 1); }
 /* --g: 0 muestra el frente y 1 el reverso. Con cursor gira al pasar por encima; en pantallas táctiles
    cada toque alterna .copa--girada (js/main.js); con teclado, al enfocarla. */
