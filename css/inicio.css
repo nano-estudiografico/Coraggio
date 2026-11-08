@@ -88,7 +88,9 @@ section { padding-block: var(--espacio-6); }
   .copas__grilla {
     display: flex; gap: var(--espacio-2);
     margin-inline: calc(50% - 50vw); padding: 0 calc((100vw - var(--ancho)) / 2) var(--espacio-2);
-    overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none;
+    /* overflow-y: hidden y no auto: al girar, la esquina en 3D sobresale por abajo y el carrusel se volvía
+       desplazable en vertical; atrapaba el gesto del dedo (la página se frenaba) y el snap saltaba de tarjeta. */
+    overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none;
   }
   .copas__grilla::-webkit-scrollbar { display: none; }
   .copa { flex: none; scroll-snap-align: center; scroll-snap-stop: always; }
