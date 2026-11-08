@@ -506,3 +506,14 @@ if (encargo && 'ResizeObserver' in window) {
     encargo.closest('.visitanos').style.setProperty('--encargo-alto', `${e.borderBoxSize[0].blockSize}px`);
   }).observe(encargo);
 }
+
+// Al recargar (Cmd+R) Chrome a veces vuelve arriba en vez de quedarse donde estaba: se guarda la
+// posición al salir y, si tras cargar la página sigue arriba, se repone.
+const claveScroll = `scroll:${location.pathname}`;
+addEventListener('pagehide', () => { try { sessionStorage.setItem(claveScroll, String(scrollY)); } catch {} });
+if (performance.getEntriesByType('navigation')[0]?.type === 'reload') {
+  let guardado = 0;
+  try { guardado = Number(sessionStorage.getItem(claveScroll)) || 0; } catch {}
+  const reponer = () => { if (guardado > 0 && scrollY < 1) scrollTo({ top: guardado, behavior: 'instant' }); };
+  if (document.readyState === 'complete') reponer(); else addEventListener('load', reponer, { once: true });
+}
