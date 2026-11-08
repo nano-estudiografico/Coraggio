@@ -53,7 +53,7 @@ section { padding-block: var(--espacio-6); }
 .frase { padding-block: var(--espacio-6) var(--espacio-4); text-align: center; }
 .frase__texto { font-size: clamp(2.5rem, 6.5vw, 5.5rem); max-width: 16ch; margin-inline: auto; }
 .frase__sub { display: block; margin-top: var(--espacio-2); font: 400 clamp(1.125rem, 2vw, 1.5rem)/1.4 var(--font-texto); }
-/* Barra del color del fondo al 30 % con oleaje que cubre 3/4 de la frase (aclara el texto que tapa). Al verse sube desde abajo (js/main.js
+/* Barra del color del fondo al 30 % con oleaje que cubre 3/4 de la frase (aclara el texto que tapa). Al verse sube desde abajo y pasa del 80 % al 30 % (js/main.js
    la deja vacía hasta entonces); sin JS o con "reducir movimiento" queda directamente en su lugar. */
 .frase__titular { position: relative; display: inline-block; }
 .frase__titular::after {
@@ -64,8 +64,8 @@ section { padding-block: var(--espacio-6); }
   mask: var(--ola) 0 0 / 1.6em 0.22em repeat-x, linear-gradient(#000 0 0) 0 100% / 100% calc(100% - 0.21em) no-repeat;
   animation: frase-ola 2.4s linear infinite;
 }
-.frase__titular--vacia::after { height: 0; }
-.frase__titular:not(.frase__titular--vacia)::after { transition: height 1.8s cubic-bezier(0.3, 0.6, 0.3, 1); }
+.frase__titular--vacia::after { height: 0; opacity: 0.8; }
+.frase__titular:not(.frase__titular--vacia)::after { transition: height 1.8s cubic-bezier(0.3, 0.6, 0.3, 1), opacity 1.8s cubic-bezier(0.3, 0.6, 0.3, 1); }
 @keyframes frase-ola { to { -webkit-mask-position: 1.6em 0, 0 100%; mask-position: 1.6em 0, 0 100%; } }
 @media (prefers-reduced-motion: reduce) { .frase__titular::after { animation: none; transition: none; } }
 
