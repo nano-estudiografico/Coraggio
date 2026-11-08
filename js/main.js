@@ -164,7 +164,7 @@ document.querySelectorAll('.dia__oferta summary').forEach((s) => {
 // al verse entran juntas como un mazo hasta el lugar de la primera (Aperol). Por inercia, mientras viajan
 // se inclinan hacia atrás (izquierda) y al frenar se balancean hacia adelante (derecha); ese impulso lanza
 // a las demás hasta su sitio, donde se enderezan. La primera se asienta en el suyo y hace un vaivén de
-// giro. Con varias columnas entra el mazo; en celular (carrusel) entran desde la derecha (ver abajo).
+// giro. Con varias columnas entra el mazo; en celular (carrusel) entran desde la izquierda (ver abajo).
 // Nada de esto corre con "reducir movimiento".
 const grillaCopas = document.querySelector('.copas__grilla');
 if (grillaCopas && 'IntersectionObserver' in window && !quieto) {
@@ -262,27 +262,28 @@ if (grillaCopas && 'IntersectionObserver' in window && !quieto) {
       alVerse(grillaCopas, { threshold: 0.35 }, () => requestAnimationFrame(repartir));
       return;
     }
-    // Celular (carrusel): las tarjetas esperan fuera, por el borde derecho, y al verse entran una tras
-    // otra hasta que la primera queda centrada. Al moverse a la izquierda se inclinan hacia atrás
-    // (derecha), al frenar se pasan un poco hacia adelante y se enderezan; luego la primera hace el vaivén.
+    // Celular (carrusel): las tarjetas esperan fuera, por el borde izquierdo, y al verse entran en fila
+    // (la que asoma a la derecha va adelante) hasta que la primera queda centrada. Al moverse a la derecha
+    // se inclinan hacia atrás (izquierda), al frenar se pasan un poco hacia adelante y se enderezan; luego
+    // la primera hace el vaivén.
     grillaCopas.scrollLeft = 0;
     const ancho = innerWidth;
     const enJuego = copas.filter((copa) => copa.getBoundingClientRect().left < ancho); // la primera y la que asoma
-    const desde = enJuego.map((copa) => ancho - copa.getBoundingClientRect().left + 40);
-    enJuego.forEach((copa, i) => {
-      copa.style.translate = `${desde[i]}px 0px`;
+    const desde = -enJuego.at(-1).getBoundingClientRect().right - 40; // todas igual: la fila no se desarma
+    enJuego.forEach((copa) => {
+      copa.style.translate = `${desde}px 0px`;
       copa.style.transformOrigin = '50% 100%';
     });
     alVerse(grillaCopas, { threshold: 0.35 }, () => requestAnimationFrame(() => {
       const animaciones = enJuego.map((copa, i) => {
         copa.style.translate = '';
-        const opciones = { duration: 900, delay: i * 90, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'backwards' };
+        const opciones = { duration: 900, delay: (enJuego.length - 1 - i) * 90, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'backwards' };
         return [
-          copa.animate([{ translate: `${desde[i]}px 0px` }, { translate: '0px 0px' }], opciones),
+          copa.animate([{ translate: `${desde}px 0px` }, { translate: '0px 0px' }], opciones),
           copa.animate([
-            { rotate: '7deg' },
-            { rotate: '7deg', offset: 0.15 },
-            { rotate: '-3deg', offset: 0.55, easing: 'ease-in-out' },
+            { rotate: '-7deg' },
+            { rotate: '-7deg', offset: 0.15 },
+            { rotate: '3deg', offset: 0.55, easing: 'ease-in-out' },
             { rotate: '0deg' },
           ], { ...opciones, easing: 'ease-out' }),
         ];
