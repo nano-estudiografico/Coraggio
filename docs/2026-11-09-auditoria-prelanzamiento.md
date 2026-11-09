@@ -31,7 +31,7 @@ Lo que ya estaba bien y conviene no romper:
 | JSON-LD | Se **quita `aggregateRating`**. Las políticas de datos estructurados de Google no admiten valoraciones «autoservidas» en `LocalBusiness`: no generan estrellas en el resultado y pueden derivar en acción manual. El 4,9 y las 31 reseñas siguen en el texto visible, que es lo correcto. | `index.html`, `en.html` |
 | robots.txt | Nuevo. Permite todo (también a rastreadores de IA) y declara el sitemap. | `robots.txt` |
 | sitemap.xml | Nuevo, con las 4 URLs y sus alternativas de idioma. | `sitemap.xml` |
-| 404 | Nueva página con la marca, enlaces a inicio y carta, `noindex`. GitHub Pages la sirve automáticamente. | `404.html` |
+| 404 | Nueva página con la marca, enlaces a inicio y carta, `noindex`. Cloudflare Pages la sirve automáticamente en cualquier ruta inexistente. | `404.html` |
 | URLs limpias | Enlaces internos, canonical, hreflang, `og:url`, sitemap y JSON-LD usan `/`, `/en`, `/carta` y `/carta-en`, que es como Cloudflare Pages las sirve. Así ningún clic pasa por una redirección. | 4 páginas, `sitemap.xml` |
 | Cabeceras de seguridad | `_headers` con Content-Security-Policy (solo permite lo que el sitio usa: estilos propios y en línea, Google Fonts, el mapa de Google y la hoja de Google Sheets), `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`, HSTS con preload y `Cross-Origin-Opener-Policy`. Probado en el navegador: fuentes, mapa, video y carta viva funcionan sin bloqueos. | `_headers` |
 | Caché | Un año e `immutable` para `css/`, `js/`, `img/` y `video/` (CSS y JS ya llevan `?v=`). | `_headers` |
@@ -39,7 +39,7 @@ Lo que ya estaba bien y conviene no romper:
 | Servidor local | `npm run dev` levanta wrangler, que se comporta igual que Cloudflare Pages (URLs limpias, cabeceras, 404). Sustituye al `http.server` de Python, que no resolvía `/carta`. | `package.json`, `.claude/launch.json` |
 | Tests | Actualizados al dominio nuevo y a URLs limpias, y un test nuevo que vigila canonical, hreflang, og:url, robots.txt, sitemap, 404, `_headers` y `_redirects`. | `tests/sitio.test.js` |
 
-Se deja a propósito `<meta name="robots" content="noindex, nofollow">` en las 4 páginas: mientras el sitio solo exista en la vista previa de GitHub no debe indexarse. **Quitarlo es el paso 2 del lanzamiento.**
+Se deja a propósito `<meta name="robots" content="noindex, nofollow">` en las 4 páginas: mientras el sitio solo exista en la vista previa de GitHub no debe indexarse. **Quitarlo es el paso 3 del lanzamiento.**
 
 ## 2. Hallazgos pendientes, por prioridad
 
