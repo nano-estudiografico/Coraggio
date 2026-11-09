@@ -21,7 +21,7 @@ test('frase de marca y definición literales', () => {
 });
 
 test('hero con Ver la carta y Pedir a domicilio', () => {
-  assert.match(inicio(), /href="carta\.html"[^>]*>\s*Ver la carta/);
+  assert.match(inicio(), /href="\/carta"[^>]*>\s*Ver la carta/);
   assert.match(inicio(), /href="https:\/\/www\.rappi\.com\.co\/restaurantes\/delivery\/373002-coraggio-aperitivos"[^>]*>\s*Pedir a domicilio/);
 });
 
@@ -131,7 +131,7 @@ test('metadatos y datos estructurados', () => {
   const ld = JSON.parse(inicio().match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
   assert.deepEqual(ld['@type'], ['CafeOrCoffeeShop', 'BarOrPub']);
   assert.equal(ld.url, 'https://coraggioaperitivos.com/');
-  assert.equal(ld.hasMenu, 'https://coraggioaperitivos.com/carta.html');
+  assert.equal(ld.hasMenu, 'https://coraggioaperitivos.com/carta');
   assert.ok(!('aggregateRating' in ld), 'sin aggregateRating: Google no admite reseñas propias en LocalBusiness');
   assert.equal(ld.address.addressLocality, 'Medellín');
   assert.equal(ld.telephone, '+57 300 700 2822');
@@ -170,8 +170,9 @@ test('sin JS: el estado de horario arranca oculto y el horario está escrito', (
 });
 
 test('selector ES | EN en el menú de las cuatro páginas, con la página actual marcada', () => {
-  const pares = { 'index.html': ['index.html', 'en.html', 'es'], 'en.html': ['index.html', 'en.html', 'en'],
-    'carta.html': ['carta.html', 'carta-en.html', 'es'], 'carta-en.html': ['carta.html', 'carta-en.html', 'en'] };
+  // Cloudflare Pages sirve URLs limpias: /carta en lugar de carta.html.
+  const pares = { 'index.html': ['/', '/en', 'es'], 'en.html': ['/', '/en', 'en'],
+    'carta.html': ['/carta', '/carta-en', 'es'], 'carta-en.html': ['/carta', '/carta-en', 'en'] };
   for (const [p, [es, en, actual]] of Object.entries(pares)) {
     const iconos = leer(p).match(/<div class="menu__iconos">[\s\S]*?<\/div>/)[0];
     const sel = iconos.match(/<p class="idioma">[\s\S]*?<\/p>/)?.[0];
@@ -192,7 +193,7 @@ test('versión en inglés: idioma, enlaces internos y avisos legales', () => {
     assert.match(h, /Prices in thousands of Colombian pesos\. Consumption tax included\./, p);
     // Fuera del selector de idioma, ningún enlace interno lleva a las páginas en español.
     const sinSelector = h.replace(/<p class="idioma">[\s\S]*?<\/p>/, '').replace(/<link rel="alternate"[^>]*>/g, '');
-    assert.doesNotMatch(sinSelector, /href="(index|carta)\.html/, p);
+    assert.doesNotMatch(sinSelector, /href="\/(carta)?(#[^"]*)?"/, p);
   }
   assert.match(leer('en.html'), /Not every spritz tastes the same\./);
   assert.match(leer('en.html'), /Every day, 9:00 a\.m\. – 9:00 p\.m\./);
@@ -201,7 +202,7 @@ test('versión en inglés: idioma, enlaces internos y avisos legales', () => {
 
 test('SEO: canonical, hreflang, og:url, robots.txt y sitemap apuntan a coraggioaperitivos.com', () => {
   const D = 'https://coraggioaperitivos.com/';
-  const urls = { 'index.html': D, 'en.html': `${D}en.html`, 'carta.html': `${D}carta.html`, 'carta-en.html': `${D}carta-en.html` };
+  const urls = { 'index.html': D, 'en.html': `${D}en`, 'carta.html': `${D}carta`, 'carta-en.html': `${D}carta-en` };
   const sitemap = leer('sitemap.xml');
   for (const [p, url] of Object.entries(urls)) {
     const h = leer(p);
@@ -209,9 +210,13 @@ test('SEO: canonical, hreflang, og:url, robots.txt y sitemap apuntan a coraggioa
     assert.match(h, new RegExp(`<meta property="og:url" content="${url}">`), p);
     for (const l of ['es', 'en', 'x-default']) assert.match(h, new RegExp(`<link rel="alternate" hreflang="${l}" href="${D}`), `${p}: hreflang ${l}`);
     assert.doesNotMatch(h, /github\.io/, p);
+    assert.doesNotMatch(h, /href="[^"]*\.html/, `${p}: enlaces internos sin .html (Cloudflare Pages redirige a la URL limpia)`);
     assert.ok(sitemap.includes(`<loc>${url}</loc>`), `${p} no está en el sitemap`);
   }
   assert.match(leer('robots.txt'), /^Allow: \/$/m);
   assert.match(leer('robots.txt'), /^Sitemap: https:\/\/coraggioaperitivos\.com\/sitemap\.xml$/m);
   assert.match(leer('404.html'), /<meta name="robots" content="noindex">/);
+  const cab = leer('_headers');
+  for (const c of ['Content-Security-Policy', 'X-Content-Type-Options: nosniff', 'X-Frame-Options: DENY', 'Referrer-Policy', 'Permissions-Policy', 'Strict-Transport-Security']) assert.ok(cab.includes(c), `_headers sin ${c}`);
+  assert.match(leer('_redirects'), /^https:\/\/www\.coraggioaperitivos\.com\/\* https:\/\/coraggioaperitivos\.com\/:splat 301$/m);
 });

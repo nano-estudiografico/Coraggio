@@ -1,0 +1,2 @@
+# www → dominio sin www (la forma canónica). Las URLs con .html las redirige Cloudflare Pages solo.
+https://www.coraggioaperitivos.com/* https://coraggioaperitivos.com/:splat 301

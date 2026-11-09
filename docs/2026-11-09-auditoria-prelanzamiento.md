@@ -1,10 +1,12 @@
 # Auditoría pre-lanzamiento: coraggioaperitivos.com
 
-Fecha: 9 de noviembre de 2026. Revisión del sitio (`index.html`, `en.html`, `carta.html`, `carta-en.html`) antes de publicarlo en su dominio. Cubre SEO técnico y de contenido, datos estructurados, GEO (visibilidad en buscadores con IA: Google AI Overviews, ChatGPT, Perplexity), rendimiento, seguridad y legal. El sitio aún no responde en el dominio, así que todo se revisó sobre los archivos del repositorio y la vista previa en GitHub Pages.
+Fecha: 9 de noviembre de 2026. Revisión del sitio (`index.html`, `en.html`, `carta.html`, `carta-en.html`) antes de publicarlo en su dominio. Cubre SEO técnico y de contenido, datos estructurados, GEO (visibilidad en buscadores con IA: Google AI Overviews, ChatGPT, Perplexity), rendimiento, seguridad y legal. El sitio aún no responde en el dominio, así que todo se revisó sobre los archivos del repositorio, la vista previa en GitHub Pages y un servidor local idéntico a Cloudflare Pages (`npm run dev`, que usa wrangler).
+
+**Hosting: Cloudflare Pages.** Sirve URLs limpias (`/carta` en lugar de `carta.html`, y redirige con 308 la forma con extensión), lee `_headers` y `_redirects` de la raíz y sirve `404.html` en las rutas inexistentes.
 
 ## Resumen
 
-**Estado: listo para publicar una vez hechos los pasos de lanzamiento de la sección 3.** Puntuación estimada de salud SEO: **86/100** (antes de los cambios de hoy: 61, sobre todo por URLs de la vista previa, falta de canonical y de sitemap).
+**Estado: listo para publicar una vez hechos los pasos de lanzamiento de la sección 3.** Puntuación estimada de salud SEO: **90/100** (antes de los cambios de hoy: 61, sobre todo por URLs de la vista previa, falta de canonical y de sitemap).
 
 Lo que ya estaba bien y conviene no romper:
 
@@ -30,7 +32,12 @@ Lo que ya estaba bien y conviene no romper:
 | robots.txt | Nuevo. Permite todo (también a rastreadores de IA) y declara el sitemap. | `robots.txt` |
 | sitemap.xml | Nuevo, con las 4 URLs y sus alternativas de idioma. | `sitemap.xml` |
 | 404 | Nueva página con la marca, enlaces a inicio y carta, `noindex`. GitHub Pages la sirve automáticamente. | `404.html` |
-| Tests | Actualizados al dominio nuevo y un test nuevo que vigila canonical, hreflang, og:url, robots.txt, sitemap y 404. | `tests/sitio.test.js` |
+| URLs limpias | Enlaces internos, canonical, hreflang, `og:url`, sitemap y JSON-LD usan `/`, `/en`, `/carta` y `/carta-en`, que es como Cloudflare Pages las sirve. Así ningún clic pasa por una redirección. | 4 páginas, `sitemap.xml` |
+| Cabeceras de seguridad | `_headers` con Content-Security-Policy (solo permite lo que el sitio usa: estilos propios y en línea, Google Fonts, el mapa de Google y la hoja de Google Sheets), `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`, HSTS con preload y `Cross-Origin-Opener-Policy`. Probado en el navegador: fuentes, mapa, video y carta viva funcionan sin bloqueos. | `_headers` |
+| Caché | Un año e `immutable` para `css/`, `js/`, `img/` y `video/` (CSS y JS ya llevan `?v=`). | `_headers` |
+| Redirección | `www.coraggioaperitivos.com` → `coraggioaperitivos.com` con 301. | `_redirects` |
+| Servidor local | `npm run dev` levanta wrangler, que se comporta igual que Cloudflare Pages (URLs limpias, cabeceras, 404). Sustituye al `http.server` de Python, que no resolvía `/carta`. | `package.json`, `.claude/launch.json` |
+| Tests | Actualizados al dominio nuevo y a URLs limpias, y un test nuevo que vigila canonical, hreflang, og:url, robots.txt, sitemap, 404, `_headers` y `_redirects`. | `tests/sitio.test.js` |
 
 Se deja a propósito `<meta name="robots" content="noindex, nofollow">` en las 4 páginas: mientras el sitio solo exista en la vista previa de GitHub no debe indexarse. **Quitarlo es el paso 2 del lanzamiento.**
 
@@ -39,12 +46,11 @@ Se deja a propósito `<meta name="robots" content="noindex, nofollow">` en las 4
 ### Alta (antes o el mismo día del lanzamiento)
 
 - **Quitar `noindex`** (ver sección 3). Si queda, el sitio no aparecerá en Google aunque todo lo demás esté bien.
-- **Google Business Profile**: poner `https://coraggioaperitivos.com` como sitio web y `https://coraggioaperitivos.com/carta.html` como enlace de menú. Es la señal más fuerte para búsqueda local y para que las IA relacionen la ficha con el sitio.
+- **Google Business Profile**: poner `https://coraggioaperitivos.com` como sitio web y `https://coraggioaperitivos.com/carta` como enlace de menú. Es la señal más fuerte para búsqueda local y para que las IA relacionen la ficha con el sitio.
 - **Search Console y Bing Webmaster**: verificar el dominio y enviar el sitemap. Bing alimenta a Copilot y a ChatGPT; no cuesta nada añadirlo.
 
 ### Media (primeras semanas)
 
-- **Cabeceras de seguridad.** GitHub Pages envía HSTS pero no permite configurar `Content-Security-Policy`, `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy` ni `Permissions-Policy`. En un sitio estático sin formularios el riesgo real es bajo. Si se quiere corregir: poner Cloudflare (plan gratuito) delante del dominio y añadir las cabeceras con una regla de transformación, o mover el hosting a Cloudflare Pages o Netlify, que las aceptan en un archivo `_headers`. Una CSP por `<meta>` es posible pero hay que probarla con cuidado: el sitio usa estilos en línea, Google Fonts, el iframe de Maps y la lectura de Google Sheets.
 - **Google Fonts** (tres familias) es la única petición externa que bloquea el primer pintado y envía la IP del visitante a Google. Autohospedar las fuentes en `fonts/` con `font-display: swap` mejora LCP y quita la dependencia. Colombia no exige banner de consentimiento para esto (no hay cookies), pero es buena práctica.
 - **Video del hero** (2 MB, autoplay). En celular con datos es el mayor costo de la página. Opciones: una versión más chica para pantallas angostas (`<source media>`), o `preload="none"` y arrancarlo al cargar la página. El póster ya existe, así que el LCP no depende del video.
 - **Schema de la carta.** `hasMenu` ya enlaza la carta; el siguiente nivel es generar en `carta-html.js` un JSON-LD `Menu` con `MenuSection`, `MenuItem` y `Offer` (precio en COP) a partir del mismo `data/carta.json`. Google y las IA leen los precios directamente. Pendiente porque tiene que convivir con la carta «viva» que se recarga desde Drive.
@@ -52,7 +58,6 @@ Se deja a propósito `<meta name="robots" content="noindex, nofollow">` en las 4
 
 ### Baja (cuando se pueda)
 
-- **URLs limpias.** Los enlaces internos van a `index.html` y `carta.html`. GitHub Pages sirve también `/carta`; con las canonical ya puestas no hay duplicados, pero `/carta` y `/en` quedan mejor en la ficha de Google y al dictarlas. Implica cambiar los `href` y los tests, y el servidor local de desarrollo (`python -m http.server`) no resuelve `/carta` sin extensión.
 - **`llms.txt`.** Archivo opcional que algunos rastreadores de IA leen. Google lo ignora. Si se hace, es un resumen de 10 líneas con nombre, qué es, dirección, horario, enlaces a carta, Instagram y Rappi.
 - **H1 del inicio** («Ponle corazón.») es de marca, no descriptivo. Está bien así porque el `<title>`, la descripción y los H2 llevan las palabras clave. No tocar.
 - **Repositorio público.** Expone `CartaCORAGGIO.pdf`, `docs/` (incluye este informe y el documento de diseño con la lista de reseñas) y `grabaciones/`. No hay secretos, claves ni tokens (revisado). Si el PDF de la carta queda viejo, conviene borrarlo del repo: el botón «Descargar carta en PDF» ya apunta a Drive.
@@ -60,25 +65,29 @@ Se deja a propósito `<meta name="robots" content="noindex, nofollow">` en las 4
 
 ## 3. Pasos de lanzamiento, en orden
 
-1. **DNS del dominio.** Registros `A` del apex `coraggioaperitivos.com` a las IP de GitHub Pages (`185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`) y `CNAME` de `www` a `nano-estudiografico.github.io`. En GitHub: Settings → Pages → Custom domain → `coraggioaperitivos.com`, esperar la verificación y marcar **Enforce HTTPS**. GitHub crea el archivo `CNAME` en el repo: hacerle commit. `www` redirige solo al apex, que es la forma canónica elegida.
-2. **Quitar `noindex`** en las cuatro páginas y commitear:
+1. **Proyecto en Cloudflare Pages.** Workers & Pages → Create → Pages → conectar el repositorio `nano-estudiografico/Coraggio`, rama `main`. Framework preset: None. Build command: vacío. Build output directory: `/` (la raíz). Cada push a `main` publica solo. Comprobar primero en la URL `*.pages.dev` que salen las 4 páginas, `/robots.txt`, `/sitemap.xml`, una ruta inexistente (404 con marca) y que la carta recarga desde la hoja.
+2. **Dominio.** Si el dominio está en Cloudflare (recomendado: así la zona DNS, el certificado y el proxy quedan en un solo sitio), en el proyecto → Custom domains → añadir `coraggioaperitivos.com` y también `www.coraggioaperitivos.com`; Cloudflare crea los registros solos. Si el DNS está en otro registrador, Cloudflare indica el `CNAME` a poner. El `_redirects` ya manda `www` al dominio sin `www`. En SSL/TLS dejar «Full (strict)» y activar «Always Use HTTPS».
+3. **Quitar `noindex`** en las cuatro páginas y commitear:
    ```sh
    sed -i '' '/<meta name="robots" content="noindex, nofollow">/d' index.html en.html carta.html carta-en.html
-   npm test && git commit -am "feat: el sitio pasa a indexable al publicarse en coraggioaperitivos.com"
+   npm test && git commit -am "feat: el sitio pasa a indexable al publicarse en coraggioaperitivos.com" && git push
    ```
-3. **Comprobar en el dominio**: `/`, `/en.html`, `/carta.html`, `/carta-en.html`, `/robots.txt`, `/sitemap.xml`, una URL inexistente (debe salir la 404 con marca), y que la carta se recarga desde la hoja (abrir la consola del navegador: no debe haber error de CORS).
-4. **Validar**: Rich Results Test de Google con la URL de inicio; vista previa de Open Graph (opengraph.xyz o el depurador de Facebook); PageSpeed Insights en celular.
-5. **Search Console**: propiedad de tipo «Dominio» (registro TXT en DNS), enviar `sitemap.xml`, pedir indexación de las 4 URLs. **Bing Webmaster Tools**: importar desde Search Console.
-6. **Google Business Profile**: sitio web y enlace de menú (paso de prioridad alta). **Instagram**: enlace de la bio al dominio. **Rappi**: si la ficha admite sitio web, ponerlo.
-7. **Al cabo de una semana**: revisar en Search Console cobertura y errores de hreflang; buscar «Coraggio Aperitivos» en Google, ChatGPT y Perplexity y ver qué responden y qué citan.
+4. **Apagar GitHub Pages** en el repositorio (Settings → Pages → Source: None) para que la vista previa `nano-estudiografico.github.io/Coraggio` deje de existir y no compita con el dominio. Las canonical ya apuntan al dominio, así que no es urgente, pero es más limpio.
+5. **Comprobar en el dominio** con `curl -I https://coraggioaperitivos.com/`: debe salir la cabecera `content-security-policy` y las demás de `_headers`. Abrir las 4 páginas con la consola del navegador: cero mensajes «Refused to…».
+6. **Validar**: Rich Results Test de Google con la URL de inicio; vista previa de Open Graph (opengraph.xyz o el depurador de Facebook); PageSpeed Insights en celular; securityheaders.com (debería dar A).
+7. **Search Console**: propiedad de tipo «Dominio» (registro TXT; si el DNS está en Cloudflare se añade ahí), enviar `sitemap.xml`, pedir indexación de las 4 URLs. **Bing Webmaster Tools**: importar desde Search Console.
+8. **Google Business Profile**: sitio web `https://coraggioaperitivos.com` y enlace de menú `https://coraggioaperitivos.com/carta`. **Instagram**: enlace de la bio al dominio. **Rappi**: si la ficha admite sitio web, ponerlo.
+9. **Al cabo de una semana**: revisar en Search Console cobertura y errores de hreflang; buscar «Coraggio Aperitivos» en Google, ChatGPT y Perplexity y ver qué responden y qué citan.
+
+Nota sobre la CSP: si más adelante se añade algo externo (analítica, otro embed, una fuente nueva), hay que sumarlo a `_headers` o el navegador lo bloquea. La consola del navegador dice exactamente qué directiva lo bloqueó.
 
 ## 4. Puntuación por categoría
 
 | Categoría | Peso | Nota | Comentario |
 |---|---|---|---|
-| SEO técnico | 22 % | 90 | Canonical, hreflang, sitemap, robots y 404 listos. Faltan cabeceras (limitación del hosting). |
+| SEO técnico | 22 % | 98 | Canonical, hreflang, sitemap, robots, 404, URLs limpias y cabeceras de seguridad listos. |
 | Contenido | 23 % | 85 | Real, propio y citable. Falta un bloque de preguntas frecuentes. |
-| On-page | 20 % | 90 | Títulos, descripciones y encabezados correctos. URLs con `.html`. |
+| On-page | 20 % | 95 | Títulos, descripciones y encabezados correctos. URLs limpias. |
 | Datos estructurados | 10 % | 80 | Negocio completo. Falta `Menu` detallado en la carta. |
 | Rendimiento | 10 % | 75 | Video de 2 MB en el hero y fuentes externas. Imágenes bien (WebP, lazy, dimensiones). |
 | Preparación para IA (GEO) | 10 % | 85 | Rastreadores permitidos, entidad consistente, datos en texto. Falta FAQ. |

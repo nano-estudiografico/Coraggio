@@ -5,6 +5,7 @@
   "scripts": {
     "test": "node --test",
     "carta": "node tools/build-carta.mjs",
-    "imagenes": "sh tools/optimizar-imagenes.sh"
+    "imagenes": "sh tools/optimizar-imagenes.sh",
+    "dev": "npx --yes wrangler pages dev . --port 8080"
   }
 }
