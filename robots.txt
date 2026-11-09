@@ -1,0 +1,5 @@
+# Coraggio Aperitivos — todo el sitio es público y rastreable, también para buscadores con IA.
+User-agent: *
+Allow: /
+
+Sitemap: https://coraggioaperitivos.com/sitemap.xml

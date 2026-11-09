@@ -123,13 +123,16 @@ test('metadatos y datos estructurados', () => {
     assert.match(h, /<html lang="es-CO">/);
     assert.match(h, /<meta name="description"/);
     // Las redes solo leen og:image con dirección completa; además la imagen debe existir en el proyecto.
-    const og = h.match(/<meta property="og:image" content="https:\/\/[^"]+\/Coraggio\/([^"]+)"/);
+    const og = h.match(/<meta property="og:image" content="https:\/\/coraggioaperitivos\.com\/([^"]+)"/);
     assert.ok(og, `${p}: og:image debe ser una URL completa`);
     assert.ok(fs.existsSync(new URL(`../${og[1]}`, import.meta.url)), `${p}: no existe ${og[1]}`);
     assert.match(h, /<link rel="icon" href="favicon\.svg"/);
   }
   const ld = JSON.parse(inicio().match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
-  assert.equal(ld['@type'], 'BarOrPub');
+  assert.deepEqual(ld['@type'], ['CafeOrCoffeeShop', 'BarOrPub']);
+  assert.equal(ld.url, 'https://coraggioaperitivos.com/');
+  assert.equal(ld.hasMenu, 'https://coraggioaperitivos.com/carta.html');
+  assert.ok(!('aggregateRating' in ld), 'sin aggregateRating: Google no admite reseñas propias en LocalBusiness');
   assert.equal(ld.address.addressLocality, 'Medellín');
   assert.equal(ld.telephone, '+57 300 700 2822');
   assert.equal(ld.openingHoursSpecification.opens, '09:00');
@@ -183,7 +186,7 @@ test('selector ES | EN en el menú de las cuatro páginas, con la página actual
 test('versión en inglés: idioma, enlaces internos y avisos legales', () => {
   for (const p of ['en.html', 'carta-en.html']) {
     const h = leer(p);
-    assert.match(h, /<meta property="og:image" content="https:\/\/[^"]+\/img\/thumbnail\.png">/, p);
+    assert.match(h, /<meta property="og:image" content="https:\/\/coraggioaperitivos\.com\/img\/thumbnail\.jpg">/, p);
     assert.match(h, /<html lang="en">/, p);
     assert.match(h, /Excessive alcohol consumption is harmful to your health\. Sale of alcoholic beverages to minors is prohibited\./, p);
     assert.match(h, /Prices in thousands of Colombian pesos\. Consumption tax included\./, p);
@@ -194,4 +197,21 @@ test('versión en inglés: idioma, enlaces internos y avisos legales', () => {
   assert.match(leer('en.html'), /Not every spritz tastes the same\./);
   assert.match(leer('en.html'), /Every day, 9:00 a\.m\. – 9:00 p\.m\./);
   assert.match(leer('en.html'), /<p class="estado" id="estado-horario" hidden><\/p>/);
+});
+
+test('SEO: canonical, hreflang, og:url, robots.txt y sitemap apuntan a coraggioaperitivos.com', () => {
+  const D = 'https://coraggioaperitivos.com/';
+  const urls = { 'index.html': D, 'en.html': `${D}en.html`, 'carta.html': `${D}carta.html`, 'carta-en.html': `${D}carta-en.html` };
+  const sitemap = leer('sitemap.xml');
+  for (const [p, url] of Object.entries(urls)) {
+    const h = leer(p);
+    assert.match(h, new RegExp(`<link rel="canonical" href="${url}">`), p);
+    assert.match(h, new RegExp(`<meta property="og:url" content="${url}">`), p);
+    for (const l of ['es', 'en', 'x-default']) assert.match(h, new RegExp(`<link rel="alternate" hreflang="${l}" href="${D}`), `${p}: hreflang ${l}`);
+    assert.doesNotMatch(h, /github\.io/, p);
+    assert.ok(sitemap.includes(`<loc>${url}</loc>`), `${p} no está en el sitemap`);
+  }
+  assert.match(leer('robots.txt'), /^Allow: \/$/m);
+  assert.match(leer('robots.txt'), /^Sitemap: https:\/\/coraggioaperitivos\.com\/sitemap\.xml$/m);
+  assert.match(leer('404.html'), /<meta name="robots" content="noindex">/);
 });
