@@ -1,2 +1,1 @@
-# www → dominio sin www (la forma canónica). Las URLs con .html las redirige Cloudflare Pages solo.
-https://www.coraggioaperitivos.com/* https://coraggioaperitivos.com/:splat 301
+# La redirección de www al dominio sin www se configura en el panel de Cloudflare (Workers no admite URLs absolutas aquí).

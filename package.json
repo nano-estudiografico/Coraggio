@@ -6,6 +6,6 @@
     "test": "node --test",
     "carta": "node tools/build-carta.mjs",
     "imagenes": "sh tools/optimizar-imagenes.sh",
-    "dev": "npx --yes wrangler pages dev . --port 8080"
+    "dev": "npx --yes wrangler dev --port 8080"
   }
 }
