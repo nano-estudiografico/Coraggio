@@ -216,6 +216,7 @@ test('SEO: canonical, hreflang, og:url, robots.txt y sitemap apuntan a coraggioa
   assert.match(leer('robots.txt'), /^Allow: \/$/m);
   assert.match(leer('robots.txt'), /^Sitemap: https:\/\/coraggioaperitivos\.com\/sitemap\.xml$/m);
   assert.match(leer('404.html'), /<meta name="robots" content="noindex">/);
+  for (const p of Object.keys(urls)) assert.doesNotMatch(leer(p), /noindex/, `${p} no debe llevar noindex: el sitio ya está publicado`);
   const cab = leer('_headers');
   for (const c of ['Content-Security-Policy', 'X-Content-Type-Options: nosniff', 'X-Frame-Options: DENY', 'Referrer-Policy', 'Permissions-Policy', 'Strict-Transport-Security']) assert.ok(cab.includes(c), `_headers sin ${c}`);
   // Workers rechaza URLs absolutas en _redirects (error 100324): www se redirige con una Redirect Rule del panel.
