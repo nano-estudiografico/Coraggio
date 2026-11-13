@@ -21,7 +21,7 @@ test('frase de marca y definición literales', () => {
 });
 
 test('hero con Ver la carta y Pedir a domicilio', () => {
-  assert.match(inicio(), /href="\/carta"[^>]*>\s*Ver la carta/);
+  assert.match(inicio(), /href="carta"[^>]*>\s*Ver la carta/);
   assert.match(inicio(), /href="https:\/\/www\.rappi\.com\.co\/restaurantes\/delivery\/373002-coraggio-aperitivos"[^>]*>\s*Pedir a domicilio/);
 });
 
@@ -170,9 +170,9 @@ test('sin JS: el estado de horario arranca oculto y el horario está escrito', (
 });
 
 test('selector ES | EN en el menú de las cuatro páginas, con la página actual marcada', () => {
-  // Cloudflare Pages sirve URLs limpias: /carta en lugar de carta.html.
-  const pares = { 'index.html': ['/', '/en', 'es'], 'en.html': ['/', '/en', 'en'],
-    'carta.html': ['/carta', '/carta-en', 'es'], 'carta-en.html': ['/carta', '/carta-en', 'en'] };
+  // URLs limpias y relativas (valen en Cloudflare y en GitHub Pages bajo /Coraggio/).
+  const pares = { 'index.html': ['\\./', 'en', 'es'], 'en.html': ['\\./', 'en', 'en'],
+    'carta.html': ['carta', 'carta-en', 'es'], 'carta-en.html': ['carta', 'carta-en', 'en'] };
   for (const [p, [es, en, actual]] of Object.entries(pares)) {
     const iconos = leer(p).match(/<div class="menu__iconos">[\s\S]*?<\/div>/)[0];
     const sel = iconos.match(/<p class="idioma">[\s\S]*?<\/p>/)?.[0];
@@ -193,7 +193,7 @@ test('versión en inglés: idioma, enlaces internos y avisos legales', () => {
     assert.match(h, /Prices in thousands of Colombian pesos\. Consumption tax included\./, p);
     // Fuera del selector de idioma, ningún enlace interno lleva a las páginas en español.
     const sinSelector = h.replace(/<p class="idioma">[\s\S]*?<\/p>/, '').replace(/<link rel="alternate"[^>]*>/g, '');
-    assert.doesNotMatch(sinSelector, /href="\/(carta)?(#[^"]*)?"/, p);
+    assert.doesNotMatch(sinSelector, /href="(\.?\/|\.?\/?carta)(#[^"]*)?"/, p);
   }
   assert.match(leer('en.html'), /Not every spritz tastes the same\./);
   assert.match(leer('en.html'), /Every day, 9:00 a\.m\. – 9:00 p\.m\./);
@@ -218,5 +218,10 @@ test('SEO: canonical, hreflang, og:url, robots.txt y sitemap apuntan a coraggioa
   assert.match(leer('404.html'), /<meta name="robots" content="noindex">/);
   const cab = leer('_headers');
   for (const c of ['Content-Security-Policy', 'X-Content-Type-Options: nosniff', 'X-Frame-Options: DENY', 'Referrer-Policy', 'Permissions-Policy', 'Strict-Transport-Security']) assert.ok(cab.includes(c), `_headers sin ${c}`);
-  assert.match(leer('_redirects'), /^https:\/\/www\.coraggioaperitivos\.com\/\* https:\/\/coraggioaperitivos\.com\/:splat 301$/m);
+  // Workers rechaza URLs absolutas en _redirects (error 100324): www se redirige con una Redirect Rule del panel.
+  assert.doesNotMatch(leer('_redirects'), /^\s*https?:\/\//m);
+  const wr = leer('wrangler.jsonc');
+  assert.match(wr, /"not_found_handling":\s*"404-page"/, 'sin 404 propia en el Worker');
+  const ign = leer('.assetsignore');
+  for (const d of ['.git', 'Base', 'docs', 'tests', 'tools']) assert.match(ign, new RegExp(`^${d.replace('.', '\\.')}$`, 'm'), `.assetsignore no excluye ${d}`);
 });
