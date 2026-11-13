@@ -1,5 +1,3 @@
-import { estadoHorario } from './horario.js';
-
 const ingles = document.documentElement.lang.startsWith('en');
 const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
 // La primera vez que el elemento entra en pantalla deja de observarlo y corre fn.
@@ -7,15 +5,6 @@ const alVerse = (el, opciones, fn) => {
   const o = new IntersectionObserver(([e]) => { if (e.isIntersecting) { o.disconnect(); fn(); } }, opciones);
   o.observe(el);
 };
-
-// Abierto / Cerrado según la hora de Medellín; sin JS queda solo el horario escrito.
-const estado = document.getElementById('estado-horario');
-if (estado) {
-  const { abierto, etiqueta, detalle } = estadoHorario(new Date(), ingles ? 'en' : 'es');
-  estado.textContent = `${etiqueta} · ${detalle}`;
-  estado.classList.add(abierto ? 'estado--abierto' : 'estado--cerrado');
-  estado.hidden = false;
-}
 
 // Flechas del carrusel de reseñas (la lista también se desplaza con el dedo o el teclado).
 const lista = document.getElementById('resenas-lista');

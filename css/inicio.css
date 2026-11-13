@@ -557,10 +557,6 @@ section { padding-block: var(--espacio-6); }
     background: linear-gradient(var(--crema) 20%, transparent calc(var(--encargo-alto, 0px) + 4rem)); }
 }
 @media (min-width: 900px) { .visitanos__mapa { position: absolute; top: 0; left: 0; width: 150%; height: 100%; margin: 0; } }
-.estado { display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600; margin: 0; }
-.estado::before { content: ''; width: 0.7rem; height: 0.7rem; border-radius: 50%; background: currentColor; }
-.estado--abierto::before { background: #2f7d32; }
-.estado--cerrado::before { background: #9a3412; }
 
 
 @media (prefers-reduced-motion: reduce) {

@@ -49,7 +49,7 @@ test('recetas con medidas exactas, en el reverso de las copas', () => {
 
 test('visítanos: dirección, horario escrito, contacto', () => {
   assert.match(inicio(), /Cra\. 43 # 33-57, Local 167/);
-  assert.match(inicio(), /Todos los días, 9:00 a\. m\. – 9:00 p\. m\./);
+  assert.match(inicio(), /Abierto todos los días desde las 9:00 a\. m\./);
   assert.match(inicio(), /wa\.me\/message\/XNE77YPUTSUAP1/);
   assert.match(inicio(), /mailto:coraggioaperitivos@gmail\.com/);
   assert.match(inicio(), /pan de masa madre, tortas y desayunos empresariales/i);
@@ -164,11 +164,6 @@ test('contenedores de imagen con color de fondo', () => {
   assert.match(leer('css/base.css'), /picture[^{]*\{[^}]*background(-color)?:/);
 });
 
-test('sin JS: el estado de horario arranca oculto y el horario está escrito', () => {
-  assert.match(inicio(), /<p class="estado" id="estado-horario" hidden><\/p>/);
-  assert.match(leer('css/base.css'), /\[hidden\]\s*\{\s*display:\s*none/);
-});
-
 test('selector ES | EN en el menú de las cuatro páginas, con la página actual marcada', () => {
   // URLs limpias y relativas (valen en Cloudflare y en GitHub Pages bajo /Coraggio/).
   const pares = { 'index.html': ['\\./', 'en', 'es'], 'en.html': ['\\./', 'en', 'en'],
@@ -196,8 +191,7 @@ test('versión en inglés: idioma, enlaces internos y avisos legales', () => {
     assert.doesNotMatch(sinSelector, /href="(\.?\/|\.?\/?carta)(#[^"]*)?"/, p);
   }
   assert.match(leer('en.html'), /Not every spritz tastes the same\./);
-  assert.match(leer('en.html'), /Every day, 9:00 a\.m\. – 9:00 p\.m\./);
-  assert.match(leer('en.html'), /<p class="estado" id="estado-horario" hidden><\/p>/);
+  assert.match(leer('en.html'), /Open every day from 9:00 a\.m\./);
 });
 
 test('SEO: canonical, hreflang, og:url, robots.txt y sitemap apuntan a coraggioaperitivos.com', () => {
