@@ -136,7 +136,7 @@ test('metadatos y datos estructurados', () => {
   assert.equal(ld.address.addressLocality, 'Medellín');
   assert.equal(ld.telephone, '+57 300 700 2822');
   assert.equal(ld.openingHoursSpecification.opens, '09:00');
-  assert.equal(ld.openingHoursSpecification.closes, '21:00');
+  assert.ok(!('closes' in ld.openingHoursSpecification), 'sin hora de cierre: no es fija');
 });
 
 test('sin localStorage, animaciones con reduced-motion y nada arranca invisible', () => {
