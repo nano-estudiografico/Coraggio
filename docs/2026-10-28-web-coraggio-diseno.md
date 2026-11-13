@@ -41,7 +41,7 @@ El usuario pidió una estructura parecida a vibebevvy.com: una sola página larg
 | Dato | Valor |
 |---|---|
 | Nombre | Coraggio Aperitivos ("Café ~ Aperitivos") |
-| Dirección | Cra. 43A #33-57, Local 167 (C.C. Plazuelas de San Diego), La Candelaria, Medellín, Antioquia, Colombia |
+| Dirección | Cra. 43 # 33-57, Local 167 (C.C. Plazuelas de San Diego), La Candelaria, Medellín, Antioquia, Colombia |
 | Coordenadas | 6.2346475, -75.5694637 (Plus Code 6CMJ+V6 Medellín) |
 | Google | 4,9 estrellas, 31 reseñas · Bar · $20.000–40.000 por persona — https://www.google.com/maps/place/Coraggio+Aperitivos/@6.2346475,-75.5694637,17z/data=!4m6!3m5!1s0x8e442976cf9ba0d1:0xa5ca79516951902a |
 | Horario | Todos los días, 9:00 a 21:00 |

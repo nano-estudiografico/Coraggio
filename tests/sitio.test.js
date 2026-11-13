@@ -48,7 +48,7 @@ test('recetas con medidas exactas, en el reverso de las copas', () => {
 });
 
 test('visítanos: dirección, horario escrito, contacto', () => {
-  assert.match(inicio(), /Cra\. 43A #33-57, Local 167/);
+  assert.match(inicio(), /Cra\. 43 # 33-57, Local 167/);
   assert.match(inicio(), /Todos los días, 9:00 a\. m\. – 9:00 p\. m\./);
   assert.match(inicio(), /wa\.me\/message\/XNE77YPUTSUAP1/);
   assert.match(inicio(), /mailto:coraggioaperitivos@gmail\.com/);
